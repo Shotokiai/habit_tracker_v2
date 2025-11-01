@@ -11,6 +11,7 @@ interface HabitTrackerProps {
   onUpdateRecords: (dayRecords: DayRecord[]) => void
   onDeleteHabit: () => void
   isNewHabitMode: boolean
+  compact?: boolean
 }
 
 export default function HabitTracker({
@@ -19,6 +20,7 @@ export default function HabitTracker({
   onUpdateRecords,
   onDeleteHabit,
   isNewHabitMode,
+  compact = false,
 }: HabitTrackerProps) {
   const [dayRecords, setDayRecords] = useState<DayRecord[]>([])
   const [isSaved, setIsSaved] = useState(false)
@@ -82,16 +84,27 @@ export default function HabitTracker({
   }
 
   if (isNewHabitMode) {
-    return <HabitHeader onSave={handleSaveHabit} isSaved={false} habitData={{ name: "", person: "" }} />
+    if (compact) {
+      return (
+        <div className="flex flex-col gap-2">
+          <HabitHeader onSave={handleSaveHabit} isSaved={false} habitData={{ name: "", person: "" }} compact={true} />
+          <div className="px-4">
+            <HabitGrid dayRecords={[]} />
+          </div>
+        </div>
+      )
+    }
+
+    return <HabitHeader onSave={handleSaveHabit} isSaved={false} habitData={{ name: "", person: "" }} compact={compact} />
   }
 
   return (
-    <div className="flex flex-col gap-6 p-4">
+    <div className="flex flex-col gap-4 p-4 h-full">
       {habit && isSaved && (
         <>
           <div className="bg-card rounded-lg p-4 border border-foreground/10">
             <p className="text-sm text-muted-foreground">
-              Tracked by: <span className="font-semibold text-foreground">{habit.person}</span>
+              Why I want to build this habit? <span className="font-semibold text-foreground">{habit.person}</span>
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               Month:{" "}
@@ -113,9 +126,9 @@ export default function HabitTracker({
             </button>
             <button
               onClick={handleHabitMissed}
-              className="w-full px-6 py-3 bg-destructive text-destructive-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-destructive shadow-md"
+              className="w-full px-6 py-3 bg-destructive text-white font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-destructive shadow-md"
             >
-              Habit Missed
+              Miss My Routine
             </button>
             <button
               onClick={onDeleteHabit}

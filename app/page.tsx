@@ -105,13 +105,18 @@ export default function Home() {
           handleSwipe()
         }}
       >
-        {habits.length === 0 ? (
+        {(habits.length === 0 || currentHabitIndex === habits.length) ? (
+          // If there are no habits, or the user clicked Add (current index === habits.length),
+          // show the new-habit UI. When there are existing habits we render the compact add UI
+          // in-place (so it appears just below the top bar) by using HabitTracker in new-habit mode
+          // but letting the page layout keep the header and grid visible.
           <HabitTracker
             habit={null}
             onAddHabit={addHabit}
             onUpdateRecords={() => {}}
             onDeleteHabit={() => {}}
             isNewHabitMode={true}
+            compact={habits.length > 0 && currentHabitIndex === habits.length}
           />
         ) : (
           <>
@@ -145,6 +150,7 @@ export default function Home() {
                 onUpdateRecords={(dayRecords) => updateHabitRecords(habits[currentHabitIndex].id, dayRecords)}
                 onDeleteHabit={() => deleteHabit(habits[currentHabitIndex].id)}
                 isNewHabitMode={false}
+                compact={false}
               />
             </div>
 

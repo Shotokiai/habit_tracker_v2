@@ -14,18 +14,22 @@ interface HabitGridProps {
 
 export default function HabitGrid({ dayRecords }: HabitGridProps) {
   const gridSize = 31
-  const dotSize = 12
-  const spacing = 18
+  const dotSize = 6  // smaller dots
+  const spacing = 10 // tighter spacing
+  const padding = 24 // more padding for labels
   const gridWidth = gridSize * spacing
   const gridHeight = gridSize * spacing
+  
+  // Only show numbers that are multiples of 5
+  const showLabel = (num: number) => num % 5 === 0
 
   const linePath = useMemo(() => {
     if (dayRecords.length === 0) return ""
 
     const points: string[] = []
     dayRecords.forEach((record) => {
-      const x = record.x * spacing + spacing / 2
-      const y = gridHeight - (record.y * spacing + spacing / 2)
+      const x = padding + (record.x - 1) * spacing + spacing / 2
+      const y = padding + ((gridSize - record.y) * spacing + spacing / 2)
       points.push(`${x},${y}`)
     })
 
@@ -33,42 +37,66 @@ export default function HabitGrid({ dayRecords }: HabitGridProps) {
   }, [dayRecords, gridHeight])
 
   return (
-    <div className="flex flex-col items-center gap-2 overflow-x-auto px-2 py-4">
-      <div className="relative">
+    <div className="flex flex-col items-center w-full px-2">
+      <div className="relative w-full">
         <div
-          className="absolute -left-12 top-0 flex flex-col justify-between text-xs font-semibold text-foreground"
-          style={{ height: gridHeight + 40 }}
+          className="absolute -left-8 flex flex-col justify-between text-[10px] font-semibold text-foreground"
+          style={{ height: gridHeight + padding * 2, top: padding }}
         >
-          {Array.from({ length: gridSize }, (_, i) => gridSize - i).map((num) => (
-            <div key={num} className="flex items-center justify-end w-10 h-4">
-              <span>{num}</span>
-            </div>
-          ))}
+          {Array.from({ length: gridSize }, (_, i) => gridSize - i).map((num) => {
+            const isMultipleOf5 = num % 5 === 0;
+            const offsetY = ((gridSize - num) * spacing + spacing / 2);
+            return (
+              <div 
+                key={num} 
+                className={`absolute flex items-center justify-end ${!isMultipleOf5 ? 'opacity-0' : ''}`}
+                style={{
+                  transform: `translateY(${offsetY}px)`,
+                  width: '24px',
+                  left: 0
+                }}
+              >
+                <span>{num}</span>
+              </div>
+            );
+          })}
         </div>
 
         {/* Main grid container */}
         <div
-          className="relative bg-card border border-foreground/20 rounded-lg p-2 shadow-md ml-2"
-          style={{ width: gridWidth + 40, height: gridHeight + 40 }}
+          className="relative bg-card border border-foreground/20 rounded-lg p-0 shadow-md ml-2"
+          style={{ width: gridWidth + padding * 2, height: gridHeight + padding * 2, maxHeight: '100%' }}
         >
-          <svg width={gridWidth + 40} height={gridHeight + 40} className="absolute inset-0 pointer-events-none">
+          <svg width={gridWidth + padding * 2} height={gridHeight + padding * 2} className="absolute inset-0 pointer-events-none">
             {dayRecords.length > 0 && (
               <polyline points={linePath} fill="none" stroke="currentColor" strokeWidth="2" className="text-primary" />
             )}
           </svg>
 
-          <DotGrid gridSize={gridSize} spacing={spacing} dotSize={dotSize} dayRecords={dayRecords} />
+          <DotGrid gridSize={gridSize} spacing={spacing} dotSize={dotSize} dayRecords={dayRecords} padding={padding} />
         </div>
 
         <div
-          className="flex justify-between mt-2 text-xs font-semibold text-foreground ml-2"
-          style={{ width: gridWidth + 40 }}
+          className="relative mt-2 text-[10px] font-semibold text-foreground ml-2"
+          style={{ width: gridWidth + padding * 2, height: '20px' }}
         >
-          {Array.from({ length: gridSize }, (_, i) => i + 1).map((num) => (
-            <div key={num} className="w-4 text-center text-xs">
-              <span>{num}</span>
-            </div>
-          ))}
+          {Array.from({ length: gridSize }, (_, i) => i + 1).map((num) => {
+            const isMultipleOf5 = num % 5 === 0;
+            const offsetX = padding + (num - 1) * spacing + spacing / 2;
+            return (
+              <div 
+                key={num} 
+                className={`absolute ${!isMultipleOf5 ? 'opacity-0' : ''}`}
+                style={{
+                  transform: `translateX(-50%)`,
+                  left: `${offsetX}px`,
+                  top: 0
+                }}
+              >
+                <span>{num}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

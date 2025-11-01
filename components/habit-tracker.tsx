@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import FirstUserForm from "./first-user-form"
 import type { Habit, DayRecord } from "@/app/page"
 import HabitGrid from "./habit-grid"
 import HabitHeader from "./habit-header"
@@ -22,8 +23,25 @@ export default function HabitTracker({
   isNewHabitMode,
   compact = false,
 }: HabitTrackerProps) {
+  // First-time user info state
+  const [userInfo, setUserInfo] = useState<{ username: string; email: string } | null>(null)
+  const [userChecked, setUserChecked] = useState(false)
   const [dayRecords, setDayRecords] = useState<DayRecord[]>([])
   const [isSaved, setIsSaved] = useState(false)
+  // On mount, check for user info in localStorage
+  useEffect(() => {
+    const stored = localStorage.getItem("ht_userInfo")
+    if (stored) {
+      setUserInfo(JSON.parse(stored))
+    }
+    setUserChecked(true)
+  }, [])
+
+  // Handler for first user form
+  const handleFirstUser = (user: { username: string; email: string }) => {
+    setUserInfo(user)
+    localStorage.setItem("ht_userInfo", JSON.stringify(user))
+  }
 
   useEffect(() => {
     if (habit) {
@@ -83,6 +101,11 @@ export default function HabitTracker({
     setIsSaved(true)
   }
 
+  // Show first-user form if not set
+  if (userChecked && !userInfo) {
+    return <FirstUserForm onSubmit={handleFirstUser} />
+  }
+
   if (isNewHabitMode) {
     if (compact) {
       return (
@@ -94,7 +117,6 @@ export default function HabitTracker({
         </div>
       )
     }
-
     return <HabitHeader onSave={handleSaveHabit} isSaved={false} habitData={{ name: "", person: "" }} compact={compact} />
   }
 

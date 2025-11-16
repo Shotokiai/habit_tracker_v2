@@ -1,18 +1,19 @@
 import { useState } from "react"
 
 interface FirstUserFormProps {
-  onSubmit: (user: { username: string; email: string }) => void
+  onSubmit: (user: { username: string; email: string; age: number }) => void
 }
 
 export default function FirstUserForm({ onSubmit }: FirstUserFormProps) {
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
+  const [age, setAge] = useState("")
   const [error, setError] = useState("")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!username.trim() || !email.trim()) {
-      setError("Please fill in both fields.")
+    if (!username.trim() || !email.trim() || !age) {
+      setError("Please fill in all fields.")
       return
     }
     setError("")
@@ -22,7 +23,7 @@ export default function FirstUserForm({ onSubmit }: FirstUserFormProps) {
         const res = await fetch('/api/register-user', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, email }),
+          body: JSON.stringify({ username, email, age: parseInt(age) }),
         })
         if (!res.ok) {
           const json = await res.json().catch(() => ({}))
@@ -30,7 +31,7 @@ export default function FirstUserForm({ onSubmit }: FirstUserFormProps) {
           return
         }
         // success
-        onSubmit({ username, email })
+        onSubmit({ username, email, age: parseInt(age) })
       } catch (err) {
         console.error(err)
         setError('Network error')
@@ -48,6 +49,18 @@ export default function FirstUserForm({ onSubmit }: FirstUserFormProps) {
         onChange={e => setUsername(e.target.value)}
         className="px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
       />
+      <select
+        value={age}
+        onChange={e => setAge(e.target.value)}
+        className="px-4 py-2 border border-foreground/20 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+      >
+        <option value="">Select your age</option>
+        {Array.from({ length: 66 }, (_, i) => 15 + i).map(a => (
+          <option key={a} value={a}>
+            {a} years old
+          </option>
+        ))}
+      </select>
       <input
         type="email"
         placeholder="Your email"

@@ -10,9 +10,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method not allowed' })
   }
 
-  const { username, email } = req.body
-  if (!username || !email) {
-    return res.status(400).json({ error: 'Missing username or email' })
+  const { username, email, age } = req.body
+  if (!username || !email || !age) {
+    return res.status(400).json({ error: 'Missing username, email, or age' })
+  }
+
+  // Validate age is between 15 and 80
+  const ageNum = parseInt(age, 10)
+  if (isNaN(ageNum) || ageNum < 15 || ageNum > 80) {
+    return res.status(400).json({ error: 'Age must be between 15 and 80' })
   }
 
   try {
@@ -21,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ data: { username, email, createdAt: new Date().toISOString() } }),
+      body: JSON.stringify({ data: { username, email, age: ageNum, createdAt: new Date().toISOString() } }),
     })
 
     if (!response.ok) {

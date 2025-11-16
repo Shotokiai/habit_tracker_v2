@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import FirstUserForm from "./first-user-form"
-import type { Habit, DayRecord } from "@/app/page"
+import type { Habit, DayRecord } from "@/lib/types"
 import HabitGrid from "./habit-grid"
 import HabitHeader from "./habit-header"
 
@@ -121,43 +121,62 @@ export default function HabitTracker({
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4 h-full">
+    <div className="flex flex-col gap-2 p-2 h-full">
       {habit && isSaved && (
         <>
-          <div className="bg-card rounded-lg p-4 border border-foreground/10">
-            <p className="text-sm text-muted-foreground">
-              Why I want to build this habit? <span className="font-semibold text-foreground">{habit.person}</span>
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              Month:{" "}
-              {new Date(habit.monthYear + "-01").toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              })}
-            </p>
+          {/* Top bar with Back, habit name, Add */}
+          <div className="bg-card border-b border-foreground/10 p-2 flex items-center justify-between gap-2 rounded-t-lg">
+            <button
+              onClick={onDeleteHabit}
+              className="px-2 py-1 bg-transparent text-foreground font-semibold rounded text-sm hover:underline"
+              title="Back"
+            >
+              Back
+            </button>
+            <h1 className="flex-1 text-center text-base font-bold text-foreground truncate">
+              {habit.name}
+            </h1>
+            <button
+              className="px-2 py-1 bg-transparent text-primary font-semibold rounded text-sm hover:underline"
+              title="Add"
+              disabled
+            >
+              Add
+            </button>
           </div>
 
-          <HabitGrid dayRecords={dayRecords} />
+          {/* Quote box placeholder */}
+          <div className="bg-card border border-foreground/10 rounded-lg p-2 my-2 text-center text-base font-semibold">
+            Quote
+          </div>
 
-          <div className="flex flex-col gap-3">
+          {/* Change view */}
+          <div className="text-center text-base font-semibold mb-2">Change view V</div>
+
+          {/* Dotted structure grid */}
+          <div className="flex-1 flex items-center justify-center">
+            <HabitGrid dayRecords={dayRecords} />
+          </div>
+
+          {/* Two CTAs side by side */}
+          <div className="flex gap-2 mt-2">
             <button
               onClick={handleLetGo}
-              className="w-full px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-primary shadow-md"
+              className="flex-1 px-4 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-primary shadow-md"
             >
               Let's Go
             </button>
             <button
               onClick={handleHabitMissed}
-              className="w-full px-6 py-3 bg-destructive text-white font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-destructive shadow-md"
+              className="flex-1 px-4 py-3 bg-destructive text-white font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-destructive shadow-md"
             >
               Miss My Routine
             </button>
-            <button
-              onClick={onDeleteHabit}
-              className="w-full px-6 py-2 bg-muted text-foreground font-semibold rounded-lg hover:bg-muted-foreground/50 transition-colors text-sm"
-            >
-              Delete Habit
-            </button>
+          </div>
+
+          {/* Want to give up text at bottom */}
+          <div className="w-full text-center text-base font-semibold mt-4 mb-2">
+            Want to give up
           </div>
         </>
       )}

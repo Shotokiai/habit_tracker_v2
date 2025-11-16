@@ -1,49 +1,41 @@
 "use client"
 
+
 import { useState, useEffect } from "react"
 import HabitTracker from "@/components/habit-tracker"
-
-export interface Habit {
-  id: string
-  name: string
-  person: string
-  dayRecords: DayRecord[]
-  createdAt: string
-  monthYear: string
-}
-
-export interface DayRecord {
-  x: number
-  y: number
-}
+import FirstUserForm from "@/components/first-user-form"
+import HabitSelection from "@/components/habit-selection"
+import type { Habit, DayRecord } from "@/lib/types"
 
 export default function Home() {
-  const [habits, setHabits] = useState<Habit[]>([])
-  const [currentHabitIndex, setCurrentHabitIndex] = useState(0)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [touchStart, setTouchStart] = useState(0)
-  const [touchEnd, setTouchEnd] = useState(0)
+  const [habits, setHabits] = useState<Habit[]>([]);
+  const [currentHabitIndex, setCurrentHabitIndex] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const [user, setUser] = useState<{ username: string; age: number; email: string } | null>(null);
+  const [habitSelection, setHabitSelection] = useState<string | null>(null);
 
   useEffect(() => {
-    const savedHabits = localStorage.getItem("habits")
+    const savedHabits = localStorage.getItem("habits");
     if (savedHabits) {
       try {
-        setHabits(JSON.parse(savedHabits))
+        setHabits(JSON.parse(savedHabits));
       } catch {
-        setHabits([])
+        setHabits([]);
       }
     }
-    setIsLoaded(true)
-  }, [])
+    setIsLoaded(true);
+  }, []);
 
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem("habits", JSON.stringify(habits))
+      localStorage.setItem("habits", JSON.stringify(habits));
     }
-  }, [habits, isLoaded])
+  }, [habits, isLoaded]);
 
   const addHabit = (name: string, person: string) => {
-    const currentMonthYear = new Date().toISOString().slice(0, 7)
+    const currentMonthYear = new Date().toISOString().slice(0, 7);
     const newHabit: Habit = {
       id: Date.now().toString(),
       name,
@@ -51,38 +43,35 @@ export default function Home() {
       dayRecords: [],
       createdAt: new Date().toISOString(),
       monthYear: currentMonthYear,
-    }
-    setHabits([...habits, newHabit])
-    setCurrentHabitIndex(habits.length)
-  }
-
+    };
+    setHabits([...habits, newHabit]);
+    setCurrentHabitIndex(habits.length);
+  };
   const updateHabitRecords = (habitId: string, dayRecords: DayRecord[]) => {
-    setHabits(habits.map((habit) => (habit.id === habitId ? { ...habit, dayRecords } : habit)))
-  }
-
+    setHabits(habits.map((habit) => (habit.id === habitId ? { ...habit, dayRecords } : habit)));
+  };
   const deleteHabit = (habitId: string) => {
-    const newHabits = habits.filter((h) => h.id !== habitId)
-    setHabits(newHabits)
+    const newHabits = habits.filter((h) => h.id !== habitId);
+    setHabits(newHabits);
     if (currentHabitIndex >= newHabits.length && currentHabitIndex > 0) {
-      setCurrentHabitIndex(currentHabitIndex - 1)
+      setCurrentHabitIndex(currentHabitIndex - 1);
     }
-  }
+  };
 
   const handleSwipe = () => {
-    const distance = touchStart - touchEnd
-    const isLeftSwipe = distance > 50
-    const isRightSwipe = distance < -50
-
+  const distance = touchStart - touchEnd;
+  const isLeftSwipe = distance > 50;
+  const isRightSwipe = distance < -50;
     if (isLeftSwipe && currentHabitIndex < habits.length - 1) {
-      setCurrentHabitIndex(currentHabitIndex + 1)
+      setCurrentHabitIndex(currentHabitIndex + 1);
     } else if (isLeftSwipe && currentHabitIndex === habits.length - 1) {
-      setCurrentHabitIndex(0)
+      setCurrentHabitIndex(0);
     } else if (isRightSwipe && currentHabitIndex > 0) {
-      setCurrentHabitIndex(currentHabitIndex - 1)
+      setCurrentHabitIndex(currentHabitIndex - 1);
     } else if (isRightSwipe && currentHabitIndex === 0) {
-      setCurrentHabitIndex(habits.length - 1)
+      setCurrentHabitIndex(habits.length - 1);
     }
-  }
+  };
 
   if (!isLoaded) {
     return (
@@ -95,21 +84,39 @@ export default function Home() {
     )
   }
 
+  // Show onboarding form first
+  if (!user) {
+    return (
+      <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
+        <FirstUserForm onSubmit={setUser} />
+      </main>
+    );
+  }
+
+  // Show habit selection after onboarding
+  if (!habitSelection) {
+    return (
+      <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
+        <HabitSelection onSelect={(habit) => {
+          setHabitSelection(habit);
+          // When habit is selected, add a new habit with person='__hide__' to hide 'why' input
+          addHabit(habit, "__hide__");
+        }} />
+      </main>
+    );
+  }
+
   return (
     <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
       <div
-        className="w-full h-screen max-w-md bg-background overflow-hidden flex flex-col"
-        onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
-        onTouchEnd={(e) => {
-          setTouchEnd(e.changedTouches[0].clientX)
-          handleSwipe()
+  className="w-full h-screen max-w-md bg-background overflow-hidden flex flex-col"
+  onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
+  onTouchEnd={(e) => {
+          setTouchEnd(e.changedTouches[0].clientX);
+          handleSwipe();
         }}
       >
         {(habits.length === 0 || currentHabitIndex === habits.length) ? (
-          // If there are no habits, or the user clicked Add (current index === habits.length),
-          // show the new-habit UI. When there are existing habits we render the compact add UI
-          // in-place (so it appears just below the top bar) by using HabitTracker in new-habit mode
-          // but letting the page layout keep the header and grid visible.
           <HabitTracker
             habit={null}
             onAddHabit={addHabit}
@@ -161,5 +168,5 @@ export default function Home() {
         )}
       </div>
     </main>
-  )
+  );
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import FirstUserForm from "./first-user-form"
 import type { Habit, DayRecord } from "@/app/page"
 import HabitGrid from "./habit-grid"
 import HabitHeader from "./habit-header"
@@ -86,12 +87,12 @@ export default function HabitTracker({
   }
 
   return (
-    <div className="flex flex-col gap-6 p-4">
+    <div className="flex flex-col gap-4 p-4 h-full">
       {habit && isSaved && (
         <>
           <div className="bg-card rounded-lg p-4 border border-foreground/10">
             <p className="text-sm text-muted-foreground">
-              Tracked by: <span className="font-semibold text-foreground">{habit.person}</span>
+              Why I want to build this habit? <span className="font-semibold text-foreground">{habit.person}</span>
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               Month:{" "}
@@ -102,27 +103,33 @@ export default function HabitTracker({
             </p>
           </div>
 
-          <HabitGrid dayRecords={dayRecords} />
+          {/* Change view */}
+          <div className="text-center text-base font-semibold mb-2">Change view V</div>
 
-          <div className="flex flex-col gap-3">
+          {/* Dotted structure grid */}
+          <div className="flex-1 flex items-center justify-center">
+            <HabitGrid dayRecords={dayRecords} />
+          </div>
+
+          {/* Two CTAs side by side */}
+          <div className="flex gap-2 mt-2">
             <button
               onClick={handleLetGo}
-              className="w-full px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-primary shadow-md"
+              className="flex-1 px-4 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-primary shadow-md"
             >
               Let's Go
             </button>
             <button
               onClick={handleHabitMissed}
-              className="w-full px-6 py-3 bg-destructive text-destructive-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-destructive shadow-md"
+              className="w-full px-6 py-3 bg-destructive text-white font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-destructive shadow-md"
             >
               Habit Missed
             </button>
-            <button
-              onClick={onDeleteHabit}
-              className="w-full px-6 py-2 bg-muted text-foreground font-semibold rounded-lg hover:bg-muted-foreground/50 transition-colors text-sm"
-            >
-              Delete Habit
-            </button>
+          </div>
+
+          {/* Want to give up text at bottom */}
+          <div className="w-full text-center text-base font-semibold mt-4 mb-2">
+            Want to give up
           </div>
         </>
       )}

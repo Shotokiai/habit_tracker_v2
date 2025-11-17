@@ -9,7 +9,6 @@ export default function FirstUserForm({ onSubmit }: FirstUserFormProps) {
   const [username, setUsername] = useState("")
   const [age, setAge] = useState<number | "">("")
   const [email, setEmail] = useState("")
-  const [age, setAge] = useState("")
   const [error, setError] = useState("")
 
   const isFormFilled = username.trim() && age !== "" && email.trim();

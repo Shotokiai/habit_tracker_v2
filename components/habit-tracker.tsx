@@ -90,21 +90,11 @@ export default function HabitTracker({
     <div className="flex flex-col gap-4 p-4 h-full">
       {habit && isSaved && (
         <>
-          <div className="bg-card rounded-lg p-4 border border-foreground/10">
-            <p className="text-sm text-muted-foreground">
-              Why I want to build this habit? <span className="font-semibold text-foreground">{habit.person}</span>
-            </p>
-            <p className="text-xs text-muted-foreground mt-1">
-              Month:{" "}
-              {new Date(habit.monthYear + "-01").toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              })}
-            </p>
+          {/* Habit Title at Top */}
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-bold text-foreground truncate">{habit.name}</h2>
+            <div className="text-base font-semibold text-right">Change view V</div>
           </div>
-
-          {/* Change view */}
-          <div className="text-center text-base font-semibold mb-2">Change view V</div>
 
           {/* Dotted structure grid */}
           <div className="flex-1 flex items-center justify-center">

@@ -5,9 +5,9 @@ import { useState, useEffect } from "react"
 import HabitTracker from "@/components/habit-tracker"
 import FirstUserForm from "@/components/first-user-form"
 import HabitSelection from "@/components/habit-selection"
+import CustomHabitScreen from "@/components/CustomHabitScreen"
 import type { Habit, DayRecord } from "@/lib/types"
 
-export default function Home() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [currentHabitIndex, setCurrentHabitIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -15,6 +15,7 @@ export default function Home() {
   const [touchEnd, setTouchEnd] = useState(0);
   const [user, setUser] = useState<{ username: string; age: number; email: string } | null>(null);
   const [habitSelection, setHabitSelection] = useState<string | null>(null);
+  const [customHabitType, setCustomHabitType] = useState<"make" | "break" | null>(null);
 
   useEffect(() => {
     const savedHabits = localStorage.getItem("habits");
@@ -93,15 +94,42 @@ export default function Home() {
     );
   }
 
+
   // Show habit selection after onboarding
-  if (!habitSelection) {
+  if (!habitSelection && !customHabitType) {
     return (
       <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
-        <HabitSelection onSelect={(habit) => {
-          setHabitSelection(habit);
-          // When habit is selected, add a new habit with person='__hide__' to hide 'why' input
-          addHabit(habit, "__hide__");
-        }} />
+        <HabitSelection
+          onSelect={(habit) => {
+            if (habit === "custom_make") {
+              setCustomHabitType("make");
+            } else if (habit === "custom_break") {
+              setCustomHabitType("break");
+            } else {
+              setHabitSelection(habit);
+              addHabit(habit, "__hide__");
+            }
+          }}
+        />
+      </main>
+    );
+  }
+
+  // Show custom habit creation screen
+  if (customHabitType) {
+    return (
+      <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
+        <div className="w-full max-w-md">
+          <CustomHabitScreen
+            habitType={customHabitType}
+            onHabitCreate={(habitName) => {
+              addHabit(habitName, "__hide__");
+              setHabitSelection(habitName);
+              setCustomHabitType(null);
+            }}
+            onBack={() => setCustomHabitType(null)}
+          />
+        </div>
       </main>
     );
   }

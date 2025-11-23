@@ -6,7 +6,7 @@ const makeHabits = [
   { key: "read", label: "Read 20 Min a day", img: "/images/read.png" },
   { key: "workout", label: "30 min Basic Workout", img: "/images/workout.png" },
   { key: "plan", label: "Plan the next day", img: "/images/plan.png" },
-  { key: "custom", label: "Create your own", img: "/images/custom.png" },
+  { key: "custom_make", label: "Create your own", img: "/images/custom.png" },
 ];
 
 const breakHabits = [
@@ -15,7 +15,7 @@ const breakHabits = [
   { key: "reels", label: "Scrolling reels for long periods", img: "/images/reels.png" },
   { key: "smoking", label: "Smoking cigarettes", img: "/images/smoking.png" },
   { key: "selftalk", label: "Negative self talk", img: "/images/selftalk.png" },
-  { key: "custom", label: "Create your own", img: "/images/custom.png" },
+  { key: "custom_break", label: "Create your own", img: "/images/custom.png" },
 ];
 
 export default function HabitSelection({ onSelect }: { onSelect: (habit: string) => void }) {

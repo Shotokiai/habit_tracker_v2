@@ -43,11 +43,12 @@ export default function FirstUserForm({ onSubmit }: FirstUserFormProps) {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
-      <div className="w-full max-w-xs mx-auto bg-card rounded-lg shadow-md border border-foreground/10 p-0 relative flex flex-col items-center">
-        {/* Mobile vertical background section */}
-        <div className="absolute inset-0 h-1/3 w-full bg-gradient-to-b from-primary/30 to-transparent rounded-t-lg z-0" />
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6 w-full z-10">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted p-4">
+      <div className="w-full max-w-sm bg-card rounded-lg shadow-lg border border-foreground/10 p-0 relative">
+        {/* Header gradient */}
+        <div className="absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-primary/20 to-transparent rounded-t-lg" />
+        
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6 relative z-10">
           <h2 className="text-lg font-bold text-center">Welcome! Tell us about yourself</h2>
           <input
             type="text"

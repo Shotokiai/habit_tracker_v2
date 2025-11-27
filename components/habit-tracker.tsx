@@ -23,6 +23,8 @@ export default function HabitTracker({
 }: HabitTrackerProps) {
   const [dayRecords, setDayRecords] = useState<DayRecord[]>([])
   const [isSaved, setIsSaved] = useState(false)
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
+  const [showViewDropdown, setShowViewDropdown] = useState(false)
 
   useEffect(() => {
     if (habit) {
@@ -55,7 +57,7 @@ export default function HabitTracker({
       }
       const newX = lastRecord.x + 1
       const newY = lastRecord.y + 1
-      if (newX <= 31 && newY <= 31) {
+      if (newX <= 30 && newY <= 30) {
         return [...prev, { x: newX, y: newY }]
       }
       return prev
@@ -70,7 +72,7 @@ export default function HabitTracker({
       }
       const newX = lastRecord.x + 1
       const newY = Math.max(0, lastRecord.y - 1)
-      if (newX <= 31) {
+      if (newX <= 30) {
         return [...prev, { x: newX, y: newY }]
       }
       return prev
@@ -82,6 +84,19 @@ export default function HabitTracker({
     setIsSaved(true)
   }
 
+  const handleGiveUpClick = () => {
+    setShowDeleteConfirmation(true)
+  }
+
+  const handleConfirmDelete = () => {
+    onDeleteHabit()
+    setShowDeleteConfirmation(false)
+  }
+
+  const handleCancelDelete = () => {
+    setShowDeleteConfirmation(false)
+  }
+
   if (isNewHabitMode) {
     return <HabitHeader onSave={handleSaveHabit} isSaved={false} habitData={{ name: "", person: "" }} />
   }
@@ -90,10 +105,34 @@ export default function HabitTracker({
     <div className="flex flex-col gap-4 p-4 h-full">
       {habit && isSaved && (
         <>
-          {/* Habit Title at Top */}
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-bold text-foreground truncate">{habit.name}</h2>
-            <div className="text-base font-semibold text-right">Change view V</div>
+          {/* Chart view dropdown */}
+          <div className="relative flex items-center justify-end mb-2">
+            <button
+              onClick={() => setShowViewDropdown(!showViewDropdown)}
+              className="flex items-center gap-1 text-base font-semibold text-right hover:text-primary transition-colors"
+            >
+              Chart view 
+              <span className={`transform transition-transform ${showViewDropdown ? 'rotate-180' : ''}`}>
+                ▼
+              </span>
+            </button>
+            
+            {showViewDropdown && (
+              <div className="absolute top-8 right-0 bg-background border border-foreground/20 rounded-md shadow-lg z-10 min-w-32">
+                <button
+                  onClick={() => setShowViewDropdown(false)}
+                  className="w-full px-3 py-2 text-left hover:bg-muted transition-colors text-sm"
+                >
+                  Chart view
+                </button>
+                <button
+                  onClick={() => setShowViewDropdown(false)}
+                  className="w-full px-3 py-2 text-left hover:bg-muted transition-colors text-sm"
+                >
+                  Calendar view
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Dotted structure grid */}
@@ -111,7 +150,7 @@ export default function HabitTracker({
             </button>
             <button
               onClick={handleHabitMissed}
-              className="w-full px-6 py-3 bg-destructive text-white font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-destructive shadow-md"
+              className="flex-1 px-4 py-3 bg-destructive text-white font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-destructive shadow-md"
             >
               Habit Missed
             </button>
@@ -119,8 +158,38 @@ export default function HabitTracker({
 
           {/* Want to give up text at bottom */}
           <div className="w-full text-center text-base font-semibold mt-4 mb-2">
-            Want to give up
+            <button
+              onClick={handleGiveUpClick}
+              className="underline text-foreground hover:text-muted-foreground transition-colors"
+            >
+              Want to give up
+            </button>
           </div>
+
+          {/* Confirmation Dialog */}
+          {showDeleteConfirmation && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+              <div className="bg-background border border-border rounded-lg p-6 max-w-sm mx-4 shadow-lg">
+                <h3 className="text-lg font-semibold text-foreground mb-4 text-center">
+                  Do you really don't want to continue?
+                </h3>
+                <div className="flex gap-3 mt-4">
+                  <button
+                    onClick={handleConfirmDelete}
+                    className="flex-1 px-4 py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 transition-colors"
+                  >
+                    Yes
+                  </button>
+                  <button
+                    onClick={handleCancelDelete}
+                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-md hover:bg-gray-300 transition-colors"
+                  >
+                    No
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

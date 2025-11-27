@@ -13,8 +13,21 @@ interface DotGridProps {
 }
 
 export default function DotGrid({ gridSize, spacing, dotSize, dayRecords }: DotGridProps) {
-  const isHighlighted = (x: number, y: number) => {
-    return dayRecords.some((record) => record.x === x && record.y === y && record.y > 0)
+  const getRecordType = (x: number, y: number) => {
+    const record = dayRecords.find((record) => record.x === x && record.y === y);
+    if (!record) return 'none';
+    
+    // Check if this is a missed day by comparing with previous day
+    if (x > 1) {
+      const previousRecord = dayRecords.find(r => r.x === x - 1);
+      if (previousRecord && record.y < previousRecord.y) {
+        return 'missed';
+      }
+    } else if (x === 1 && record.y === 0) {
+      return 'missed';
+    }
+    
+    return record.y >= 0 ? 'success' : 'none';
   }
 
   return (
@@ -23,13 +36,17 @@ export default function DotGrid({ gridSize, spacing, dotSize, dayRecords }: DotG
         Array.from({ length: gridSize }, (_, i) => i + 1).map((y) => {
           const posX = x * spacing - spacing / 2
           const posY = (gridSize - y + 1) * spacing - spacing / 2
-          const highlighted = isHighlighted(x, y)
+          const recordType = getRecordType(x, y)
 
           return (
             <div
               key={`${x}-${y}`}
               className={`absolute rounded-full transition-all ${
-                highlighted ? "bg-primary shadow-lg scale-125" : "bg-muted hover:bg-muted-foreground/30"
+                recordType === 'success' 
+                  ? 'bg-primary scale-150 shadow-lg' 
+                  : recordType === 'missed'
+                  ? 'bg-red-500 scale-150 shadow-lg'
+                  : 'bg-muted scale-100'
               }`}
               style={{
                 width: dotSize,

@@ -13,9 +13,9 @@ interface HabitGridProps {
 }
 
 export default function HabitGrid({ dayRecords }: HabitGridProps) {
-  const gridSize = 31
-  const dotSize = 12
-  const spacing = 18
+  const gridSize = 30
+  const dotSize = 8
+  const spacing = 12
   const gridWidth = gridSize * spacing
   const gridHeight = gridSize * spacing
 
@@ -33,25 +33,37 @@ export default function HabitGrid({ dayRecords }: HabitGridProps) {
   }, [dayRecords, gridHeight])
 
   return (
-    <div className="flex flex-col items-center gap-2 overflow-x-auto px-2 py-4">
+    <div className="flex flex-col items-center gap-2 px-4 py-4">
       <div className="relative">
         <div
-          className="absolute -left-12 top-0 flex flex-col justify-between text-xs font-semibold text-foreground"
-          style={{ height: gridHeight + 40 }}
+          className="absolute -left-8 top-0 flex flex-col justify-between text-xs font-semibold text-foreground"
+          style={{ height: gridHeight + 20 }}
         >
-          {Array.from({ length: gridSize }, (_, i) => gridSize - i).map((num) => (
-            <div key={num} className="flex items-center justify-end w-10 h-4">
-              <span>{num}</span>
-            </div>
-          ))}
+          {Array.from({ length: gridSize }, (_, i) => {
+            const num = gridSize - i;
+            return (
+              <div key={num} className="flex items-center justify-end w-6 h-4">
+                <span className="text-right">{num % 5 === 0 ? num : ''}</span>
+              </div>
+            );
+          })}
         </div>
 
         {/* Main grid container */}
         <div
-          className="relative bg-card border border-foreground/20 rounded-lg p-2 shadow-md ml-2"
-          style={{ width: gridWidth + 40, height: gridHeight + 40 }}
+          className="relative bg-card border border-foreground/20 rounded-lg p-2 shadow-md"
+          style={{ width: gridWidth + 20, height: gridHeight + 20 }}
         >
           <svg width={gridWidth + 40} height={gridHeight + 40} className="absolute inset-0 pointer-events-none">
+            {/* Diagonal guide line from (1,1) to (30,30) - plain black line */}
+            <line
+              x1={dotSize / 2 + 10}
+              y1={gridHeight - dotSize / 2 + 10}
+              x2={gridWidth - dotSize / 2 + 10}
+              y2={dotSize / 2 + 10}
+              stroke="black"
+              strokeWidth="1"
+            />
             {dayRecords.length > 0 && (
               <polyline points={linePath} fill="none" stroke="currentColor" strokeWidth="2" className="text-primary" />
             )}
@@ -61,14 +73,17 @@ export default function HabitGrid({ dayRecords }: HabitGridProps) {
         </div>
 
         <div
-          className="flex justify-between mt-2 text-xs font-semibold text-foreground ml-2"
-          style={{ width: gridWidth + 40 }}
+          className="flex justify-between mt-2 text-xs font-semibold text-foreground"
+          style={{ width: gridWidth + 20 }}
         >
-          {Array.from({ length: gridSize }, (_, i) => i + 1).map((num) => (
-            <div key={num} className="w-4 text-center text-xs">
-              <span>{num}</span>
-            </div>
-          ))}
+          {Array.from({ length: gridSize }, (_, i) => {
+            const num = i + 1;
+            return (
+              <div key={num} className="w-3 text-center text-xs">
+                <span>{num % 5 === 0 ? num : ''}</span>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

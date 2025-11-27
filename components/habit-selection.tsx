@@ -18,14 +18,43 @@ const breakHabits = [
   { key: "custom_break", label: "Create your own", img: "/images/custom.png" },
 ];
 
-export default function HabitSelection({ onSelect }: { onSelect: (habit: string) => void }) {
+export default function HabitSelection({ 
+  onSelect, 
+  onBack, 
+  userName 
+}: { 
+  onSelect: (habit: string) => void
+  onBack?: () => void
+  userName?: string
+}) {
   const [tab, setTab] = useState<'make' | 'break'>('make');
   const [selected, setSelected] = useState<string>("");
 
   const habits = tab === 'make' ? makeHabits : breakHabits;
 
   return (
-    <div className="flex flex-col gap-4 p-6 max-w-xs mx-auto bg-card rounded-lg shadow-md border border-foreground/10 mt-10">
+    <div className="flex flex-col h-full">
+      {/* Header with back button and welcome message - only show if onBack is provided */}
+      {onBack && (
+        <div className="bg-card border-b border-foreground/10 p-4 flex items-center justify-between">
+          <button
+            onClick={onBack}
+            className="p-2 hover:bg-muted rounded-full transition-colors"
+            title="Back"
+          >
+            <svg className="w-6 h-6 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <h1 className="text-lg font-bold text-foreground">
+            Welcome, {userName || 'User'}!
+          </h1>
+          <div></div> {/* Spacer for centering */}
+        </div>
+      )}
+
+      {/* Main content */}
+      <div className={`flex-1 flex flex-col gap-4 p-6 max-w-xs mx-auto ${!onBack ? 'bg-card rounded-lg shadow-md border border-foreground/10 mt-10' : ''}`}>
       <div className="flex gap-2 mb-4">
         <button
           className={`flex-1 px-2 py-1 rounded-t-lg border-b-2 ${tab === 'make' ? 'border-primary font-bold' : 'border-muted'}`}
@@ -59,6 +88,7 @@ export default function HabitSelection({ onSelect }: { onSelect: (habit: string)
       >
         Let's build →
       </button>
+      </div>
     </div>
   );
 }

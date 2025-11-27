@@ -1,13 +1,4 @@
 import { useState } from "react"
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  SafeAreaView,
-  Alert,
-} from "react-native"
 
 interface CustomHabitScreenProps {
   habitType: "make" | "break"
@@ -29,7 +20,7 @@ export default function CustomHabitScreen({
 
   const handleLetsBuild = () => {
     if (!habitText.trim()) {
-      Alert.alert("Error", "Please describe your habit")
+      alert("Please describe your habit")
       return
     }
 
@@ -37,113 +28,50 @@ export default function CustomHabitScreen({
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <div className="flex flex-col h-screen bg-background">
       {/* Header with Back Button */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={onBack} style={styles.backButton}>
-          <Text style={styles.backButtonText}>← Back</Text>
-        </TouchableOpacity>
-      </View>
+      <div className="px-4 py-3 bg-card border-b border-border">
+        <button
+          onClick={onBack}
+          className="px-3 py-2 bg-muted text-muted-foreground hover:bg-muted/80 transition-colors font-medium text-sm rounded-md"
+        >
+          ← Back
+        </button>
+      </div>
 
-      <View style={styles.content}>
+      <div className="flex-1 p-6 flex flex-col justify-center max-w-md mx-auto w-full">
         {/* Heading */}
-        <Text style={styles.heading}>{heading}</Text>
+        <h1 className="text-xl font-bold text-foreground mb-6 text-center">
+          {heading}
+        </h1>
 
         {/* Text Input */}
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
+        <div className="mb-6">
+          <textarea
+            className="w-full border-2 border-input rounded-lg p-4 text-base bg-background text-foreground min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             placeholder="Describe in an one line"
-            placeholderTextColor="#bbb"
             value={habitText}
-            onChangeText={setHabitText}
-            multiline
+            onChange={(e) => setHabitText(e.target.value)}
             maxLength={200}
           />
-          <Text style={styles.charCount}>{habitText.length}/200</Text>
-        </View>
+          <div className="text-xs text-muted-foreground text-right mt-1">
+            {habitText.length}/200
+          </div>
+        </div>
 
         {/* Let's Build Button */}
-        <TouchableOpacity
-          style={[styles.letsBuildButton, !habitText.trim() && styles.letsBuildButtonDisabled]}
-          onPress={handleLetsBuild}
+        <button
+          className={`w-full py-4 rounded-lg text-base font-bold transition-colors ${
+            habitText.trim()
+              ? "bg-primary text-primary-foreground hover:bg-primary/90"
+              : "bg-muted text-muted-foreground cursor-not-allowed"
+          }`}
+          onClick={handleLetsBuild}
           disabled={!habitText.trim()}
         >
-          <Text style={styles.letsBuildButtonText}>Let's Build →</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+          Let's Build →
+        </button>
+      </div>
+    </div>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
-  header: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    backgroundColor: "#fff",
-    borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
-  },
-  backButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 6,
-    alignSelf: "flex-start",
-  },
-  backButtonText: {
-    color: "#1a1a1a",
-    fontWeight: "bold",
-    fontSize: 14,
-  },
-  content: {
-    flex: 1,
-    padding: 24,
-    justifyContent: "center",
-  },
-  heading: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#1a1a1a",
-    marginBottom: 24,
-    textAlign: "center",
-  },
-  inputContainer: {
-    marginBottom: 24,
-  },
-  input: {
-    borderWidth: 2,
-    borderColor: "#ddd",
-    borderRadius: 12,
-    padding: 14,
-    fontSize: 16,
-    backgroundColor: "#fff",
-    color: "#000",
-    minHeight: 100,
-    textAlignVertical: "top",
-  },
-  charCount: {
-    fontSize: 12,
-    color: "#999",
-    textAlign: "right",
-    marginTop: 4,
-  },
-  letsBuildButton: {
-    backgroundColor: "#3b82f6",
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  letsBuildButtonDisabled: {
-    backgroundColor: "#ccc",
-  },
-  letsBuildButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-})

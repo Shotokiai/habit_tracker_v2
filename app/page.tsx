@@ -8,6 +8,8 @@ import HabitSelection from "@/components/habit-selection"
 import CustomHabitScreen from "@/components/CustomHabitScreen"
 import type { Habit, DayRecord } from "@/lib/types"
 
+
+export default function Page() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [currentHabitIndex, setCurrentHabitIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -60,9 +62,9 @@ import type { Habit, DayRecord } from "@/lib/types"
   };
 
   const handleSwipe = () => {
-  const distance = touchStart - touchEnd;
-  const isLeftSwipe = distance > 50;
-  const isRightSwipe = distance < -50;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
     if (isLeftSwipe && currentHabitIndex < habits.length - 1) {
       setCurrentHabitIndex(currentHabitIndex + 1);
     } else if (isLeftSwipe && currentHabitIndex === habits.length - 1) {
@@ -82,7 +84,7 @@ import type { Habit, DayRecord } from "@/lib/types"
           <p className="text-foreground">Loading your habits...</p>
         </div>
       </div>
-    )
+    );
   }
 
   // Show onboarding form first
@@ -93,7 +95,6 @@ import type { Habit, DayRecord } from "@/lib/types"
       </main>
     );
   }
-
 
   // Show habit selection after onboarding
   if (!habitSelection && !customHabitType) {
@@ -137,9 +138,9 @@ import type { Habit, DayRecord } from "@/lib/types"
   return (
     <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
       <div
-  className="w-full h-screen max-w-md bg-background overflow-hidden flex flex-col"
-  onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
-  onTouchEnd={(e) => {
+        className="w-full h-screen max-w-md bg-background overflow-hidden flex flex-col"
+        onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
+        onTouchEnd={(e) => {
           setTouchEnd(e.changedTouches[0].clientX);
           handleSwipe();
         }}

@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react"
 import FirstUserForm from "./first-user-form"
-import type { Habit, DayRecord } from "@/app/page"
+import type { Habit, DayRecord } from "@/lib/types"
 import HabitGrid from "./habit-grid"
 import HabitHeader from "./habit-header"
+import HabitCalendar from "./habit-calendar"
 
 interface HabitTrackerProps {
   habit: Habit | null
@@ -25,6 +26,8 @@ export default function HabitTracker({
   const [isSaved, setIsSaved] = useState(false)
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
   const [showViewDropdown, setShowViewDropdown] = useState(false)
+  const [currentView, setCurrentView] = useState<'chart' | 'calendar'>('chart')
+  const [hasUsedCalendar, setHasUsedCalendar] = useState(false)
 
   useEffect(() => {
     if (habit) {
@@ -111,7 +114,7 @@ export default function HabitTracker({
               onClick={() => setShowViewDropdown(!showViewDropdown)}
               className="flex items-center gap-1 text-base font-semibold text-right hover:text-primary transition-colors"
             >
-              Chart view 
+              {currentView === 'chart' ? 'Chart view' : 'Calendar view'}
               <span className={`transform transition-transform ${showViewDropdown ? 'rotate-180' : ''}`}>
                 ▼
               </span>
@@ -120,14 +123,32 @@ export default function HabitTracker({
             {showViewDropdown && (
               <div className="absolute top-8 right-0 bg-background border border-foreground/20 rounded-md shadow-lg z-10 min-w-32">
                 <button
-                  onClick={() => setShowViewDropdown(false)}
-                  className="w-full px-3 py-2 text-left hover:bg-muted transition-colors text-sm"
+                  onClick={() => {
+                    if (!hasUsedCalendar) {
+                      setCurrentView('chart')
+                      setShowViewDropdown(false)
+                    }
+                  }}
+                  className={`w-full px-3 py-2 text-left transition-colors text-sm relative ${
+                    currentView === 'chart' ? 'bg-muted font-semibold' : ''
+                  } ${hasUsedCalendar ? 'cursor-not-allowed' : 'hover:bg-muted'}`}
                 >
-                  Chart view
+                  <span className={hasUsedCalendar ? 'opacity-50' : ''}>
+                    Chart view
+                  </span>
+                  {hasUsedCalendar && (
+                    <div className="absolute inset-0 bg-gray-200 opacity-30 rounded"></div>
+                  )}
                 </button>
                 <button
-                  onClick={() => setShowViewDropdown(false)}
-                  className="w-full px-3 py-2 text-left hover:bg-muted transition-colors text-sm"
+                  onClick={() => {
+                    setCurrentView('calendar')
+                    setHasUsedCalendar(true)
+                    setShowViewDropdown(false)
+                  }}
+                  className={`w-full px-3 py-2 text-left hover:bg-muted transition-colors text-sm ${
+                    currentView === 'calendar' ? 'bg-muted font-semibold' : ''
+                  }`}
                 >
                   Calendar view
                 </button>
@@ -135,9 +156,16 @@ export default function HabitTracker({
             )}
           </div>
 
-          {/* Dotted structure grid */}
+          {/* Dotted structure grid or Calendar view */}
           <div className="flex-1 flex items-center justify-center">
-            <HabitGrid dayRecords={dayRecords} />
+            {currentView === 'chart' ? (
+              <HabitGrid dayRecords={dayRecords} />
+            ) : (
+              <HabitCalendar 
+                dayRecords={dayRecords} 
+                habitStartDate={habit.createdAt}
+              />
+            )}
           </div>
 
           {/* Two CTAs side by side */}

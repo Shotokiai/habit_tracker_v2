@@ -1,93 +1,284 @@
 import { useState } from "react";
 
-const makeHabits = [
-  { key: "walk", label: "Walk 2km a day", img: "/images/walk.png" },
-  { key: "water", label: "Drink 3L water daily", img: "/images/water.png" },
-  { key: "read", label: "Read 20 Min a day", img: "/images/read.png" },
-  { key: "workout", label: "30 min Basic Workout", img: "/images/workout.png" },
-  { key: "plan", label: "Plan the next day", img: "/images/plan.png" },
-  { key: "custom_make", label: "Create your own", img: "/images/custom.png" },
-];
-
-const breakHabits = [
-  { key: "gaming", label: "Limit Excessive gaming", img: "/images/gaming.png" },
-  { key: "junkfood", label: "Eating junk food", img: "/images/junkfood.png" },
-  { key: "reels", label: "Scrolling reels for long periods", img: "/images/reels.png" },
-  { key: "smoking", label: "Smoking cigarettes", img: "/images/smoking.png" },
-  { key: "selftalk", label: "Negative self talk", img: "/images/selftalk.png" },
-  { key: "custom_break", label: "Create your own", img: "/images/custom.png" },
-];
+const getHabitsForAge = (age: number, type: 'make' | 'break') => {
+  if (age >= 15 && age <= 20) {
+    return type === 'make' ? [
+      { key: "study", label: "Study focused for 25 mins", emoji: "📚" },
+      { key: "walk", label: "Walk briskly 15 mins daily", emoji: "🚶" },
+      { key: "meditate", label: "Meditate calmly for 10 mins", emoji: "🧘" },
+      { key: "read", label: "Read 10 pages daily", emoji: "📖" },
+    ] : [
+      { key: "noPhone", label: "No phone after 9 PM", emoji: "📵" },
+      { key: "noSoda", label: "Skip soda daily", emoji: "🥤" },
+      { key: "sleep", label: "Avoid sleeping less than 7 hours", emoji: "😴" },
+      { key: "noJunk", label: "Avoid junk food daily", emoji: "🍟" },
+    ];
+  } else if (age >= 21 && age <= 25) {
+    return type === 'make' ? [
+      { key: "save", label: "Saved ₹100 everyday", emoji: "💰" },
+      { key: "cook", label: "Cook breakfast before work", emoji: "🍳" },
+      { key: "callFriend", label: "Call one friend after dinner", emoji: "📞" },
+      { key: "stretch", label: "Stretch after waking up", emoji: "🤸" },
+    ] : [
+      { key: "limitCoffee", label: "Limit coffee to one cup", emoji: "☕" },
+      { key: "noScreens", label: "No screens after 10 PM", emoji: "📺" },
+      { key: "walkInstead", label: "Walk instead of driving short distances", emoji: "🚶" },
+      { key: "noLateNights", label: "Cut late nights", emoji: "🌙" },
+    ];
+  } else if (age >= 26 && age <= 30) {
+    return type === 'make' ? [
+      { key: "readNews", label: "Read news during morning tea", emoji: "📰" },
+      { key: "water", label: "Drink 2L of water daily", emoji: "💧" },
+      { key: "hobby", label: "Do hobby 20 mins daily", emoji: "🎨" },
+      { key: "planMeals", label: "Plan meals for the week", emoji: "📋" },
+    ] : [
+      { key: "noEatingOut", label: "No eating out daily", emoji: "🍽️" },
+      { key: "workLimit", label: "Work limit 8 hours", emoji: "⏰" },
+      { key: "noSnacks", label: "No snacks after 8 PM", emoji: "🍪" },
+      { key: "trackExpenses", label: "Track daily expenses", emoji: "💳" },
+    ];
+  } else if (age >= 31 && age <= 35) {
+    return type === 'make' ? [
+      { key: "familyChat", label: "Family chat 15 mins", emoji: "👨‍👩‍👧‍👦" },
+      { key: "strength", label: "Strength training 20 mins", emoji: "💪" },
+      { key: "breathing", label: "Deep breathing after waking up", emoji: "🫁" },
+      { key: "journal", label: "Journal before sleep", emoji: "📝" },
+    ] : [
+      { key: "oneTask", label: "One task at a time (no multitasking)", emoji: "🎯" },
+      { key: "noSugary", label: "Skip sugary drinks", emoji: "🧃" },
+      { key: "bedtime", label: "Bedtime by 11 PM", emoji: "🛏️" },
+      { key: "noWeekendBinge", label: "No weekend screen binge", emoji: "📱" },
+    ];
+  } else if (age >= 36 && age <= 40) {
+    return type === 'make' ? [
+      { key: "freshLunch", label: "Lunch cooked fresh daily", emoji: "🥘" },
+      { key: "morningWalk", label: "Morning walk before 8 AM", emoji: "🌅" },
+      { key: "waterMorning", label: "Drink 2 glasses of water in the morning", emoji: "💧" },
+      { key: "stretchDaily", label: "Stretch 10 mins daily", emoji: "🤸" },
+    ] : [
+      { key: "noFoodAfter8", label: "No food after 8 PM", emoji: "🍽️" },
+      { key: "stand2Min", label: "Stand for 2 minutes every hour", emoji: "🧍" },
+      { key: "moveHourly", label: "Move body every hour", emoji: "🚶" },
+      { key: "reduceAlcohol", label: "Reduce alcohol intake", emoji: "🍷" },
+    ];
+  } else { // 40+
+    return type === 'make' ? [
+      { key: "yoga", label: "Yoga 15 mins", emoji: "🧘" },
+      { key: "stretchBed", label: "Stretch before bed", emoji: "🤸" },
+      { key: "fruitBreakfast", label: "Eat fruit with breakfast", emoji: "🍎" },
+      { key: "puzzle", label: "Solve puzzle 10 mins", emoji: "🧩" },
+    ] : [
+      { key: "noProcessed", label: "No processed packaged foods", emoji: "📦" },
+      { key: "stand30Min", label: "Stand every 30 mins", emoji: "🧍" },
+      { key: "limitSugar", label: "Limit sugar intake", emoji: "🍭" },
+      { key: "checkHealth", label: "Check health signs daily", emoji: "🩺" },
+    ];
+  }
+};
 
 export default function HabitSelection({ 
   onSelect, 
   onBack, 
-  userName 
+  userName,
+  userAge = 25 // Default age if not provided
 }: { 
   onSelect: (habit: string) => void
   onBack?: () => void
   userName?: string
+  userAge?: number
 }) {
   const [tab, setTab] = useState<'make' | 'break'>('make');
   const [selected, setSelected] = useState<string>("");
+  const [customHabit, setCustomHabit] = useState<string>("");
+  const maxCustomLength = 25;
 
-  const habits = tab === 'make' ? makeHabits : breakHabits;
+  const habits = getHabitsForAge(userAge, tab);
+
+  const handleStartBuilding = async () => {
+    if (customHabit.trim()) {
+      // Track custom habit creation in Google Sheets
+      try {
+        await fetch('/api/track-custom-habit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            habitName: customHabit.trim(),
+            habitType: tab,
+            userAge,
+            userName
+          })
+        });
+      } catch (error) {
+        console.error('Failed to track custom habit:', error);
+      }
+      
+      // Handle custom habit
+      onSelect(tab === 'make' ? `custom_make:${customHabit.trim()}` : `custom_break:${customHabit.trim()}`);
+    } else if (selected) {
+      // Handle predefined habit
+      onSelect(selected);
+    }
+  };
+
+  const isFormValid = selected || customHabit.trim();
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Header with back button and welcome message - only show if onBack is provided */}
-      {onBack && (
-        <div className="bg-card border-b border-foreground/10 p-4 flex items-center justify-between">
-          <button
-            onClick={onBack}
-            className="p-2 hover:bg-muted rounded-full transition-colors"
-            title="Back"
-          >
-            <svg className="w-6 h-6 text-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <h1 className="text-lg font-bold text-foreground">
-            Welcome, {userName || 'User'}!
-          </h1>
-          <div></div> {/* Spacer for centering */}
-        </div>
-      )}
-
-      {/* Main content */}
-      <div className={`flex-1 flex flex-col gap-4 p-6 max-w-xs mx-auto ${!onBack ? 'bg-card rounded-lg shadow-md border border-foreground/10 mt-10' : ''}`}>
-      <div className="flex gap-2 mb-4">
-        <button
-          className={`flex-1 px-2 py-1 rounded-t-lg border-b-2 ${tab === 'make' ? 'border-primary font-bold' : 'border-muted'}`}
-          onClick={() => setTab('make')}
-        >
-          Make Habit
-        </button>
-        <button
-          className={`flex-1 px-2 py-1 rounded-t-lg border-b-2 ${tab === 'break' ? 'border-primary font-bold' : 'border-muted'}`}
-          onClick={() => setTab('break')}
-        >
-          Break Habit
-        </button>
-      </div>
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        {habits.map(habit => (
-          <button
-            key={habit.key}
-            className={`flex flex-col items-center gap-2 p-2 border rounded-lg ${selected === habit.key ? 'border-primary bg-primary/10' : 'border-muted bg-background'}`}
-            onClick={() => setSelected(habit.key)}
-          >
-            <img src={habit.img || '/placeholder-logo.png'} alt="" className="w-8 h-8" onError={(e) => { e.currentTarget.src = '/placeholder-logo.png'; }} />
-            <span className="text-xs text-center">{habit.label}</span>
-          </button>
-        ))}
-      </div>
-      <button
-        className={`w-full px-4 py-2 font-semibold rounded-lg transition-opacity border mt-2 ${selected ? 'bg-primary text-primary-foreground border-primary hover:opacity-90' : 'bg-muted text-muted-foreground border-muted cursor-not-allowed'}`}
-        disabled={!selected}
-        onClick={() => selected && onSelect(selected)}
+    <div 
+      className="flex items-center justify-center min-h-screen p-4"
+      style={{ backgroundColor: '#f3f4f6' }}
+    >
+      <div 
+        className="w-full max-w-md rounded-xl shadow-lg p-6"
+        style={{ backgroundColor: '#ffffff' }}
       >
-        Let's build →
-      </button>
+        {/* Header with back button and welcome message - only show if onBack is provided */}
+        {onBack && (
+          <div className="flex items-center mb-6">
+            <button
+              onClick={onBack}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors mr-4"
+              style={{ color: '#6b7280' }}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <h1 
+              className="text-lg font-bold"
+              style={{ color: '#1f2937' }}
+            >
+              Welcome, {userName || 'User'}!
+            </h1>
+          </div>
+        )}
+
+        {/* Tab Buttons */}
+        <div className="flex mb-6">
+          <button
+            className={`flex-1 px-4 py-3 font-semibold border-2 rounded-l-lg transition-colors ${
+              tab === 'make' 
+                ? 'border-gray-800 bg-white text-gray-800' 
+                : 'border-gray-300 bg-gray-100 text-gray-600'
+            }`}
+            onClick={() => {
+              setTab('make');
+              setSelected('');
+              setCustomHabit('');
+            }}
+          >
+            Make Habit
+          </button>
+          <button
+            className={`flex-1 px-4 py-3 font-semibold border-2 border-l-0 rounded-r-lg transition-colors ${
+              tab === 'break' 
+                ? 'border-gray-800 bg-white text-gray-800' 
+                : 'border-gray-300 bg-gray-100 text-gray-600'
+            }`}
+            onClick={() => {
+              setTab('break');
+              setSelected('');
+              setCustomHabit('');
+            }}
+          >
+            Break Habit
+          </button>
+        </div>
+
+        {/* Habit Options */}
+        <div className="space-y-3 mb-4">
+          {habits.map(habit => (
+            <button
+              key={habit.key}
+              className={`w-full p-4 rounded-lg text-left transition-all border-2 flex items-center gap-3 ${
+                selected === habit.key 
+                  ? 'border-gray-400 bg-gray-50' 
+                  : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+              }`}
+              onClick={() => {
+                setSelected(selected === habit.key ? '' : habit.key);
+                if (customHabit) setCustomHabit(''); // Clear custom habit when selecting predefined
+              }}
+            >
+              <span className="text-2xl">{habit.emoji}</span>
+              <span 
+                className="font-medium"
+                style={{ color: '#374151' }}
+              >
+                {habit.label}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* Custom Habit Input */}
+        <div className="mb-6">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              placeholder="Create your own habit..."
+              value={customHabit}
+              maxLength={maxCustomLength}
+              onChange={(e) => {
+                setCustomHabit(e.target.value);
+                if (selected) setSelected(''); // Clear selection when typing custom
+              }}
+              className="flex-1 px-4 py-3 border-2 rounded-lg"
+              style={{
+                borderColor: customHabit ? '#6b7280' : '#d1d5db',
+                backgroundColor: '#ffffff',
+                color: '#374151',
+                outline: 'none'
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#22d3ee'}
+              onBlur={(e) => e.target.style.borderColor = customHabit ? '#6b7280' : '#d1d5db'}
+            />
+            <button
+              className="w-12 h-12 border-2 rounded-lg flex items-center justify-center transition-colors"
+              style={{
+                borderColor: '#d1d5db',
+                backgroundColor: '#ffffff',
+                color: '#6b7280'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                e.currentTarget.style.borderColor = '#6b7280';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#ffffff';
+                e.currentTarget.style.borderColor = '#d1d5db';
+              }}
+              onClick={() => customHabit && handleStartBuilding()}
+              disabled={!customHabit.trim()}
+            >
+              <span className="text-xl">+</span>
+            </button>
+          </div>
+          {/* Character count indicator */}
+          {customHabit && (
+            <div className="text-right mt-1">
+              <span 
+                className="text-sm"
+                style={{ color: customHabit.length >= maxCustomLength ? '#ef4444' : '#6b7280' }}
+              >
+                {customHabit.length}/{maxCustomLength}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Start Building Button */}
+        <button
+          onClick={handleStartBuilding}
+          className="w-full px-4 py-3 font-semibold rounded-lg transition-all"
+          style={{
+            backgroundColor: isFormValid ? '#1f2937' : '#d1d5db',
+            color: isFormValid ? '#ffffff' : '#6b7280',
+            cursor: isFormValid ? 'pointer' : 'not-allowed'
+          }}
+          disabled={!isFormValid}
+        >
+          Start Building
+        </button>
       </div>
     </div>
   );

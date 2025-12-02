@@ -24,37 +24,89 @@ export default function Page() {
 
   // Helper function to get full habit name from key
   const getHabitNameFromKey = (key: string): string => {
+    // Age-based habit mappings
     const allHabits = [
-      { key: "walk", label: "Walk 2km a day" },
-      { key: "water", label: "Drink 3L water daily" },
-      { key: "read", label: "Read 20 Min a day" },
-      { key: "workout", label: "30 min Basic Workout" },
-      { key: "plan", label: "Plan the next day" },
-      { key: "gaming", label: "Limit Excessive gaming" },
-      { key: "junkfood", label: "Eating junk food" },
-      { key: "reels", label: "Scrolling reels for long periods" },
-      { key: "smoking", label: "Smoking cigarettes" },
-      { key: "selftalk", label: "Negative self talk" },
+      // 15-20 years
+      { key: "study", label: "Study focused for 25 mins" },
+      { key: "walk", label: "Walk briskly 15 mins daily" },
+      { key: "meditate", label: "Meditate calmly for 10 mins" },
+      { key: "read", label: "Read 10 pages daily" },
+      { key: "noPhone", label: "No phone after 9 PM" },
+      { key: "noSoda", label: "Skip soda daily" },
+      { key: "sleep", label: "Avoid sleeping less than 7 hours" },
+      { key: "noJunk", label: "Avoid junk food daily" },
+      // 20-25 years
+      { key: "save", label: "Saved ₹100 everyday" },
+      { key: "cook", label: "Cook breakfast before work" },
+      { key: "callFriend", label: "Call one friend after dinner" },
+      { key: "stretch", label: "Stretch after waking up" },
+      { key: "limitCoffee", label: "Limit coffee to one cup" },
+      { key: "noScreens", label: "No screens after 10 PM" },
+      { key: "walkInstead", label: "Walk instead of driving short distances" },
+      { key: "noLateNights", label: "Cut late nights" },
+      // 25-30 years
+      { key: "readNews", label: "Read news during morning tea" },
+      { key: "water", label: "Drink 2L of water daily" },
+      { key: "hobby", label: "Do hobby 20 mins daily" },
+      { key: "planMeals", label: "Plan meals for the week" },
+      { key: "noEatingOut", label: "No eating out daily" },
+      { key: "workLimit", label: "Work limit 8 hours" },
+      { key: "noSnacks", label: "No snacks after 8 PM" },
+      { key: "trackExpenses", label: "Track daily expenses" },
+      // 30-35 years
+      { key: "familyChat", label: "Family chat 15 mins" },
+      { key: "strength", label: "Strength training 20 mins" },
+      { key: "breathing", label: "Deep breathing after waking up" },
+      { key: "journal", label: "Journal before sleep" },
+      { key: "oneTask", label: "One task at a time (no multitasking)" },
+      { key: "noSugary", label: "Skip sugary drinks" },
+      { key: "bedtime", label: "Bedtime by 11 PM" },
+      { key: "noWeekendBinge", label: "No weekend screen binge" },
+      // 35-40 years
+      { key: "freshLunch", label: "Lunch cooked fresh daily" },
+      { key: "morningWalk", label: "Morning walk before 8 AM" },
+      { key: "waterMorning", label: "Drink 2 glasses of water in the morning" },
+      { key: "stretchDaily", label: "Stretch 10 mins daily" },
+      { key: "noFoodAfter8", label: "No food after 8 PM" },
+      { key: "stand2Min", label: "Stand for 2 minutes every hour" },
+      { key: "moveHourly", label: "Move body every hour" },
+      { key: "reduceAlcohol", label: "Reduce alcohol intake" },
+      // 40+ years
+      { key: "yoga", label: "Yoga 15 mins" },
+      { key: "stretchBed", label: "Stretch before bed" },
+      { key: "fruitBreakfast", label: "Eat fruit with breakfast" },
+      { key: "puzzle", label: "Solve puzzle 10 mins" },
+      { key: "noProcessed", label: "No processed packaged foods" },
+      { key: "stand30Min", label: "Stand every 30 mins" },
+      { key: "limitSugar", label: "Limit sugar intake" },
+      { key: "checkHealth", label: "Check health signs daily" },
     ];
     const habit = allHabits.find(h => h.key === key);
     return habit ? habit.label : key;
   };
 
   useEffect(() => {
-    const savedHabits = localStorage.getItem("habits");
-    if (savedHabits) {
-      try {
-        setHabits(JSON.parse(savedHabits));
-      } catch {
-        setHabits([]);
-      }
-    }
-    
-    // Load saved user
+    // Load saved user first
     const savedUser = localStorage.getItem("currentUser");
     if (savedUser) {
       try {
-        setUser(JSON.parse(savedUser));
+        const userData = JSON.parse(savedUser);
+        setUser(userData);
+        
+        // Load habits specific to this user
+        const userHabitsKey = `habits_${userData.email}`;
+        const savedUserHabits = localStorage.getItem(userHabitsKey);
+        if (savedUserHabits) {
+          try {
+            const userHabits = JSON.parse(savedUserHabits);
+            setHabits(userHabits);
+            if (userHabits.length > 0) {
+              setHabitSelection("existing");
+            }
+          } catch {
+            setHabits([]);
+          }
+        }
       } catch {
         localStorage.removeItem("currentUser");
       }
@@ -67,7 +119,32 @@ export default function Page() {
   const handleUserSubmit = (userData: { username: string; age: number; email: string }) => {
     setUser(userData);
     localStorage.setItem("currentUser", JSON.stringify(userData));
+    
+    // Load existing habits for this user
+    const userHabitsKey = `habits_${userData.email}`;
+    const savedUserHabits = localStorage.getItem(userHabitsKey);
+    if (savedUserHabits) {
+      try {
+        const userHabits = JSON.parse(savedUserHabits);
+        setHabits(userHabits);
+        // If user has habits, don't show habit selection
+        if (userHabits.length > 0) {
+          setHabitSelection("existing"); // Mark that user has existing habits
+        }
+      } catch {
+        // If there's an error loading habits, start fresh
+        setHabits([]);
+      }
+    }
   };
+
+  useEffect(() => {
+    if (isLoaded && user) {
+      // Save habits specific to the current user's email
+      const userHabitsKey = `habits_${user.email}`;
+      localStorage.setItem(userHabitsKey, JSON.stringify(habits));
+    }
+  }, [habits, isLoaded, user]);
 
   const addHabit = (name: string, person: string) => {
     const currentMonthYear = new Date().toISOString().slice(0, 7);
@@ -128,16 +205,27 @@ export default function Page() {
     );
   }
 
-  // Show habit selection after onboarding
-  if (!habitSelection && !customHabitType) {
+  // Show habit selection after onboarding (only if user doesn't have existing habits)
+  if (!habitSelection && !customHabitType && habits.length === 0) {
     return (
       <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
         <HabitSelection
+          userAge={user?.age || 25}
           onSelect={(habit) => {
             if (habit === "custom_make") {
               setCustomHabitType("make");
             } else if (habit === "custom_break") {
               setCustomHabitType("break");
+            } else if (habit.startsWith("custom_make:")) {
+              // Extract custom habit name without prefix
+              const customHabitName = habit.replace("custom_make:", "");
+              addHabit(customHabitName, "__hide__");
+              setHabitSelection(customHabitName);
+            } else if (habit.startsWith("custom_break:")) {
+              // Extract custom habit name without prefix
+              const customHabitName = habit.replace("custom_break:", "");
+              addHabit(customHabitName, "__hide__");
+              setHabitSelection(customHabitName);
             } else {
               const fullHabitName = getHabitNameFromKey(habit);
               setHabitSelection(habit);
@@ -181,6 +269,7 @@ export default function Page() {
         {showHabitSelection ? (
           <HabitSelection
             userName={user?.username}
+            userAge={user?.age || 25}
             onBack={() => setShowHabitSelection(false)}
             onSelect={(habit) => {
               if (habit === "custom_make") {
@@ -191,6 +280,36 @@ export default function Page() {
                 setCustomHabitType("break");
                 setShowHabitSelection(false);
                 setCurrentHabitIndex(habits.length);
+              } else if (habit.startsWith("custom_make:")) {
+                // Extract custom habit name without prefix
+                const customHabitName = habit.replace("custom_make:", "");
+                const currentMonthYear = new Date().toISOString().slice(0, 7);
+                const newHabit: Habit = {
+                  id: Date.now().toString(),
+                  name: customHabitName,
+                  person: user?.username || "User",
+                  dayRecords: [],
+                  createdAt: new Date().toISOString(),
+                  monthYear: currentMonthYear,
+                };
+                setHabits([...habits, newHabit]);
+                setCurrentHabitIndex(habits.length);
+                setShowHabitSelection(false);
+              } else if (habit.startsWith("custom_break:")) {
+                // Extract custom habit name without prefix
+                const customHabitName = habit.replace("custom_break:", "");
+                const currentMonthYear = new Date().toISOString().slice(0, 7);
+                const newHabit: Habit = {
+                  id: Date.now().toString(),
+                  name: customHabitName,
+                  person: user?.username || "User",
+                  dayRecords: [],
+                  createdAt: new Date().toISOString(),
+                  monthYear: currentMonthYear,
+                };
+                setHabits([...habits, newHabit]);
+                setCurrentHabitIndex(habits.length);
+                setShowHabitSelection(false);
               } else {
                 const fullHabitName = getHabitNameFromKey(habit);
                 setHabitSelection(habit);
@@ -402,9 +521,10 @@ export default function Page() {
                   onClick={() => {
                     // Handle logout
                     localStorage.removeItem('currentUser');
-                    localStorage.removeItem('habits');
+                    // Don't remove user-specific habits - they should persist for next login
                     setUser(null);
                     setHabits([]);
+                    setHabitSelection(null);
                     setShowProfileDrawer(false);
                     setShowLogoutConfirmation(false);
                     // Reset to first user form or login screen

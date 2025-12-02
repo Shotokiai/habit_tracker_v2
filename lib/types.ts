@@ -5,6 +5,7 @@ export interface Habit {
   dayRecords: DayRecord[];
   createdAt: string;
   monthYear: string;
+  preferredView?: 'chart' | 'calendar';
 }
 
 export interface DayRecord {

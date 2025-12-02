@@ -13,6 +13,8 @@ interface HabitTrackerProps {
   onUpdateRecords: (dayRecords: DayRecord[]) => void
   onDeleteHabit: () => void
   isNewHabitMode: boolean
+  onUpdateHabit?: (habit: Habit) => void
+  onViewChange?: (view: 'chart' | 'calendar') => void
 }
 
 export default function HabitTracker({
@@ -21,13 +23,16 @@ export default function HabitTracker({
   onUpdateRecords,
   onDeleteHabit,
   isNewHabitMode,
+  onUpdateHabit,
+  onViewChange,
 }: HabitTrackerProps) {
   const [dayRecords, setDayRecords] = useState<DayRecord[]>([])
   const [isSaved, setIsSaved] = useState(false)
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
   const [showViewDropdown, setShowViewDropdown] = useState(false)
-  const [currentView, setCurrentView] = useState<'chart' | 'calendar'>('chart')
+  const [currentView, setCurrentView] = useState<'chart' | 'calendar'>(habit?.preferredView || 'chart')
   const [hasUsedCalendar, setHasUsedCalendar] = useState(false)
+  const [showAlreadyLoggedMessage, setShowAlreadyLoggedMessage] = useState(false)
 
   useEffect(() => {
     if (habit) {
@@ -52,7 +57,24 @@ export default function HabitTracker({
     }
   }, [dayRecords, isSaved])
 
+  // Check if user has already logged today
+  const hasLoggedToday = () => {
+    if (!habit) return false
+    const today = new Date()
+    const habitStartDate = new Date(habit.createdAt)
+    const daysSinceStart = Math.floor((today.getTime() - habitStartDate.getTime()) / (1000 * 60 * 60 * 24)) + 1
+    
+    // Check if there's already a record for today
+    return dayRecords.some(record => record.x === daysSinceStart)
+  }
+
   const handleLetGo = () => {
+    if (hasLoggedToday()) {
+      setShowAlreadyLoggedMessage(true)
+      setTimeout(() => setShowAlreadyLoggedMessage(false), 3000)
+      return
+    }
+
     setDayRecords((prev) => {
       const lastRecord = prev[prev.length - 1]
       if (!lastRecord) {
@@ -68,6 +90,12 @@ export default function HabitTracker({
   }
 
   const handleHabitMissed = () => {
+    if (hasLoggedToday()) {
+      setShowAlreadyLoggedMessage(true)
+      setTimeout(() => setShowAlreadyLoggedMessage(false), 3000)
+      return
+    }
+
     setDayRecords((prev) => {
       const lastRecord = prev[prev.length - 1]
       if (!lastRecord) {
@@ -105,11 +133,11 @@ export default function HabitTracker({
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4 h-full">
+    <div className="flex flex-col h-full px-4 py-2">
       {habit && isSaved && (
         <>
           {/* Chart view dropdown */}
-          <div className="relative flex items-center justify-end mb-2">
+          <div className="relative flex items-center justify-end py-2 flex-shrink-0">
             <button
               onClick={() => setShowViewDropdown(!showViewDropdown)}
               className="flex items-center gap-1 text-base font-semibold text-right hover:text-primary transition-colors"
@@ -127,6 +155,10 @@ export default function HabitTracker({
                     if (!hasUsedCalendar) {
                       setCurrentView('chart')
                       setShowViewDropdown(false)
+                      onViewChange?.('chart')
+                      if (habit && onUpdateHabit) {
+                        onUpdateHabit({...habit, preferredView: 'chart'})
+                      }
                     }
                   }}
                   className={`w-full px-3 py-2 text-left transition-colors text-sm relative ${
@@ -145,6 +177,10 @@ export default function HabitTracker({
                     setCurrentView('calendar')
                     setHasUsedCalendar(true)
                     setShowViewDropdown(false)
+                    onViewChange?.('calendar')
+                    if (habit && onUpdateHabit) {
+                      onUpdateHabit({...habit, preferredView: 'calendar'})
+                    }
                   }}
                   className={`w-full px-3 py-2 text-left hover:bg-muted transition-colors text-sm ${
                     currentView === 'calendar' ? 'bg-muted font-semibold' : ''
@@ -157,9 +193,11 @@ export default function HabitTracker({
           </div>
 
           {/* Dotted structure grid or Calendar view */}
-          <div className="flex-1 flex items-center justify-center">
+          <div className="flex-1 flex items-center justify-center min-h-0 py-2">
             {currentView === 'chart' ? (
-              <HabitGrid dayRecords={dayRecords} />
+              <div className="w-full h-full flex items-center justify-center">
+                <HabitGrid dayRecords={dayRecords} />
+              </div>
             ) : (
               <HabitCalendar 
                 dayRecords={dayRecords} 
@@ -168,24 +206,31 @@ export default function HabitTracker({
             )}
           </div>
 
+          {/* Already logged message */}
+          {showAlreadyLoggedMessage && (
+            <div className="bg-orange-100 border border-orange-300 text-orange-800 px-4 py-2 rounded-md text-center text-sm font-medium">
+              You have already logged your habit for today!
+            </div>
+          )}
+
           {/* Two CTAs side by side */}
-          <div className="flex gap-2 mt-2">
+          <div className="flex gap-2 flex-shrink-0 px-2">
             <button
               onClick={handleLetGo}
-              className="flex-1 px-4 py-3 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-primary shadow-md"
+              className="flex-1 px-3 py-2.5 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-primary shadow-md text-center text-sm"
             >
               Let's Go
             </button>
             <button
               onClick={handleHabitMissed}
-              className="flex-1 px-4 py-3 bg-destructive text-white font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-destructive shadow-md"
+              className="flex-1 px-3 py-2.5 bg-destructive text-white font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-destructive shadow-md text-center text-sm"
             >
               Habit Missed
             </button>
           </div>
 
           {/* Want to give up text at bottom */}
-          <div className="w-full text-center text-base font-semibold mt-4 mb-2">
+          <div className="w-full text-center text-sm font-semibold py-3 flex-shrink-0">
             <button
               onClick={handleGiveUpClick}
               className="underline text-foreground hover:text-muted-foreground transition-colors"

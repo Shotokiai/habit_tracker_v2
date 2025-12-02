@@ -15,12 +15,14 @@ export default function Page() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [swipeStartFromNav, setSwipeStartFromNav] = useState(false);
   const [user, setUser] = useState<{ username: string; age: number; email: string } | null>(null);
   const [habitSelection, setHabitSelection] = useState<string | null>(null);
   const [customHabitType, setCustomHabitType] = useState<"make" | "break" | null>(null);
   const [showHabitSelection, setShowHabitSelection] = useState(false);
   const [showProfileDrawer, setShowProfileDrawer] = useState(false);
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
+  const [currentView, setCurrentView] = useState<'chart' | 'calendar'>('chart');
 
   // Helper function to get full habit name from key
   const getHabitNameFromKey = (key: string): string => {
@@ -162,6 +164,10 @@ export default function Page() {
   const updateHabitRecords = (habitId: string, dayRecords: DayRecord[]) => {
     setHabits(habits.map((habit) => (habit.id === habitId ? { ...habit, dayRecords } : habit)));
   };
+  
+  const updateHabit = (habitId: string, updatedFields: Partial<Habit>) => {
+    setHabits(habits.map((habit) => (habit.id === habitId ? { ...habit, ...updatedFields } : habit)));
+  };
   const deleteHabit = (habitId: string) => {
     const newHabits = habits.filter((h) => h.id !== habitId);
     setHabits(newHabits);
@@ -171,6 +177,8 @@ export default function Page() {
   };
 
   const handleSwipe = () => {
+    if (!swipeStartFromNav) return; // Only allow swipe if started from nav
+    
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > 50;
     const isRightSwipe = distance < -50;
@@ -183,6 +191,7 @@ export default function Page() {
     } else if (isRightSwipe && currentHabitIndex === 0) {
       setCurrentHabitIndex(habits.length - 1);
     }
+    setSwipeStartFromNav(false); // Reset after swipe
   };
 
   if (!isLoaded) {
@@ -260,11 +269,6 @@ export default function Page() {
     <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
       <div
         className="w-full h-screen max-w-md bg-background overflow-hidden flex flex-col"
-        onTouchStart={(e) => setTouchStart(e.targetTouches[0].clientX)}
-        onTouchEnd={(e) => {
-          setTouchEnd(e.changedTouches[0].clientX);
-          handleSwipe();
-        }}
       >
         {showHabitSelection ? (
           <HabitSelection
@@ -335,11 +339,25 @@ export default function Page() {
             onAddHabit={addHabit}
             onUpdateRecords={() => {}}
             onDeleteHabit={() => {}}
+            onUpdateHabit={() => {}}
+            onViewChange={setCurrentView}
             isNewHabitMode={true}
           />
         ) : (
           <>
-            <div className="bg-card border-b border-foreground/10 p-3 flex items-center justify-between gap-2">
+            <div 
+              className="bg-card border-b border-foreground/10 p-3 flex items-center justify-between gap-2"
+              onTouchStart={(e) => {
+                setTouchStart(e.targetTouches[0].clientX);
+                setSwipeStartFromNav(true);
+              }}
+              onTouchEnd={(e) => {
+                if (swipeStartFromNav) {
+                  setTouchEnd(e.changedTouches[0].clientX);
+                  handleSwipe();
+                }
+              }}
+            >
               <button
                 onClick={() => setShowProfileDrawer(true)}
                 className="p-2 hover:bg-muted rounded-full transition-colors border border-foreground/20"
@@ -349,9 +367,18 @@ export default function Page() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </button>
-              <h1 className="text-lg font-bold text-foreground truncate">
-                {habits[currentHabitIndex]?.name}
-              </h1>
+              <div className="flex-1">
+                <h1 className="text-lg font-bold text-foreground truncate">
+                  {habits[currentHabitIndex]?.name}
+                </h1>
+                <div className="text-xs text-muted-foreground">
+                  Created: {new Date(habits[currentHabitIndex]?.createdAt || '').toLocaleDateString('en-US', { 
+                    month: 'short', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                  })}
+                </div>
+              </div>
               <button
                 onClick={() => setShowHabitSelection(true)}
                 className="px-3 py-1.5 bg-primary text-primary-foreground font-semibold rounded text-sm hover:opacity-90 transition-opacity"
@@ -369,18 +396,34 @@ export default function Page() {
                   <span className="text-lg font-bold text-green-600">
                     {(() => {
                       const records = habits[currentHabitIndex]?.dayRecords || [];
-                      let successCount = 0;
+                      const habit = habits[currentHabitIndex];
+                      
+                      let completed = 0;
                       records.forEach((record, index) => {
-                        if (index === 0) {
-                          // First day is successful if y > 0
-                          if (record.y > 0) successCount++;
-                        } else {
-                          // Subsequent days are successful if y >= previous y
-                          const prevRecord = records[index - 1];
-                          if (record.y >= prevRecord.y) successCount++;
+                        const prevRecord = index > 0 ? records[index - 1] : null;
+                        const prevY = prevRecord ? prevRecord.y : 0;
+                        
+                        // A day is completed if y value increased from previous day
+                        if (record.y > prevY) {
+                          completed++;
                         }
                       });
-                      return successCount;
+                      
+                      // Show different denominators based on current view
+                      if (currentView === 'calendar') {
+                        // Calculate challenge days based on habit creation date for calendar view
+                        const currentDate = new Date();
+                        const startDate = new Date(habit?.createdAt || '');
+                        const currentMonth = currentDate.getMonth();
+                        const currentYear = currentDate.getFullYear();
+                        const habitStartDay = startDate.getDate();
+                        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+                        const challengeDays = daysInMonth - habitStartDay + 1;
+                        return `${completed}/${challengeDays}`;
+                      } else {
+                        // Always show 30 for chart view
+                        return `${completed}/30`;
+                      }
                     })()}
                   </span>
                 </div>
@@ -433,15 +476,14 @@ export default function Page() {
                 onAddHabit={addHabit}
                 onUpdateRecords={(dayRecords) => updateHabitRecords(habits[currentHabitIndex].id, dayRecords)}
                 onDeleteHabit={() => deleteHabit(habits[currentHabitIndex].id)}
+                onUpdateHabit={(updatedFields) => updateHabit(habits[currentHabitIndex].id, updatedFields)}
+                onViewChange={setCurrentView}
                 isNewHabitMode={false}
               />
             </div>
-
-            <div className="bg-card border-t border-foreground/10 px-4 py-2 text-center text-xs text-muted-foreground">
-              Habit {currentHabitIndex + 1} of {habits.length} • Swipe to navigate
-            </div>
           </>
         )}
+        
         
         {/* Profile Side Drawer */}
         {showProfileDrawer && (

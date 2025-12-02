@@ -39,16 +39,16 @@ export default function CustomHabitScreen({
         </button>
       </div>
 
-      <div className="flex-1 p-6 flex flex-col justify-center max-w-md mx-auto w-full">
+      <div className="flex-1 p-4 flex flex-col justify-center max-w-md mx-auto w-full">
         {/* Heading */}
-        <h1 className="text-xl font-bold text-foreground mb-6 text-center">
+        <h1 className="text-xl font-bold text-foreground mb-4 text-center">
           {heading}
         </h1>
 
         {/* Text Input */}
-        <div className="mb-6">
+        <div className="mb-4">
           <textarea
-            className="w-full border-2 border-input rounded-lg p-4 text-base bg-background text-foreground min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className="w-full border-2 border-input rounded-lg p-3 text-base bg-background text-foreground min-h-[100px] resize-none focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
             placeholder="Describe in an one line"
             value={habitText}
             onChange={(e) => setHabitText(e.target.value)}

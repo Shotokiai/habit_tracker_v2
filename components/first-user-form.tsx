@@ -42,6 +42,10 @@ export default function FirstUserForm({ onSubmit }: FirstUserFormProps) {
       setError("Please fill in all fields.")
       return
     }
+    if (!email.trim().endsWith('@gmail.com')) {
+      setError("Please enter a valid Gmail address ending with @gmail.com")
+      return
+    }
     setError("")
     // POST to our API which forwards to SheetDB
     ;(async () => {

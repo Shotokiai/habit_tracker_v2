@@ -49,14 +49,25 @@ export default function Page() {
         setHabits([]);
       }
     }
+    
+    // Load saved user
+    const savedUser = localStorage.getItem("currentUser");
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch {
+        localStorage.removeItem("currentUser");
+      }
+    }
+    
     setIsLoaded(true);
   }, []);
 
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem("habits", JSON.stringify(habits));
-    }
-  }, [habits, isLoaded]);
+  // Handle user login/registration
+  const handleUserSubmit = (userData: { username: string; age: number; email: string }) => {
+    setUser(userData);
+    localStorage.setItem("currentUser", JSON.stringify(userData));
+  };
 
   const addHabit = (name: string, person: string) => {
     const currentMonthYear = new Date().toISOString().slice(0, 7);
@@ -112,7 +123,7 @@ export default function Page() {
   if (!user) {
     return (
       <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
-        <FirstUserForm onSubmit={setUser} />
+        <FirstUserForm onSubmit={handleUserSubmit} />
       </main>
     );
   }
@@ -390,7 +401,7 @@ export default function Page() {
                 <button
                   onClick={() => {
                     // Handle logout
-                    localStorage.removeItem('user');
+                    localStorage.removeItem('currentUser');
                     localStorage.removeItem('habits');
                     setUser(null);
                     setHabits([]);

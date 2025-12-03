@@ -367,7 +367,7 @@ export default function Page() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </button>
-              <div className="flex-1">
+              <div className="flex-1 mr-3">
                 <h1 className="text-lg font-bold text-foreground truncate">
                   {habits[currentHabitIndex]?.name}
                 </h1>
@@ -381,10 +381,10 @@ export default function Page() {
               </div>
               <button
                 onClick={() => setShowHabitSelection(true)}
-                className="w-16 px-2 py-1.5 bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity flex-shrink-0 overflow-hidden"
+                className="w-14 h-10 bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity flex-shrink-0 flex items-center justify-center"
                 title="Add new habit"
               >
-                <div className="truncate leading-tight">+ Add</div>
+                + Add
               </button>
             </div>
 
@@ -403,7 +403,7 @@ export default function Page() {
                       
                       // Chart view always shows X/30, Calendar view shows dynamic days
                       if (currentView === 'chart') {
-                        // Always show 30 for chart view regardless of creation date
+                        // Chart view always shows /30 constant
                         return `${completed}/30`;
                       } else {
                         // Calculate challenge days based on habit creation date for calendar view
@@ -451,23 +451,26 @@ export default function Page() {
                       const successCount = records.length > 0 ? records[records.length - 1].y : 0;
                       if (successCount === 0) return "0%";
                       
-                      // Calculate percentage based on current view
-                      let totalDays;
+                      // Calculate percentage based on view type
                       if (currentView === 'chart') {
-                        // Always use 30 for chart view regardless of creation date
-                        totalDays = 30;
+                        // Chart view uses 29 days to match calendar logic
+                        const percentage = (successCount / 29) * 100;
+                        // Round up for better user experience
+                        return successCount > 0 ? Math.ceil(percentage * 10) / 10 + "%" : "0%";
                       } else {
-                        // Calculate challenge days based on habit creation date for calendar view
+                        // Calendar view uses dynamic days calculation
                         const currentDate = new Date();
                         const startDate = new Date(habit?.createdAt || '');
                         const currentMonth = currentDate.getMonth();
                         const currentYear = currentDate.getFullYear();
                         const habitStartDay = startDate.getDate();
-                        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-                        totalDays = daysInMonth - habitStartDay + 1;
+                        const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+                        const totalDays = daysInCurrentMonth - habitStartDay + 1;
+                        if (totalDays <= 0) return "0%";
+                        const percentage = (successCount / totalDays) * 100;
+                        // Round up for better user experience
+                        return Math.ceil(percentage * 10) / 10 + "%";
                       }
-                      
-                      return Math.round((successCount / totalDays) * 100) + "%";
                     })()}
                   </span>
                 </div>

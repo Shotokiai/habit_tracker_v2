@@ -150,7 +150,7 @@ export default function HabitTracker({
   }
 
   return (
-    <div className="flex flex-col h-full px-4 py-2">
+    <div className="flex flex-col h-full px-6 py-2">
       {habit && isSaved && (
         <>
           {/* Chart view dropdown */}
@@ -227,7 +227,7 @@ export default function HabitTracker({
           )}
 
           {/* Two CTAs side by side */}
-          <div className="flex gap-2 flex-shrink-0 px-2 mt-4">
+          <div className="flex gap-2 flex-shrink-0 px-2">
             <button
               onClick={handleLetGo}
               className="flex-1 px-3 py-2.5 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-primary shadow-md text-center text-sm"

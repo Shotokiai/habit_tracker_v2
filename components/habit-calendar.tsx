@@ -20,7 +20,7 @@ export default function HabitCalendar({ dayRecords, habitStartDate }: HabitCalen
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate()
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay()
   
-  // Calculate remaining days in the month from habit start
+  // Calculate remaining days in the month from habit start (including today)
   const remainingDays = daysInMonth - habitStartDay + 1
   
   // Get month name

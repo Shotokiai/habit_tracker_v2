@@ -3,47 +3,52 @@ import { useState } from "react";
 const getHabitsForAge = (age: number, type: 'make' | 'break') => {
   if (age >= 15 && age <= 20) {
     return type === 'make' ? [
-      { key: "study", label: "Study focused for 25 mins", emoji: "📚" },
-      { key: "walk", label: "Walk briskly 15 mins daily", emoji: "🚶" },
-      { key: "meditate", label: "Meditate calmly for 10 mins", emoji: "🧘" },
+      { key: "study", label: "Study 25 mins focused", emoji: "📚" },
+      { key: "walk", label: "Walk briskly 15 mins", emoji: "🚶" },
+      { key: "meditate", label: "Meditate 5 mins daily", emoji: "🧘" },
       { key: "read", label: "Read 10 pages daily", emoji: "📖" },
     ] : [
       { key: "noPhone", label: "No phone after 9 PM", emoji: "📵" },
-      { key: "noSoda", label: "Skip soda daily", emoji: "🥤" },
-      { key: "sleep", label: "Avoid sleeping less than 7 hours", emoji: "😴" },
-      { key: "noJunk", label: "Avoid junk food daily", emoji: "🍟" },
+      { key: "noSoda", label: "No soda every day", emoji: "🥤" },
+      { key: "sleep", label: "Sleep 7 hrs min", emoji: "😴" },
+      { key: "noJunk", label: "No junk food daily", emoji: "🍟" },
     ];
   } else if (age >= 21 && age <= 25) {
     return type === 'make' ? [
-      { key: "save", label: "Saved ₹100 everyday", emoji: "💰" },
-      { key: "cook", label: "Cook breakfast before work", emoji: "🍳" },
-      { key: "callFriend", label: "Call one friend after dinner", emoji: "📞" },
-      { key: "stretch", label: "Stretch after waking up", emoji: "🤸" },
+      { key: "save", label: "Save ₹100 daily auto", emoji: "💰" },
+      { key: "cook", label: "Cook breakfast daily", emoji: "🍳" },
+      { key: "callFriend", label: "Call friend nightly", emoji: "📞" },
+      { key: "stretch", label: "Stretch after waking", emoji: "🤸" },
     ] : [
-      { key: "limitCoffee", label: "Limit coffee to one cup", emoji: "☕" },
+      { key: "limitCoffee", label: "Limit coffee to 1 cup", emoji: "☕" },
       { key: "noScreens", label: "No screens after 10 PM", emoji: "📺" },
-      { key: "walkInstead", label: "Walk instead of driving short distances", emoji: "🚶" },
-      { key: "noLateNights", label: "Cut late nights", emoji: "🌙" },
+      { key: "walkShort", label: "Walk short distances", emoji: "🚶" },
+      { key: "noLateNights", label: "No late nights out", emoji: "🌙" },
     ];
   } else if (age >= 26 && age <= 30) {
     return type === 'make' ? [
-      { key: "readNews", label: "Read news during morning tea", emoji: "📰" },
-      { key: "water", label: "Drink 2L of water daily", emoji: "💧" },
-      { key: "hobby", label: "Do hobby 20 mins daily", emoji: "🎨" },
-      { key: "planMeals", label: "Plan meals for the week", emoji: "📋" },
+      { key: "readNews", label: "Read news with tea", emoji: "📰" },
+      { key: "water", label: "Drink 2L water daily", emoji: "💧" },
+      { key: "hobby", label: "Hobby 20 mins daily", emoji: "🎨" },
+      { key: "planMeals", label: "Plan meals weekly", emoji: "📋" },
     ] : [
-      { key: "noEatingOut", label: "No eating out daily", emoji: "🍽️" },
-      { key: "workLimit", label: "Work limit 8 hours", emoji: "⏰" },
+      { key: "noEatingOut", label: "No daily eating out", emoji: "🍽️" },
+      { key: "workLimit", label: "Limit work to 8 hrs", emoji: "⏰" },
       { key: "noSnacks", label: "No snacks after 8 PM", emoji: "🍪" },
-      { key: "trackExpenses", label: "Track daily expenses", emoji: "💳" },
+      { key: "trackExpenses", label: "Track expenses daily", emoji: "💳" },
     ];
   } else if (age >= 31 && age <= 35) {
     return type === 'make' ? [
       { key: "familyChat", label: "Family chat 15 mins", emoji: "👨‍👩‍👧‍👦" },
-      { key: "strength", label: "Strength training 20 mins", emoji: "💪" },
-      { key: "breathing", label: "Deep breathing after waking up", emoji: "🫁" },
-      { key: "journal", label: "Journal before sleep", emoji: "📝" },
+      { key: "strength", label: "Strength train 20 mins", emoji: "💪" },
+      { key: "breathing", label: "Deep breaths morning", emoji: "🫑" },
+      { key: "journal", label: "Journal before bed", emoji: "📝" },
     ] : [
+      { key: "singleTask", label: "Single-task only", emoji: "🎯" },
+      { key: "noSugary", label: "No sugary drinks", emoji: "🥤" },
+      { key: "bedTime", label: "Bed by 11 PM", emoji: "😴" },
+      { key: "noWeekendScreens", label: "No weekend screens", emoji: "📺" },
+    ];
       { key: "oneTask", label: "One task at a time (no multitasking)", emoji: "🎯" },
       { key: "noSugary", label: "Skip sugary drinks", emoji: "🧃" },
       { key: "bedtime", label: "Bedtime by 11 PM", emoji: "🛏️" },
@@ -61,17 +66,29 @@ const getHabitsForAge = (age: number, type: 'make' | 'break') => {
       { key: "moveHourly", label: "Move body every hour", emoji: "🚶" },
       { key: "reduceAlcohol", label: "Reduce alcohol intake", emoji: "🍷" },
     ];
+  } else if (age >= 36 && age <= 40) {
+    return type === 'make' ? [
+      { key: "freshLunch", label: "Fresh lunch daily", emoji: "🥗" },
+      { key: "walkMorning", label: "Walk before 8 AM", emoji: "🚶" },
+      { key: "waterFirst", label: "Drink water AM first", emoji: "💧" },
+      { key: "stretchDaily", label: "Stretch 10 mins daily", emoji: "🤸" },
+    ] : [
+      { key: "noFoodAfter8", label: "No food after 8 PM", emoji: "🍽️" },
+      { key: "standHourly", label: "Stand every 1 hour", emoji: "🧍" },
+      { key: "moveHourly", label: "Move every hour", emoji: "🚶" },
+      { key: "cutAlcohol", label: "Cut alcohol intake", emoji: "🍷" },
+    ];
   } else { // 40+
     return type === 'make' ? [
-      { key: "yoga", label: "Yoga 15 mins", emoji: "🧘" },
+      { key: "yoga", label: "Yoga 15 mins daily", emoji: "🧘" },
       { key: "stretchBed", label: "Stretch before bed", emoji: "🤸" },
-      { key: "fruitBreakfast", label: "Eat fruit with breakfast", emoji: "🍎" },
-      { key: "puzzle", label: "Solve puzzle 10 mins", emoji: "🧩" },
+      { key: "fruitBreakfast", label: "Fruit in breakfast", emoji: "🍎" },
+      { key: "puzzle", label: "Puzzle 10 mins daily", emoji: "🧩" },
     ] : [
-      { key: "noProcessed", label: "No processed packaged foods", emoji: "📦" },
+      { key: "noPackaged", label: "No packaged foods", emoji: "📦" },
       { key: "stand30Min", label: "Stand every 30 mins", emoji: "🧍" },
-      { key: "limitSugar", label: "Limit sugar intake", emoji: "🍭" },
-      { key: "checkHealth", label: "Check health signs daily", emoji: "🩺" },
+      { key: "limitSugar", label: "Limit sugar daily", emoji: "🍭" },
+      { key: "healthCheck", label: "Daily health check", emoji: "🩺" },
     ];
   }
 };
@@ -128,7 +145,7 @@ export default function HabitSelection({
       style={{ backgroundColor: '#f3f4f6' }}
     >
       <div 
-        className="w-full max-w-md rounded-xl shadow-lg p-6"
+        className="w-full max-w-md rounded-xl shadow-lg p-6 mx-4"
         style={{ backgroundColor: '#ffffff' }}
       >
         {/* Header with back button and welcome message - only show if onBack is provided */}
@@ -212,7 +229,7 @@ export default function HabitSelection({
 
         {/* Custom Habit Input */}
         <div className="mb-6">
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-stretch">
             <input
               type="text"
               placeholder="Create your own habit..."
@@ -222,40 +239,24 @@ export default function HabitSelection({
                 setCustomHabit(e.target.value);
                 if (selected) setSelected(''); // Clear selection when typing custom
               }}
-              className="flex-1 px-4 py-3 border-2 rounded-lg"
-              style={{
-                borderColor: customHabit ? '#6b7280' : '#d1d5db',
-                backgroundColor: '#ffffff',
-                color: '#374151',
-                outline: 'none'
-              }}
-              onFocus={(e) => e.target.style.borderColor = '#22d3ee'}
-              onBlur={(e) => e.target.style.borderColor = customHabit ? '#6b7280' : '#d1d5db'}
+              className="flex-1 px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+              style={{ color: '#374151' }}
             />
             <button
-              className="w-12 h-12 border-2 rounded-lg flex items-center justify-center transition-colors"
-              style={{
-                borderColor: '#d1d5db',
-                backgroundColor: '#ffffff',
-                color: '#6b7280'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f3f4f6';
-                e.currentTarget.style.borderColor = '#6b7280';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#ffffff';
-                e.currentTarget.style.borderColor = '#d1d5db';
-              }}
               onClick={() => customHabit && handleStartBuilding()}
               disabled={!customHabit.trim()}
+              className={`px-6 py-3 rounded-lg font-semibold text-base transition-all w-20 flex items-center justify-center border-2 flex-shrink-0 ${
+                customHabit.trim() 
+                  ? 'bg-gray-800 text-white hover:bg-gray-700 shadow-lg border-gray-800' 
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300'
+              }`}
             >
-              <span className="text-xl">+</span>
+              <span className="text-xl font-bold">+</span>
             </button>
           </div>
           {/* Character count indicator */}
           {customHabit && (
-            <div className="text-right mt-1">
+            <div className="text-right mt-2">
               <span 
                 className="text-sm"
                 style={{ color: customHabit.length >= maxCustomLength ? '#ef4444' : '#6b7280' }}

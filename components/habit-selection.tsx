@@ -128,7 +128,7 @@ export default function HabitSelection({
       style={{ backgroundColor: '#f3f4f6' }}
     >
       <div 
-        className="w-full max-w-md rounded-xl shadow-lg p-6 mx-4"
+        className="w-full max-w-md rounded-xl shadow-lg p-3 mx-2"
         style={{ backgroundColor: '#ffffff' }}
       >
         {/* Header with back button and welcome message - only show if onBack is provided */}
@@ -185,34 +185,33 @@ export default function HabitSelection({
         </div>
 
         {/* Habit Options */}
-        <div className="space-y-3 mb-4">
-          {habits.map(habit => (
-            <button
-              key={habit.key}
-              className={`w-full p-4 rounded-lg text-left transition-all border-2 flex items-center gap-3 ${
-                selected === habit.key 
-                  ? 'border-gray-400 bg-gray-50' 
-                  : 'border-gray-200 bg-gray-50 hover:border-gray-300'
-              }`}
-              onClick={() => {
-                setSelected(selected === habit.key ? '' : habit.key);
-                if (customHabit) setCustomHabit(''); // Clear custom habit when selecting predefined
-              }}
-            >
-              <span className="text-2xl">{habit.emoji}</span>
-              <span 
-                className="font-medium"
-                style={{ color: '#374151' }}
+        <div className="mb-4">
+          <div className="grid grid-cols-2 gap-3">
+            {habits.map(habit => (
+              <button
+                key={habit.key}
+                className={`p-3 rounded-xl text-center transition-all border-2 flex flex-col items-center gap-2 ${
+                  selected === habit.key 
+                    ? 'border-gray-400 bg-gray-200' 
+                    : 'border-gray-200 bg-gray-50 hover:border-gray-300'
+                }`}
+                onClick={() => {
+                  setSelected(selected === habit.key ? '' : habit.key);
+                  if (customHabit) setCustomHabit(''); // Clear custom habit when selecting predefined
+                }}
               >
-                {habit.label}
-              </span>
-            </button>
-          ))}
+                <span className="text-2xl">{habit.emoji}</span>
+                <span className="text-sm font-medium text-gray-700 leading-tight">
+                  {habit.label}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Custom Habit Input */}
-        <div className="mb-6">
-          <div className="flex gap-3 items-stretch">
+        <div className="mb-3">
+          <div className="flex gap-1 items-stretch">
             <input
               type="text"
               placeholder="Create your own habit..."
@@ -222,19 +221,19 @@ export default function HabitSelection({
                 setCustomHabit(e.target.value);
                 if (selected) setSelected(''); // Clear selection when typing custom
               }}
-              className="flex-1 px-3 py-3 text-base border-2 border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-              style={{ color: '#374151' }}
+              className="flex-1 px-2 py-3 text-base border-2 border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+              style={{ color: '#374151', minWidth: 0 }}
             />
             <button
               onClick={() => customHabit && handleStartBuilding()}
               disabled={!customHabit.trim()}
-              className={`px-4 py-3 rounded-lg font-semibold text-base transition-all w-16 flex items-center justify-center border-2 flex-shrink-0 ${
+              className={`px-2 py-3 rounded-lg font-semibold text-base transition-all w-12 flex items-center justify-center border-2 flex-shrink-0 ${
                 customHabit.trim()
                   ? 'bg-gray-800 text-white hover:bg-gray-700 shadow-lg border-gray-800'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300'
               }`}
             >
-              <span className="text-lg font-bold">+</span>
+              <span className="text-base font-bold">+</span>
             </button>
           </div>
           {/* Character count indicator */}

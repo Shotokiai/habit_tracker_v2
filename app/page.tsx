@@ -37,6 +37,7 @@ export default function Page() {
       { key: "noSoda", label: "Skip soda daily" },
       { key: "sleep", label: "Avoid sleeping less than 7 hours" },
       { key: "noJunk", label: "Avoid junk food daily" },
+      { key: "noPackaged", label: "No packaged foods" },
       // 20-25 years
       { key: "save", label: "Saved ₹100 everyday" },
       { key: "cook", label: "Cook breakfast before work" },
@@ -367,9 +368,9 @@ export default function Page() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </button>
-              <div className="flex-1 mr-3">
-                <h1 className="text-base font-bold text-foreground truncate" style={{ maxWidth: 'calc(100% - 80px)' }}>
-                  {habits[currentHabitIndex]?.name}
+              <div className="flex-1 mr-1">
+                <h1 className="text-base font-bold text-foreground truncate" style={{ maxWidth: 'calc(100vw - 120px)' }}>
+                  {getHabitNameFromKey(habits[currentHabitIndex]?.name) || habits[currentHabitIndex]?.name}
                 </h1>
                 <div className="text-xs text-muted-foreground">
                   Created: {new Date(habits[currentHabitIndex]?.createdAt || '').toLocaleDateString('en-US', { 
@@ -381,9 +382,9 @@ export default function Page() {
               </div>
               <button
                 onClick={() => setShowHabitSelection(true)}
-                className="w-16 h-10 bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity flex-shrink-0 flex items-center justify-center ml-2"
+                className="bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity px-3 py-2"
                 title="Add new habit"
-                style={{ minWidth: '64px' }}
+                style={{ minWidth: '60px', height: '32px' }}
               >
                 + Add
               </button>

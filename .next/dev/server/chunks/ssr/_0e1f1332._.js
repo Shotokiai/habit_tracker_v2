@@ -112,12 +112,12 @@ function HabitGrid({ dayRecords }) {
         spacing
     ]);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "flex flex-col items-center gap-2 px-6 py-2 w-full h-full",
+        className: "flex flex-col items-center gap-2 pl-8 pr-8 py-2 w-full h-full",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "relative flex-shrink-0",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "absolute -left-6 top-0 flex flex-col justify-between text-xs font-semibold text-foreground",
+                    className: "absolute -left-10 top-0 flex flex-col justify-between text-xs font-semibold text-foreground",
                     style: {
                         height: gridHeight + 16,
                         paddingTop: 8,
@@ -128,15 +128,16 @@ function HabitGrid({ dayRecords }) {
                     }, (_, i)=>{
                         const num = gridSize - i;
                         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex items-center justify-end w-5",
+                            className: "flex items-center justify-end w-8",
                             style: {
                                 height: spacing
                             },
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "text-right",
+                                className: "text-right pr-2 text-gray-700",
                                 style: {
-                                    fontSize: '10px',
-                                    lineHeight: '12px'
+                                    fontSize: '11px',
+                                    lineHeight: '12px',
+                                    fontWeight: '600'
                                 },
                                 children: num % 5 === 0 ? num : ''
                             }, void 0, false, {
@@ -176,7 +177,7 @@ function HabitGrid({ dayRecords }) {
                                     strokeWidth: "1"
                                 }, void 0, false, {
                                     fileName: "[project]/components/habit-grid.tsx",
-                                    lineNumber: 76,
+                                    lineNumber: 77,
                                     columnNumber: 13
                                 }, this),
                                 dayRecords.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("polyline", {
@@ -187,13 +188,13 @@ function HabitGrid({ dayRecords }) {
                                     className: "text-primary"
                                 }, void 0, false, {
                                     fileName: "[project]/components/habit-grid.tsx",
-                                    lineNumber: 77,
+                                    lineNumber: 78,
                                     columnNumber: 39
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/habit-grid.tsx",
-                            lineNumber: 74,
+                            lineNumber: 75,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$dot$2d$grid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
@@ -203,13 +204,13 @@ function HabitGrid({ dayRecords }) {
                             dayRecords: dayRecords
                         }, void 0, false, {
                             fileName: "[project]/components/habit-grid.tsx",
-                            lineNumber: 80,
+                            lineNumber: 81,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/habit-grid.tsx",
-                    lineNumber: 70,
+                    lineNumber: 71,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -236,18 +237,18 @@ function HabitGrid({ dayRecords }) {
                                 children: num % 5 === 0 ? num : ''
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-grid.tsx",
-                                lineNumber: 95,
+                                lineNumber: 96,
                                 columnNumber: 17
                             }, this)
                         }, num, false, {
                             fileName: "[project]/components/habit-grid.tsx",
-                            lineNumber: 92,
+                            lineNumber: 93,
                             columnNumber: 18
                         }, this);
                     })
                 }, void 0, false, {
                     fileName: "[project]/components/habit-grid.tsx",
-                    lineNumber: 83,
+                    lineNumber: 84,
                     columnNumber: 9
                 }, this)
             ]
@@ -816,7 +817,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
         }, this);
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "flex flex-col h-full px-6 py-2",
+        className: "flex flex-col h-full px-4 py-2",
         children: habit && isSaved && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1495,11 +1496,566 @@ function FirstUserForm({ onSubmit }) {
     }, this);
 }
 }),
-"[project]/components/habit-selection.tsx [app-ssr] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"[project]/components/habit-selection.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
 
-const e = new Error("Could not parse module '[project]/components/habit-selection.tsx', file not found");
-e.code = 'MODULE_UNPARSABLE';
-throw e;
+__turbopack_context__.s([
+    "default",
+    ()=>HabitSelection
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.3_@babel+core@7.2_e859bb158405ee4122eee6909c7a41d4/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.3_@babel+core@7.2_e859bb158405ee4122eee6909c7a41d4/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+;
+;
+const getHabitsForAge = (age, type)=>{
+    if (age >= 15 && age <= 20) {
+        return type === 'make' ? [
+            {
+                key: "study",
+                label: "Study 25 mins focused",
+                emoji: "📚"
+            },
+            {
+                key: "walk",
+                label: "Walk briskly 15 mins",
+                emoji: "🚶"
+            },
+            {
+                key: "meditate",
+                label: "Meditate 5 mins daily",
+                emoji: "🧘"
+            },
+            {
+                key: "read",
+                label: "Read 10 pages daily",
+                emoji: "📖"
+            }
+        ] : [
+            {
+                key: "noPhone",
+                label: "No phone after 9 PM",
+                emoji: "📵"
+            },
+            {
+                key: "noSoda",
+                label: "No soda every day",
+                emoji: "🥤"
+            },
+            {
+                key: "sleep",
+                label: "Sleep 7 hrs min",
+                emoji: "😴"
+            },
+            {
+                key: "noJunk",
+                label: "No junk food daily",
+                emoji: "🍟"
+            }
+        ];
+    } else if (age >= 21 && age <= 25) {
+        return type === 'make' ? [
+            {
+                key: "save",
+                label: "Save ₹100 daily auto",
+                emoji: "💰"
+            },
+            {
+                key: "cook",
+                label: "Cook breakfast daily",
+                emoji: "🍳"
+            },
+            {
+                key: "callFriend",
+                label: "Call friend nightly",
+                emoji: "📞"
+            },
+            {
+                key: "stretch",
+                label: "Stretch after waking",
+                emoji: "🤸"
+            }
+        ] : [
+            {
+                key: "limitCoffee",
+                label: "Limit coffee to 1 cup",
+                emoji: "☕"
+            },
+            {
+                key: "noScreens",
+                label: "No screens after 10 PM",
+                emoji: "📺"
+            },
+            {
+                key: "walkShort",
+                label: "Walk short distances",
+                emoji: "🚶"
+            },
+            {
+                key: "noLateNights",
+                label: "No late nights out",
+                emoji: "🌙"
+            }
+        ];
+    } else if (age >= 26 && age <= 30) {
+        return type === 'make' ? [
+            {
+                key: "readNews",
+                label: "Read news with tea",
+                emoji: "📰"
+            },
+            {
+                key: "water",
+                label: "Drink 2L water daily",
+                emoji: "💧"
+            },
+            {
+                key: "hobby",
+                label: "Hobby 20 mins daily",
+                emoji: "🎨"
+            },
+            {
+                key: "planMeals",
+                label: "Plan meals weekly",
+                emoji: "📋"
+            }
+        ] : [
+            {
+                key: "noEatingOut",
+                label: "No daily eating out",
+                emoji: "🍽️"
+            },
+            {
+                key: "workLimit",
+                label: "Limit work to 8 hrs",
+                emoji: "⏰"
+            },
+            {
+                key: "noSnacks",
+                label: "No snacks after 8 PM",
+                emoji: "🍪"
+            },
+            {
+                key: "trackExpenses",
+                label: "Track expenses daily",
+                emoji: "💳"
+            }
+        ];
+    } else if (age >= 31 && age <= 35) {
+        return type === 'make' ? [
+            {
+                key: "familyChat",
+                label: "Family chat 15 mins",
+                emoji: "👨‍👩‍👧‍👦"
+            },
+            {
+                key: "strength",
+                label: "Strength train 20 mins",
+                emoji: "💪"
+            },
+            {
+                key: "breathing",
+                label: "Deep breaths morning",
+                emoji: "🫑"
+            },
+            {
+                key: "journal",
+                label: "Journal before bed",
+                emoji: "📝"
+            }
+        ] : [
+            {
+                key: "singleTask",
+                label: "Single-task only",
+                emoji: "🎯"
+            },
+            {
+                key: "noSugary",
+                label: "No sugary drinks",
+                emoji: "🥤"
+            },
+            {
+                key: "bedTime",
+                label: "Bed by 11 PM",
+                emoji: "😴"
+            },
+            {
+                key: "noWeekendScreens",
+                label: "No weekend screens",
+                emoji: "📺"
+            }
+        ];
+    } else if (age >= 36 && age <= 40) {
+        return type === 'make' ? [
+            {
+                key: "freshLunch",
+                label: "Fresh lunch daily",
+                emoji: "🥗"
+            },
+            {
+                key: "walkMorning",
+                label: "Walk before 8 AM",
+                emoji: "🚶"
+            },
+            {
+                key: "waterFirst",
+                label: "Drink water AM first",
+                emoji: "💧"
+            },
+            {
+                key: "stretchDaily",
+                label: "Stretch 10 mins daily",
+                emoji: "🤸"
+            }
+        ] : [
+            {
+                key: "noFoodAfter8",
+                label: "No food after 8 PM",
+                emoji: "🍽️"
+            },
+            {
+                key: "standHourly",
+                label: "Stand every 1 hour",
+                emoji: "🧍"
+            },
+            {
+                key: "moveHourly",
+                label: "Move every hour",
+                emoji: "🚶"
+            },
+            {
+                key: "cutAlcohol",
+                label: "Cut alcohol intake",
+                emoji: "🍷"
+            }
+        ];
+    } else {
+        // 40+
+        return type === 'make' ? [
+            {
+                key: "yoga",
+                label: "Yoga 15 mins daily",
+                emoji: "🧘"
+            },
+            {
+                key: "stretchBed",
+                label: "Stretch before bed",
+                emoji: "🤸"
+            },
+            {
+                key: "fruitBreakfast",
+                label: "Fruit in breakfast",
+                emoji: "🍎"
+            },
+            {
+                key: "puzzle",
+                label: "Puzzle 10 mins daily",
+                emoji: "🧩"
+            }
+        ] : [
+            {
+                key: "noPackaged",
+                label: "No packaged foods",
+                emoji: "📦"
+            },
+            {
+                key: "stand30Min",
+                label: "Stand every 30 mins",
+                emoji: "🧍"
+            },
+            {
+                key: "limitSugar",
+                label: "Limit sugar daily",
+                emoji: "🍭"
+            },
+            {
+                key: "healthCheck",
+                label: "Daily health check",
+                emoji: "🩺"
+            }
+        ];
+    }
+};
+function HabitSelection({ onSelect, onBack, userName, userAge = 25 // Default age if not provided
+ }) {
+    const [tab, setTab] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('make');
+    const [selected, setSelected] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
+    const [customHabit, setCustomHabit] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])("");
+    const maxCustomLength = 25;
+    const habits = getHabitsForAge(userAge, tab);
+    const handleStartBuilding = async ()=>{
+        if (customHabit.trim()) {
+            // Track custom habit creation in Google Sheets
+            try {
+                await fetch('/api/track-custom-habit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        habitName: customHabit.trim(),
+                        habitType: tab,
+                        userAge,
+                        userName
+                    })
+                });
+            } catch (error) {
+                console.error('Failed to track custom habit:', error);
+            }
+            // Handle custom habit
+            onSelect(tab === 'make' ? `custom_make:${customHabit.trim()}` : `custom_break:${customHabit.trim()}`);
+        } else if (selected) {
+            // Handle predefined habit
+            onSelect(selected);
+        }
+    };
+    const isFormValid = selected || customHabit.trim();
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "flex items-center justify-center min-h-screen p-4",
+        style: {
+            backgroundColor: '#f3f4f6'
+        },
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "w-full max-w-md rounded-xl shadow-lg p-3 mx-2",
+            style: {
+                backgroundColor: '#ffffff'
+            },
+            children: [
+                onBack && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "flex items-center mb-6",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: onBack,
+                            className: "p-2 hover:bg-gray-100 rounded-full transition-colors mr-4",
+                            style: {
+                                color: '#6b7280'
+                            },
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                className: "w-6 h-6",
+                                fill: "none",
+                                stroke: "currentColor",
+                                viewBox: "0 0 24 24",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                    strokeLinecap: "round",
+                                    strokeLinejoin: "round",
+                                    strokeWidth: "2",
+                                    d: "M15 19l-7-7 7-7"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/habit-selection.tsx",
+                                    lineNumber: 266,
+                                    columnNumber: 17
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/components/habit-selection.tsx",
+                                lineNumber: 265,
+                                columnNumber: 15
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/components/habit-selection.tsx",
+                            lineNumber: 262,
+                            columnNumber: 13
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                            className: "text-lg font-bold",
+                            style: {
+                                color: '#1f2937'
+                            },
+                            children: [
+                                "Welcome, ",
+                                userName || 'User',
+                                "!"
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/habit-selection.tsx",
+                            lineNumber: 269,
+                            columnNumber: 13
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/habit-selection.tsx",
+                    lineNumber: 261,
+                    columnNumber: 20
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "flex mb-6",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            className: `flex-1 px-4 py-3 font-semibold border-2 rounded-l-lg transition-colors ${tab === 'make' ? 'border-gray-800 bg-white text-gray-800' : 'border-gray-300 bg-gray-100 text-gray-600'}`,
+                            onClick: ()=>{
+                                setTab('make');
+                                setSelected('');
+                                setCustomHabit('');
+                            },
+                            children: "Make Habit"
+                        }, void 0, false, {
+                            fileName: "[project]/components/habit-selection.tsx",
+                            lineNumber: 278,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            className: `flex-1 px-4 py-3 font-semibold border-2 border-l-0 rounded-r-lg transition-colors ${tab === 'break' ? 'border-gray-800 bg-white text-gray-800' : 'border-gray-300 bg-gray-100 text-gray-600'}`,
+                            onClick: ()=>{
+                                setTab('break');
+                                setSelected('');
+                                setCustomHabit('');
+                            },
+                            children: "Break Habit"
+                        }, void 0, false, {
+                            fileName: "[project]/components/habit-selection.tsx",
+                            lineNumber: 285,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/habit-selection.tsx",
+                    lineNumber: 277,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "mb-4",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "grid grid-cols-2 gap-3",
+                        children: habits.map((habit)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                className: `p-3 rounded-xl text-center transition-all border-2 flex flex-col items-center gap-2 ${selected === habit.key ? 'border-gray-400 bg-gray-200' : 'border-gray-200 bg-gray-50 hover:border-gray-300'}`,
+                                onClick: ()=>{
+                                    setSelected(selected === habit.key ? '' : habit.key);
+                                    if (customHabit) setCustomHabit(''); // Clear custom habit when selecting predefined
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-2xl",
+                                        children: habit.emoji
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/habit-selection.tsx",
+                                        lineNumber: 301,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-sm font-medium text-gray-700 leading-tight",
+                                        children: habit.label
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/habit-selection.tsx",
+                                        lineNumber: 302,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, habit.key, true, {
+                                fileName: "[project]/components/habit-selection.tsx",
+                                lineNumber: 297,
+                                columnNumber: 34
+                            }, this))
+                    }, void 0, false, {
+                        fileName: "[project]/components/habit-selection.tsx",
+                        lineNumber: 296,
+                        columnNumber: 11
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/components/habit-selection.tsx",
+                    lineNumber: 295,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "mb-3",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex gap-1 items-stretch",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                    type: "text",
+                                    placeholder: "Create your own habit...",
+                                    value: customHabit,
+                                    maxLength: maxCustomLength,
+                                    onChange: (e)=>{
+                                        setCustomHabit(e.target.value);
+                                        if (selected) setSelected(''); // Clear selection when typing custom
+                                    },
+                                    className: "flex-1 px-2 py-3 text-base border-2 border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all",
+                                    style: {
+                                        color: '#374151',
+                                        minWidth: 0
+                                    }
+                                }, void 0, false, {
+                                    fileName: "[project]/components/habit-selection.tsx",
+                                    lineNumber: 312,
+                                    columnNumber: 13
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: ()=>customHabit && handleStartBuilding(),
+                                    disabled: !customHabit.trim(),
+                                    className: `px-2 py-3 rounded-lg font-semibold text-base transition-all w-12 flex items-center justify-center border-2 flex-shrink-0 ${customHabit.trim() ? 'bg-gray-800 text-white hover:bg-gray-700 shadow-lg border-gray-800' : 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300'}`,
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-base font-bold",
+                                        children: "+"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/habit-selection.tsx",
+                                        lineNumber: 320,
+                                        columnNumber: 15
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/components/habit-selection.tsx",
+                                    lineNumber: 319,
+                                    columnNumber: 13
+                                }, this)
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/components/habit-selection.tsx",
+                            lineNumber: 311,
+                            columnNumber: 11
+                        }, this),
+                        customHabit && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "text-right mt-2",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "text-sm",
+                                style: {
+                                    color: customHabit.length >= maxCustomLength ? '#ef4444' : '#6b7280'
+                                },
+                                children: [
+                                    customHabit.length,
+                                    "/",
+                                    maxCustomLength
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/habit-selection.tsx",
+                                lineNumber: 325,
+                                columnNumber: 15
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/components/habit-selection.tsx",
+                            lineNumber: 324,
+                            columnNumber: 27
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/habit-selection.tsx",
+                    lineNumber: 310,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                    onClick: handleStartBuilding,
+                    className: "w-full px-4 py-3 font-semibold rounded-lg transition-all",
+                    style: {
+                        backgroundColor: isFormValid ? '#1f2937' : '#d1d5db',
+                        color: isFormValid ? '#ffffff' : '#6b7280',
+                        cursor: isFormValid ? 'pointer' : 'not-allowed'
+                    },
+                    disabled: !isFormValid,
+                    children: "Start Building"
+                }, void 0, false, {
+                    fileName: "[project]/components/habit-selection.tsx",
+                    lineNumber: 334,
+                    columnNumber: 9
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/components/habit-selection.tsx",
+            lineNumber: 257,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/components/habit-selection.tsx",
+        lineNumber: 254,
+        columnNumber: 10
+    }, this);
+}
 }),
 "[project]/components/CustomHabitScreen.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
@@ -1677,6 +2233,10 @@ function Page() {
             {
                 key: "noJunk",
                 label: "Avoid junk food daily"
+            },
+            {
+                key: "noPackaged",
+                label: "No packaged foods"
             },
             // 20-25 years
             {
@@ -1967,7 +2527,7 @@ function Page() {
                         className: "animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 305,
+                        lineNumber: 308,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1975,18 +2535,18 @@ function Page() {
                         children: "Loading your habits..."
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 306,
+                        lineNumber: 309,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 304,
+                lineNumber: 307,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 303,
+            lineNumber: 306,
             columnNumber: 12
         }, this);
     }
@@ -1998,12 +2558,12 @@ function Page() {
                 onSubmit: handleUserSubmit
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 314,
+                lineNumber: 317,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 313,
+            lineNumber: 316,
             columnNumber: 12
         }, this);
     }
@@ -2036,12 +2596,12 @@ function Page() {
                 }
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 321,
+                lineNumber: 324,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 320,
+            lineNumber: 323,
             columnNumber: 12
         }, this);
     }
@@ -2061,17 +2621,17 @@ function Page() {
                     onBack: ()=>setCustomHabitType(null)
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 349,
+                    lineNumber: 352,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 348,
+                lineNumber: 351,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 347,
+            lineNumber: 350,
             columnNumber: 12
         }, this);
     }
@@ -2152,7 +2712,7 @@ function Page() {
                     }
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 359,
+                    lineNumber: 362,
                     columnNumber: 31
                 }, this) : habits.length === 0 || currentHabitIndex === habits.length ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$habit$2d$tracker$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                     habit: null,
@@ -2164,7 +2724,7 @@ function Page() {
                     isNewHabitMode: true
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 415,
+                    lineNumber: 418,
                     columnNumber: 76
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                     children: [
@@ -2197,28 +2757,31 @@ function Page() {
                                             d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 427,
+                                            lineNumber: 430,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 426,
+                                        lineNumber: 429,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 425,
+                                    lineNumber: 428,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                    className: "flex-1 mr-3",
+                                    className: "flex-1 mr-1",
                                     children: [
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                                            className: "text-lg font-bold text-foreground truncate",
-                                            children: habits[currentHabitIndex]?.name
+                                            className: "text-base font-bold text-foreground truncate",
+                                            style: {
+                                                maxWidth: 'calc(100vw - 120px)'
+                                            },
+                                            children: getHabitNameFromKey(habits[currentHabitIndex]?.name) || habits[currentHabitIndex]?.name
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 431,
+                                            lineNumber: 434,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2233,29 +2796,33 @@ function Page() {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 434,
+                                            lineNumber: 439,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 430,
+                                    lineNumber: 433,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>setShowHabitSelection(true),
-                                    className: "w-14 h-10 bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity flex-shrink-0 flex items-center justify-center",
+                                    className: "bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity px-3 py-2",
                                     title: "Add new habit",
+                                    style: {
+                                        minWidth: '60px',
+                                        height: '32px'
+                                    },
                                     children: "+ Add"
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 442,
+                                    lineNumber: 447,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 416,
+                            lineNumber: 419,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2271,7 +2838,7 @@ function Page() {
                                                 children: "Successful days"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 451,
+                                                lineNumber: 459,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2299,13 +2866,13 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 452,
+                                                lineNumber: 460,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 450,
+                                        lineNumber: 458,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2316,7 +2883,7 @@ function Page() {
                                                 children: "Missed days"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 479,
+                                                lineNumber: 487,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2338,13 +2905,13 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 480,
+                                                lineNumber: 488,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 478,
+                                        lineNumber: 486,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2355,7 +2922,7 @@ function Page() {
                                                 children: "Conversion"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 499,
+                                                lineNumber: 507,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -2390,24 +2957,24 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 500,
+                                                lineNumber: 508,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 498,
+                                        lineNumber: 506,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 449,
+                                lineNumber: 457,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 448,
+                            lineNumber: 456,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2422,12 +2989,12 @@ function Page() {
                                 isNewHabitMode: false
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 538,
+                                lineNumber: 546,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 537,
+                            lineNumber: 545,
                             columnNumber: 13
                         }, this)
                     ]
@@ -2440,7 +3007,7 @@ function Page() {
                             onClick: ()=>setShowProfileDrawer(false)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 546,
+                            lineNumber: 554,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2456,7 +3023,7 @@ function Page() {
                                                 children: "Profile"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 552,
+                                                lineNumber: 560,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2474,23 +3041,23 @@ function Page() {
                                                         d: "M6 18L18 6M6 6l12 12"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 555,
+                                                        lineNumber: 563,
                                                         columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 554,
+                                                    lineNumber: 562,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 553,
+                                                lineNumber: 561,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 551,
+                                        lineNumber: 559,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2513,17 +3080,17 @@ function Page() {
                                                                 d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 565,
+                                                                lineNumber: 573,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/page.tsx",
-                                                            lineNumber: 564,
+                                                            lineNumber: 572,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 563,
+                                                        lineNumber: 571,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2533,7 +3100,7 @@ function Page() {
                                                                 children: user?.username || 'User'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 569,
+                                                                lineNumber: 577,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2541,19 +3108,19 @@ function Page() {
                                                                 children: user?.email || 'user@example.com'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 572,
+                                                                lineNumber: 580,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 568,
+                                                        lineNumber: 576,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 562,
+                                                lineNumber: 570,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2564,7 +3131,7 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 578,
+                                                lineNumber: 586,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2575,13 +3142,13 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 582,
+                                                lineNumber: 590,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 561,
+                                        lineNumber: 569,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2595,7 +3162,7 @@ function Page() {
                                                     children: "Log out"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 590,
+                                                    lineNumber: 598,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2603,35 +3170,35 @@ function Page() {
                                                     children: "Sign out of your account"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 591,
+                                                    lineNumber: 599,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 589,
+                                            lineNumber: 597,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 588,
+                                        lineNumber: 596,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 550,
+                                lineNumber: 558,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 549,
+                            lineNumber: 557,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 544,
+                    lineNumber: 552,
                     columnNumber: 31
                 }, this),
                 showLogoutConfirmation && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2644,7 +3211,7 @@ function Page() {
                                 children: "Do you want to log out?"
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 601,
+                                lineNumber: 609,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2666,7 +3233,7 @@ function Page() {
                                         children: "Yes"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 605,
+                                        lineNumber: 613,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$3_$40$babel$2b$core$40$7$2e$2_e859bb158405ee4122eee6909c7a41d4$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2675,35 +3242,35 @@ function Page() {
                                         children: "No"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 618,
+                                        lineNumber: 626,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 604,
+                                lineNumber: 612,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 600,
+                        lineNumber: 608,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 599,
+                    lineNumber: 607,
                     columnNumber: 36
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 358,
+            lineNumber: 361,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/page.tsx",
-        lineNumber: 357,
+        lineNumber: 360,
         columnNumber: 10
     }, this);
 }

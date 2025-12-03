@@ -52,17 +52,17 @@ export default function HabitGrid({ dayRecords }: HabitGridProps) {
   }, [dayRecords, gridSize, spacing])
 
   return (
-    <div className="flex flex-col items-center gap-2 px-6 py-2 w-full h-full">
+    <div className="flex flex-col items-center gap-2 pl-8 pr-8 py-2 w-full h-full">
       <div className="relative flex-shrink-0">
         <div
-          className="absolute -left-6 top-0 flex flex-col justify-between text-xs font-semibold text-foreground"
+          className="absolute -left-10 top-0 flex flex-col justify-between text-xs font-semibold text-foreground"
           style={{ height: gridHeight + 16, paddingTop: 8, paddingBottom: 8 }}
         >
           {Array.from({ length: gridSize }, (_, i) => {
             const num = gridSize - i;
             return (
-              <div key={num} className="flex items-center justify-end w-5" style={{ height: spacing }}>
-                <span className="text-right" style={{ fontSize: '10px', lineHeight: '12px' }}>{num % 5 === 0 ? num : ''}</span>
+              <div key={num} className="flex items-center justify-end w-8" style={{ height: spacing }}>
+                <span className="text-right pr-2 text-gray-700" style={{ fontSize: '11px', lineHeight: '12px', fontWeight: '600' }}>{num % 5 === 0 ? num : ''}</span>
               </div>
             );
           })}

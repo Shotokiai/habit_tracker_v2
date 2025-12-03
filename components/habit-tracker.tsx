@@ -150,7 +150,7 @@ export default function HabitTracker({
   }
 
   return (
-    <div className="flex flex-col h-full px-6 py-2 pl-4">
+    <div className="flex flex-col h-full px-4 py-2">
       {habit && isSaved && (
         <>
           {/* Chart view dropdown */}

@@ -52,6 +52,7 @@ async function handler(req, res) {
                     username,
                     email,
                     age: ageNum,
+                    new_habit_creation: '',
                     createdAt: new Date().toISOString()
                 }
             })

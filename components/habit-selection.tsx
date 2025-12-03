@@ -49,23 +49,6 @@ const getHabitsForAge = (age: number, type: 'make' | 'break') => {
       { key: "bedTime", label: "Bed by 11 PM", emoji: "😴" },
       { key: "noWeekendScreens", label: "No weekend screens", emoji: "📺" },
     ];
-      { key: "oneTask", label: "One task at a time (no multitasking)", emoji: "🎯" },
-      { key: "noSugary", label: "Skip sugary drinks", emoji: "🧃" },
-      { key: "bedtime", label: "Bedtime by 11 PM", emoji: "🛏️" },
-      { key: "noWeekendBinge", label: "No weekend screen binge", emoji: "📱" },
-    ];
-  } else if (age >= 36 && age <= 40) {
-    return type === 'make' ? [
-      { key: "freshLunch", label: "Lunch cooked fresh daily", emoji: "🥘" },
-      { key: "morningWalk", label: "Morning walk before 8 AM", emoji: "🌅" },
-      { key: "waterMorning", label: "Drink 2 glasses of water in the morning", emoji: "💧" },
-      { key: "stretchDaily", label: "Stretch 10 mins daily", emoji: "🤸" },
-    ] : [
-      { key: "noFoodAfter8", label: "No food after 8 PM", emoji: "🍽️" },
-      { key: "stand2Min", label: "Stand for 2 minutes every hour", emoji: "🧍" },
-      { key: "moveHourly", label: "Move body every hour", emoji: "🚶" },
-      { key: "reduceAlcohol", label: "Reduce alcohol intake", emoji: "🍷" },
-    ];
   } else if (age >= 36 && age <= 40) {
     return type === 'make' ? [
       { key: "freshLunch", label: "Fresh lunch daily", emoji: "🥗" },

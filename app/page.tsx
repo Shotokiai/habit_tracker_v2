@@ -381,10 +381,10 @@ export default function Page() {
               </div>
               <button
                 onClick={() => setShowHabitSelection(true)}
-                className="px-3 py-1.5 bg-primary text-primary-foreground font-semibold rounded text-sm hover:opacity-90 transition-opacity"
+                className="w-16 px-2 py-1.5 bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity flex-shrink-0 overflow-hidden"
                 title="Add new habit"
               >
-                + Add
+                <div className="truncate leading-tight">+ Add</div>
               </button>
             </div>
 
@@ -398,19 +398,14 @@ export default function Page() {
                       const records = habits[currentHabitIndex]?.dayRecords || [];
                       const habit = habits[currentHabitIndex];
                       
-                      let completed = 0;
-                      records.forEach((record, index) => {
-                        const prevRecord = index > 0 ? records[index - 1] : null;
-                        const prevY = prevRecord ? prevRecord.y : 0;
-                        
-                        // A day is completed if y value increased from previous day
-                        if (record.y > prevY) {
-                          completed++;
-                        }
-                      });
+                      // Get the final y value which represents total successful days
+                      const completed = records.length > 0 ? records[records.length - 1].y : 0;
                       
-                      // Show different denominators based on current view
-                      if (currentView === 'calendar') {
+                      // Chart view always shows X/30, Calendar view shows dynamic days
+                      if (currentView === 'chart') {
+                        // Always show 30 for chart view regardless of creation date
+                        return `${completed}/30`;
+                      } else {
                         // Calculate challenge days based on habit creation date for calendar view
                         const currentDate = new Date();
                         const startDate = new Date(habit?.createdAt || '');
@@ -420,9 +415,6 @@ export default function Page() {
                         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
                         const challengeDays = daysInMonth - habitStartDay + 1;
                         return `${completed}/${challengeDays}`;
-                      } else {
-                        // Always show 30 for chart view
-                        return `${completed}/30`;
                       }
                     })()}
                   </span>
@@ -451,18 +443,31 @@ export default function Page() {
                   <span className="font-semibold text-foreground">Conversion</span>
                   <span className="text-lg font-bold text-primary">
                     {(() => {
-                      const records = habits[currentHabitIndex]?.dayRecords || [];
-                      let successCount = 0;
-                      records.forEach((record, index) => {
-                        if (index === 0) {
-                          if (record.y > 0) successCount++;
-                        } else {
-                          const prevRecord = records[index - 1];
-                          if (record.y >= prevRecord.y) successCount++;
-                        }
-                      });
+                      const habit = habits[currentHabitIndex];
+                      if (!habit) return "0%";
+                      const records = habit.dayRecords || [];
+                      
+                      // Get the actual successful days from the final y value
+                      const successCount = records.length > 0 ? records[records.length - 1].y : 0;
                       if (successCount === 0) return "0%";
-                      return Math.round((successCount / 30) * 100) + "%";
+                      
+                      // Calculate percentage based on current view
+                      let totalDays;
+                      if (currentView === 'chart') {
+                        // Always use 30 for chart view regardless of creation date
+                        totalDays = 30;
+                      } else {
+                        // Calculate challenge days based on habit creation date for calendar view
+                        const currentDate = new Date();
+                        const startDate = new Date(habit?.createdAt || '');
+                        const currentMonth = currentDate.getMonth();
+                        const currentYear = currentDate.getFullYear();
+                        const habitStartDay = startDate.getDate();
+                        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+                        totalDays = daysInMonth - habitStartDay + 1;
+                      }
+                      
+                      return Math.round((successCount / totalDays) * 100) + "%";
                     })()}
                   </span>
                 </div>

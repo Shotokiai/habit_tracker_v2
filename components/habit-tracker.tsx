@@ -34,6 +34,23 @@ export default function HabitTracker({
   const [hasUsedCalendar, setHasUsedCalendar] = useState(false)
   const [showAlreadyLoggedMessage, setShowAlreadyLoggedMessage] = useState(false)
 
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showViewDropdown) {
+        setShowViewDropdown(false)
+      }
+    }
+
+    if (showViewDropdown) {
+      document.addEventListener('click', handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside)
+    }
+  }, [showViewDropdown])
+
   useEffect(() => {
     if (habit) {
       const currentMonthYear = new Date().toISOString().slice(0, 7)
@@ -149,28 +166,24 @@ export default function HabitTracker({
             </button>
             
             {showViewDropdown && (
-              <div className="absolute top-8 right-0 bg-background border border-foreground/20 rounded-md shadow-lg z-10 min-w-32">
+              <div 
+                className="absolute top-8 right-0 bg-background border border-foreground/20 rounded-md shadow-lg z-10 min-w-32"
+                onClick={(e) => e.stopPropagation()}
+              >
                 <button
                   onClick={() => {
-                    if (!hasUsedCalendar) {
-                      setCurrentView('chart')
-                      setShowViewDropdown(false)
-                      onViewChange?.('chart')
-                      if (habit && onUpdateHabit) {
-                        onUpdateHabit({...habit, preferredView: 'chart'})
-                      }
+                    setCurrentView('chart')
+                    setShowViewDropdown(false)
+                    onViewChange?.('chart')
+                    if (habit && onUpdateHabit) {
+                      onUpdateHabit({...habit, preferredView: 'chart'})
                     }
                   }}
-                  className={`w-full px-3 py-2 text-left transition-colors text-sm relative ${
+                  className={`w-full px-3 py-2 text-left hover:bg-muted transition-colors text-sm ${
                     currentView === 'chart' ? 'bg-muted font-semibold' : ''
-                  } ${hasUsedCalendar ? 'cursor-not-allowed' : 'hover:bg-muted'}`}
+                  }`}
                 >
-                  <span className={hasUsedCalendar ? 'opacity-50' : ''}>
-                    Chart view
-                  </span>
-                  {hasUsedCalendar && (
-                    <div className="absolute inset-0 bg-gray-200 opacity-30 rounded"></div>
-                  )}
+                  Chart view
                 </button>
                 <button
                   onClick={() => {
@@ -193,7 +206,7 @@ export default function HabitTracker({
           </div>
 
           {/* Dotted structure grid or Calendar view */}
-          <div className="flex-1 flex items-center justify-center min-h-0 py-2">
+          <div className="w-full py-4">
             {currentView === 'chart' ? (
               <div className="w-full h-full flex items-center justify-center">
                 <HabitGrid dayRecords={dayRecords} />
@@ -208,13 +221,13 @@ export default function HabitTracker({
 
           {/* Already logged message */}
           {showAlreadyLoggedMessage && (
-            <div className="bg-orange-100 border border-orange-300 text-orange-800 px-4 py-2 rounded-md text-center text-sm font-medium">
+            <div className="bg-orange-100 border border-orange-300 text-orange-800 px-4 py-2 rounded-md text-center text-sm font-medium mb-2">
               You have already logged your habit for today!
             </div>
           )}
 
           {/* Two CTAs side by side */}
-          <div className="flex gap-2 flex-shrink-0 px-2">
+          <div className="flex gap-2 flex-shrink-0 px-2 mt-4">
             <button
               onClick={handleLetGo}
               className="flex-1 px-3 py-2.5 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-primary shadow-md text-center text-sm"

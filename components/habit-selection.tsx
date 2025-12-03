@@ -212,7 +212,7 @@ export default function HabitSelection({
 
         {/* Custom Habit Input */}
         <div className="mb-6">
-          <div className="flex gap-2 items-stretch">
+          <div className="flex gap-3 items-stretch">
             <input
               type="text"
               placeholder="Create your own habit..."
@@ -222,19 +222,19 @@ export default function HabitSelection({
                 setCustomHabit(e.target.value);
                 if (selected) setSelected(''); // Clear selection when typing custom
               }}
-              className="flex-1 px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+              className="flex-1 px-3 py-3 text-base border-2 border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
               style={{ color: '#374151' }}
             />
             <button
               onClick={() => customHabit && handleStartBuilding()}
               disabled={!customHabit.trim()}
-              className={`px-6 py-3 rounded-lg font-semibold text-base transition-all w-20 flex items-center justify-center border-2 flex-shrink-0 ${
-                customHabit.trim() 
-                  ? 'bg-gray-800 text-white hover:bg-gray-700 shadow-lg border-gray-800' 
+              className={`px-4 py-3 rounded-lg font-semibold text-base transition-all w-16 flex items-center justify-center border-2 flex-shrink-0 ${
+                customHabit.trim()
+                  ? 'bg-gray-800 text-white hover:bg-gray-700 shadow-lg border-gray-800'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300'
               }`}
             >
-              <span className="text-xl font-bold">+</span>
+              <span className="text-lg font-bold">+</span>
             </button>
           </div>
           {/* Character count indicator */}

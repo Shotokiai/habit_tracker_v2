@@ -368,7 +368,7 @@ export default function Page() {
                 </svg>
               </button>
               <div className="flex-1 mr-3">
-                <h1 className="text-lg font-bold text-foreground truncate">
+                <h1 className="text-base font-bold text-foreground truncate" style={{ maxWidth: 'calc(100% - 80px)' }}>
                   {habits[currentHabitIndex]?.name}
                 </h1>
                 <div className="text-xs text-muted-foreground">
@@ -381,8 +381,9 @@ export default function Page() {
               </div>
               <button
                 onClick={() => setShowHabitSelection(true)}
-                className="w-14 h-10 bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity flex-shrink-0 flex items-center justify-center"
+                className="w-16 h-10 bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity flex-shrink-0 flex items-center justify-center ml-2"
                 title="Add new habit"
+                style={{ minWidth: '64px' }}
               >
                 + Add
               </button>

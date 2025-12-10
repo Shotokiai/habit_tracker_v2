@@ -6,7 +6,7 @@ import type { Habit, DayRecord } from "@/lib/types"
 import HabitGrid from "@/components/habit-grid"
 import HabitHeader from "@/components/habit-header"
 import HabitCalendar from "@/components/habit-calendar"
-import CompanionViewV3 from "@/components/CompanionViewV3"
+import CompanionViewV3 from "./CompanionViewV3"
 import LockView from "@/components/LockView"
 
 interface HabitTrackerProps {

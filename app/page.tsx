@@ -22,7 +22,7 @@ export default function Page() {
   const [showHabitSelection, setShowHabitSelection] = useState(false);
   const [showProfileDrawer, setShowProfileDrawer] = useState(false);
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
-  const [currentView, setCurrentView] = useState<'chart' | 'calendar'>('chart');
+  const [currentView, setCurrentView] = useState<'chart' | 'calendar' | 'companion'>('chart');
 
   // Helper function to get full habit name from key
   const getHabitNameFromKey = (key: string): string => {
@@ -400,13 +400,33 @@ export default function Page() {
                       const records = habits[currentHabitIndex]?.dayRecords || [];
                       const habit = habits[currentHabitIndex];
                       
-                      // Get the final y value which represents total successful days
-                      const completed = records.length > 0 ? records[records.length - 1].y : 0;
+                      // Count actual successful days - when Y increased from previous day
+                      const completed = (() => {
+                        const records = habits[currentHabitIndex]?.dayRecords || [];
+                        let successfulDays = 0;
+                        records.forEach((record, index) => {
+                          if (index === 0) {
+                            // First day success if y > 0
+                            if (record.y > 0) successfulDays++;
+                          } else {
+                            const prevRecord = records[index - 1];
+                            // Success only when Y increased from previous day
+                            if (record.y > prevRecord.y) {
+                              successfulDays++;
+                            }
+                          }
+                        });
+                        return successfulDays;
+                      })();
                       
-                      // Chart view always shows X/30, Calendar view shows dynamic days
+                      // Chart view always shows X/30, Calendar view shows dynamic days, Companion view shows pattern-based limit
                       if (currentView === 'chart') {
                         // Chart view always shows /30 constant
                         return `${completed}/30`;
+                      } else if (currentView === 'companion') {
+                        // Companion view shows pattern-based limit: lock=30, unicorn=60
+                        const maxDots = habit?.companionPattern === 'lock' ? 30 : 60;
+                        return `${completed}/${maxDots}`;
                       } else {
                         // Calculate challenge days based on habit creation date for calendar view
                         const currentDate = new Date();
@@ -427,14 +447,18 @@ export default function Page() {
                     {(() => {
                       const records = habits[currentHabitIndex]?.dayRecords || [];
                       let missedCount = 0;
+                      
                       records.forEach((record, index) => {
                         if (index === 0) {
-                          // First day is missed if y === 0
-                          if (record.y === 0) missedCount++;
+                          // First day is missed only if y === 0 AND there was an intention to start
+                          if (record.y === 0 && record.x === 1) missedCount++;
                         } else {
-                          // Subsequent days are missed if y < previous y
                           const prevRecord = records[index - 1];
-                          if (record.y < prevRecord.y) missedCount++;
+                          
+                          // Missed day = when Y DECREASED from previous day (habit missed button clicked)
+                          if (record.y < prevRecord.y) {
+                            missedCount++;
+                          }
                         }
                       });
                       return missedCount;
@@ -449,30 +473,32 @@ export default function Page() {
                       if (!habit) return "0%";
                       const records = habit.dayRecords || [];
                       
-                      // Get the actual successful days from the final y value
-                      const successCount = records.length > 0 ? records[records.length - 1].y : 0;
-                      if (successCount === 0) return "0%";
+                      if (records.length === 0) return "0%";
                       
-                      // Calculate percentage based on view type
-                      if (currentView === 'chart') {
-                        // Chart view uses 29 days to match calendar logic
-                        const percentage = (successCount / 29) * 100;
-                        // Round up for better user experience
-                        return successCount > 0 ? Math.ceil(percentage * 10) / 10 + "%" : "0%";
-                      } else {
-                        // Calendar view uses dynamic days calculation
-                        const currentDate = new Date();
-                        const startDate = new Date(habit?.createdAt || '');
-                        const currentMonth = currentDate.getMonth();
-                        const currentYear = currentDate.getFullYear();
-                        const habitStartDay = startDate.getDate();
-                        const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-                        const totalDays = daysInCurrentMonth - habitStartDay + 1;
-                        if (totalDays <= 0) return "0%";
-                        const percentage = (successCount / totalDays) * 100;
-                        // Round up for better user experience
-                        return Math.ceil(percentage * 10) / 10 + "%";
-                      }
+                      // Count actual successful days - when Y increased from previous day  
+                      const successCount = (() => {
+                        let successfulDays = 0;
+                        records.forEach((record, index) => {
+                          if (index === 0) {
+                            // First day success if y > 0
+                            if (record.y > 0) successfulDays++;
+                          } else {
+                            const prevRecord = records[index - 1];
+                            // Success only when Y increased from previous day
+                            if (record.y > prevRecord.y) {
+                              successfulDays++;
+                            }
+                          }
+                        });
+                        return successfulDays;
+                      })();
+                      const attemptedDays = records.length > 0 ? records[records.length - 1].x : 0;
+                      
+                      if (attemptedDays === 0) return "0%";
+                      
+                      // IMPORTANT: Calculate based on 30 days total so first completion = 3.3%
+                      const conversionPercentage = (successCount / 30) * 100;
+                      return Math.round(conversionPercentage * 10) / 10 + "%";
                     })()}
                   </span>
                 </div>

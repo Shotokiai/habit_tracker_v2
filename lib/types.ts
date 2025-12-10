@@ -5,7 +5,8 @@ export interface Habit {
   dayRecords: DayRecord[];
   createdAt: string;
   monthYear: string;
-  preferredView?: 'chart' | 'calendar';
+  preferredView?: 'chart' | 'calendar' | 'companion';
+  companionPattern?: 'unicorn' | 'lock';
 }
 
 export interface DayRecord {

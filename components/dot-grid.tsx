@@ -14,20 +14,34 @@ interface DotGridProps {
 
 export default function DotGrid({ gridSize, spacing, dotSize, dayRecords }: DotGridProps) {
   const getRecordType = (x: number, y: number) => {
-    const record = dayRecords.find((record) => record.x === x && record.y === y);
-    if (!record) return 'none';
+    // Find if there's a record at this exact coordinate
+    const exactRecord = dayRecords.find((record) => record.x === x && record.y === y);
+    if (!exactRecord) return 'none';
     
-    // Check if this is a missed day by comparing with previous day
+    // This coordinate has a record - determine if it's success or miss
+    // Look at the previous record to see if progress was made
     if (x > 1) {
       const previousRecord = dayRecords.find(r => r.x === x - 1);
-      if (previousRecord && record.y < previousRecord.y) {
-        return 'missed';
+      if (previousRecord) {
+        // If y increased from previous day = success (black dot)
+        if (exactRecord.y > previousRecord.y) {
+          return 'success';
+        }
+        // If y decreased from previous day = missed day (red dot)
+        else if (exactRecord.y < previousRecord.y) {
+          return 'missed';
+        }
+        // If y stayed same = also success (maintaining level)
+        else {
+          return 'success';
+        }
       }
-    } else if (x === 1 && record.y === 0) {
-      return 'missed';
+    } else if (x === 1) {
+      // First day: if y > 0 = success, if y = 0 = missed
+      return exactRecord.y > 0 ? 'success' : 'missed';
     }
     
-    return record.y >= 0 ? 'success' : 'none';
+    return 'success';
   }
 
   return (

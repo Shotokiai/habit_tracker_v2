@@ -1,1 +1,4 @@
-{}
+{
+  "/api/register-user": "pages/api/register-user.js",
+  "/api/track-custom-habit": "pages/api/track-custom-habit.js"
+}

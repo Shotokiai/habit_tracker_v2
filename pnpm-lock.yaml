@@ -29,6 +29,9 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      svg-path-properties:
+        specifier: ^2.0.0
+        version: 2.0.0
       tailwindcss:
         specifier: ^4.1.17
         version: 4.1.17
@@ -706,6 +709,10 @@ packages:
       babel-plugin-macros:
         optional: true
 
+  svg-path-properties@2.0.0:
+    resolution: {integrity: sha512-7+zZ4gQB8/aOnNOMy+tqCO1b1oju5umaiiNX2KuXihUX9IwFctOiCXAetpyk2if/q+YZB9qiKbo2Q/klgpfuSQ==}
+    engines: {node: '>=22.0.0'}
+
   tailwindcss@4.1.17:
     resolution: {integrity: sha512-j9Ee2YjuQqYT9bbRTfTZht9W/ytp5H+jJpZKiYdP/bpnXARAuELt9ofP0lPnmHjbga7SNQIxdTAXCmtKVYjN+Q==}
 
@@ -1299,6 +1306,8 @@ snapshots:
       react: 18.3.1
     optionalDependencies:
       '@babel/core': 7.28.5
+
+  svg-path-properties@2.0.0: {}
 
   tailwindcss@4.1.17: {}
 

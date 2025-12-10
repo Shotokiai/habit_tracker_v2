@@ -1,0 +1,21 @@
+<!-- Tree SVG based on your coordinates -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 700" style="background: white;">
+  <!-- Tree trunk -->
+  <path d="M227 394 L227 515 Q227 550 230 608 L192 608 L288 614 L386 616 Q347 548 332 471 L332 392" 
+        fill="#8B4513" 
+        stroke="#654321" 
+        stroke-width="3"/>
+  
+  <!-- Tree foliage - main cloud shape -->
+  <path d="M227 394 Q180 419 118 403 Q74 362 55 307 Q84 246 87 162 Q128 90 202 61 Q278 46 317 73 Q382 56 452 79 Q480 127 476 176 Q460 209 526 234 Q540 276 542 324 Q513 375 458 397 Q417 403 335 389 Q325 306 286 375 Q228 306 230 410" 
+        fill="#228B22" 
+        stroke="#006400" 
+        stroke-width="2" 
+        opacity="0.8"/>
+  
+  <!-- Additional foliage details -->
+  <circle cx="150" cy="200" r="45" fill="#32CD32" opacity="0.6"/>
+  <circle cx="300" cy="180" r="50" fill="#32CD32" opacity="0.6"/>
+  <circle cx="420" cy="220" r="40" fill="#32CD32" opacity="0.6"/>
+  <circle cx="250" cy="250" r="35" fill="#32CD32" opacity="0.6"/>
+</svg>

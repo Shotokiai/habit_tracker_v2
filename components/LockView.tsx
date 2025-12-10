@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { ManualDotsCanvas } from "@/components/ManualDotsCanvas";
-import { lockDotsData } from "@/data/treeDots";
+import { ManualDotsCanvas } from "./ManualDotsCanvas";
+import { lockDotsData } from "../data/treeDots";
 
 interface LockViewProps {
   habit: any;

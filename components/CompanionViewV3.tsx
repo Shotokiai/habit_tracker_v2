@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { ManualDotsCanvas } from "@/components/ManualDotsCanvas";
-import { unicornDotsData } from "@/data/treeDots";
+import { ManualDotsCanvas } from "./ManualDotsCanvas";
+import { unicornDotsData } from "../data/treeDots";
 
 interface CompanionViewV3Props {
   habit: any;

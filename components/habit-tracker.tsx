@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import FirstUserForm from "./first-user-form"
+import FirstUserForm from "@/components/first-user-form"
 import type { Habit, DayRecord } from "@/lib/types"
-import HabitGrid from "./habit-grid"
-import HabitHeader from "./habit-header"
-import HabitCalendar from "./habit-calendar"
-import CompanionViewV3 from "./CompanionViewV3"
-import LockView from "./LockView"
+import HabitGrid from "@/components/habit-grid"
+import HabitHeader from "@/components/habit-header"
+import HabitCalendar from "@/components/habit-calendar"
+import CompanionViewV3 from "@/components/CompanionViewV3"
+import LockView from "@/components/LockView"
 
 interface HabitTrackerProps {
   habit: Habit | null

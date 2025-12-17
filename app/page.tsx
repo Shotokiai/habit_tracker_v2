@@ -6,6 +6,7 @@ import HabitTracker from "@/components/habit-tracker"
 import FirstUserForm from "@/components/first-user-form"
 import HabitSelection from "@/components/habit-selection"
 import CustomHabitScreen from "@/components/CustomHabitScreen"
+import SplashScreen from "@/components/splash-screen"
 import type { Habit, DayRecord } from "@/lib/types"
 
 
@@ -23,6 +24,7 @@ export default function Page() {
   const [showProfileDrawer, setShowProfileDrawer] = useState(false);
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
   const [currentView, setCurrentView] = useState<'chart' | 'calendar' | 'companion'>('chart');
+  const [showSplashScreen, setShowSplashScreen] = useState(true);
 
   // Helper function to get full habit name from key
   const getHabitNameFromKey = (key: string): string => {
@@ -206,7 +208,16 @@ export default function Page() {
     );
   }
 
-  // Show onboarding form first
+  // Show splash screen first for new users (and after logout)
+  if (showSplashScreen && !user) {
+    return (
+      <main className="min-h-screen">
+        <SplashScreen onContinue={() => setShowSplashScreen(false)} />
+      </main>
+    );
+  }
+
+  // Show onboarding form after splash screen
   if (!user) {
     return (
       <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
@@ -605,7 +616,8 @@ export default function Page() {
                     setHabitSelection(null);
                     setShowProfileDrawer(false);
                     setShowLogoutConfirmation(false);
-                    // Reset to first user form or login screen
+                    setShowSplashScreen(true); // Show splash screen after logout
+                    // Reset to splash screen
                   }}
                   className="flex-1 px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition-colors"
                 >

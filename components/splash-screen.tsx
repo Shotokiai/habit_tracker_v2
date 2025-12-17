@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { ChevronRightIcon, CheckIcon } from '@heroicons/react/24/outline'
 
 interface SplashScreenProps {
   onContinue: () => void
@@ -57,7 +56,9 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center relative shadow-sm">
               <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center">
-                <CheckIcon className="w-2 h-2 text-indigo-500 font-bold" />
+                <svg className="w-2 h-2 text-indigo-500 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
               </div>
             </div>
             <h2 className="text-xl font-bold tracking-tight">Sankalp</h2>
@@ -333,7 +334,9 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
                 className="w-12 h-12 bg-indigo-500 rounded-full flex items-center justify-center text-white shadow-lg z-10 transition-transform duration-100"
                 style={{ transform: `translateX(${dragOffset}px)` }}
               >
-                <ChevronRightIcon className="w-6 h-6 animate-pulse" />
+                <svg className="w-6 h-6 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </div>
               <div className="absolute inset-0 flex items-center justify-center z-0">
                 <span className="text-white font-medium text-sm tracking-wide opacity-90 pl-8" style={{ fontSize: '14px', fontWeight: '500' }}>

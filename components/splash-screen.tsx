@@ -65,10 +65,11 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 antialiased overflow-x-hidden">
+    <div className="h-screen bg-gray-50 text-gray-900 antialiased overflow-hidden">
+      <div className="w-[360px] h-[780px] mx-auto bg-gray-50 relative overflow-hidden">
       {/* Header */}
       <div className="fixed top-0 left-0 w-full z-50 bg-gray-50/95 backdrop-blur-md">
-        <div className="flex justify-center items-center px-4 py-4 max-w-md mx-auto w-full">
+        <div className="flex justify-center items-center px-4 pt-10 pb-1.5 max-w-[360px] mx-auto w-full">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center relative shadow-sm">
               <div className="w-4 h-4 bg-white rounded-full flex items-center justify-center">
@@ -83,18 +84,18 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
       </div>
 
       {/* Main Content */}
-      <main className="flex flex-col min-h-screen pt-20 pb-12 px-4 max-w-md mx-auto w-full">
-        <div className="flex-1 flex flex-col justify-center mb-8 relative">
+      <main className="flex flex-col h-full pt-24 pb-8 px-4 max-w-[360px] mx-auto w-full">
+        <div className="flex flex-col mb-4 relative">
           {/* Carousel Container */}
           <div 
-            className="flex overflow-x-auto gap-4 pb-4 -mx-6 px-6 snap-x snap-mandatory h-[520px] no-scrollbar"
+            className="flex overflow-x-auto gap-4 pb-4 -mx-6 px-6 snap-x snap-mandatory h-[420px] no-scrollbar"
             onScroll={handleScroll}
             style={{ scrollSnapType: 'x mandatory', scrollBehavior: 'smooth' }}
           >
             {/* Slide 1 - Chart View */}
             <div className="min-w-full flex flex-col h-full snap-center">
-              <div className="bg-white rounded-3xl p-5 shadow-lg border border-gray-100 flex flex-col h-full relative overflow-hidden">
-                <div className="grid grid-cols-3 gap-2 mb-6 bg-gray-50 p-3 rounded-2xl">
+              <div className="bg-white rounded-3xl p-4 shadow-lg border border-gray-100 flex flex-col h-full relative overflow-hidden">
+                <div className="grid grid-cols-3 gap-2 mb-4 bg-gray-50 p-3 rounded-2xl">
                   <div className="text-center">
                     <p className="text-[10px] text-gray-500 font-medium">Successful</p>
                     <p className="text-lg font-bold text-green-500">24/30</p>
@@ -109,7 +110,7 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
                   </div>
                 </div>
                 
-                <div className="flex-1 bg-white rounded-xl border border-gray-100 relative p-4 mb-4 flex items-center justify-center overflow-hidden">
+                <div className="flex-1 bg-white rounded-xl border border-gray-100 relative p-4 flex items-center justify-center overflow-hidden">
                   <div className="absolute top-2 right-2 bg-white shadow-md rounded-md px-2 py-1 text-[10px] font-bold text-indigo-500 border border-gray-100 z-10">
                     Chart View
                   </div>
@@ -158,18 +159,12 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
                     </div>
                   </div>
                 </div>
-                
-                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 mt-auto">
-                  <p className="text-xs text-gray-600 leading-relaxed text-left">
-                    Watch your habits grow like a stock chart. Daily wins push you up, missed days cause a dip.
-                  </p>
-                </div>
               </div>
             </div>
 
             {/* Slide 2 - Calendar View */}
             <div className="min-w-full flex flex-col h-full snap-center">
-              <div className="bg-white rounded-3xl p-5 shadow-lg border border-gray-100 flex flex-col h-full relative overflow-hidden">
+              <div className="bg-white rounded-3xl p-4 shadow-lg border border-gray-100 flex flex-col h-full relative overflow-hidden">
                 {/* Stats Header */}
                 <div className="grid grid-cols-3 gap-2 mb-4 bg-gray-50 p-3 rounded-2xl">
                   <div className="text-center">
@@ -187,7 +182,7 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
                 </div>
 
                 {/* Calendar */}
-                <div className="flex-1 bg-white rounded-xl border border-gray-100 relative px-4 py-2 flex flex-col overflow-hidden">
+                <div className="flex-1 bg-white rounded-xl border border-gray-100 relative px-3 py-3 flex flex-col overflow-hidden">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest">DECEMBER</h3>
                     <div className="px-1.5 py-[2px] bg-white border border-gray-100 rounded-lg shadow-sm">
@@ -249,19 +244,12 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
                     </div>
                   </div>
                 </div>
-
-                {/* Description */}
-                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 mt-4 text-left">
-                  <p className="text-xs text-gray-600 leading-relaxed">
-                    Mark progress directly on your calendar. A simple way to spot consistency and trends over time.
-                  </p>
-                </div>
               </div>
             </div>
 
             {/* Slide 3 - Companion View */}
             <div className="min-w-full flex flex-col h-full snap-center">
-              <div className="bg-white rounded-3xl p-5 shadow-lg border border-gray-100 flex flex-col h-full relative overflow-hidden">
+              <div className="bg-white rounded-3xl p-4 shadow-lg border border-gray-100 flex flex-col h-full relative overflow-hidden">
                 {/* Stats Header */}
                 <div className="grid grid-cols-3 gap-2 mb-4 bg-gray-50 p-3 rounded-2xl">
                   <div className="text-center">
@@ -279,7 +267,7 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
                 </div>
 
                 {/* Companion Visualization */}
-                <div className="flex-1 bg-white rounded-xl border border-gray-100 relative flex flex-col overflow-hidden justify-center items-center">
+                <div className="flex-1 bg-white rounded-xl border border-gray-100 relative flex flex-col overflow-hidden justify-center items-center p-2">
                   <div className="absolute top-2 right-2 bg-white shadow-md rounded-md px-2 py-1 text-[10px] font-bold text-indigo-500 border border-gray-100 z-20">
                     Companion View
                   </div>
@@ -295,19 +283,12 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
                     />
                   </div>
                 </div>
-
-                {/* Description */}
-                <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 mt-4 text-left">
-                  <p className="text-xs text-gray-600 leading-relaxed">
-                    Build habits with a friend for 30 days. Take turns completing habits and grow together.
-                  </p>
-                </div>
               </div>
             </div>
           </div>
 
           {/* Carousel Dots */}
-          <div className="flex justify-center gap-2 mt-2">
+          <div className="flex justify-center gap-2 mt-0">
             {[0, 1, 2].map((index) => (
               <div
                 key={index}
@@ -322,22 +303,18 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
         </div>
 
         {/* Title and Description */}
-        <div className="mb-6 text-center px-2">
-          <h1 className="text-2xl font-extrabold text-gray-900 mb-3 leading-tight tracking-tight">
-            Track Your Habits<br/>
+        <div className="mt-4 mb-1 text-center px-2">
+          <h1 className="text-2xl font-extrabold text-gray-900 mb-2 leading-tight tracking-tight">
+            Consistent Habits,<br/>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 to-purple-400 block mt-1">
-              Build Consistency
+              Shape Better You
             </span>
           </h1>
-          <p className="text-gray-500 text-sm leading-relaxed">
-            Monitor your habits and grow<br/>
-            consistently, one step closer each day.
-          </p>
         </div>
 
         {/* Continue Button */}
-        <div className="mt-auto">
-          <div className="mb-6 relative w-full max-w-[340px] mx-auto">
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-50 px-4 py-5 z-50">
+          <div className="relative w-full max-w-[340px] mx-auto">
             <div 
               className="w-full h-16 bg-gray-900 rounded-full flex items-center px-2 relative overflow-hidden shadow-lg border border-gray-900 cursor-grab active:cursor-grabbing"
               onMouseDown={handleDragStart}
@@ -370,22 +347,9 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
               />
             </div>
           </div>
-          
-          {/* Terms and Privacy */}
-          <div className="px-6 text-center pb-6">
-            <p className="text-[10px] text-gray-400 leading-tight">
-              By continuing, you agree to our{' '}
-              <a className="font-bold text-gray-600 hover:underline" href="#">
-                Terms of Service
-              </a>{' '}
-              and{' '}
-              <a className="font-bold text-gray-600 hover:underline" href="#">
-                Privacy Policy
-              </a>.
-            </p>
-          </div>
         </div>
       </main>
+      </div>
       
       {/* Custom CSS for scrollbar hiding */}
       <style jsx>{`

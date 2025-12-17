@@ -21,31 +21,47 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
   }
 
   const handleDragStart = (e: React.TouchEvent | React.MouseEvent) => {
-    setIsDragging(true)
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
-    setDragStartX(clientX)
+    try {
+      setIsDragging(true)
+      const clientX = 'touches' in e ? e.touches[0]?.clientX : (e as React.MouseEvent).clientX
+      if (typeof clientX === 'number') {
+        setDragStartX(clientX)
+      }
+    } catch (error) {
+      console.log('Touch start error:', error)
+    }
   }
 
   const handleDragMove = (e: React.TouchEvent | React.MouseEvent) => {
-    if (!isDragging) return
-    
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
-    const diff = clientX - dragStartX
-    const maxOffset = 280 // Button width minus circle width
-    const clampedOffset = Math.max(0, Math.min(diff, maxOffset))
-    setDragOffset(clampedOffset)
-    
-    // Complete action when dragged far enough (80% of max width)
-    if (clampedOffset > maxOffset * 0.8) {
-      setIsDragging(false)
-      setDragOffset(0)
-      onContinue()
+    try {
+      if (!isDragging) return
+      
+      const clientX = 'touches' in e ? e.touches[0]?.clientX : (e as React.MouseEvent).clientX
+      if (typeof clientX !== 'number') return
+      
+      const diff = clientX - dragStartX
+      const maxOffset = 280 // Button width minus circle width
+      const clampedOffset = Math.max(0, Math.min(diff, maxOffset))
+      setDragOffset(clampedOffset)
+      
+      // Complete action when dragged far enough (80% of max width)
+      if (clampedOffset > maxOffset * 0.8) {
+        setIsDragging(false)
+        setDragOffset(0)
+        onContinue()
+      }
+    } catch (error) {
+      console.log('Touch move error:', error)
     }
   }
 
   const handleDragEnd = () => {
-    setIsDragging(false)
-    setDragOffset(0)
+    try {
+      setIsDragging(false)
+      setDragOffset(0)
+    } catch (error) {
+      console.log('Touch end error:', error)
+    }
   }
 
   return (
@@ -210,7 +226,9 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
                       <div className="aspect-square bg-green-600 rounded flex items-center justify-center text-[10px] text-white font-bold relative ring-2 ring-blue-100 z-10 shadow-sm">
                         16
                         <span className="absolute -top-1 -right-1 w-2 h-2 bg-white rounded-full flex items-center justify-center">
-                          <CheckIcon className="w-[6px] h-[6px] text-green-600 font-bold" />
+                          <svg className="w-[6px] h-[6px] text-green-600 font-bold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
                         </span>
                       </div>
                       <div className="aspect-square bg-white border border-gray-100 rounded flex items-center justify-center text-[10px] text-gray-700 shadow-sm font-semibold">17</div>

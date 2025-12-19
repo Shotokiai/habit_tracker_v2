@@ -1,0 +1,4 @@
+// .gitignore for Firebase Functions
+node_modules/
+.env
+.firebase/

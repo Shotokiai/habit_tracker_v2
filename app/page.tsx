@@ -17,7 +17,7 @@ export default function Page() {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [swipeStartFromNav, setSwipeStartFromNav] = useState(false);
-  const [user, setUser] = useState<{ username: string; age: number; email: string } | null>(null);
+  const [user, setUser] = useState<{ username: string; age: string; email: string } | null>(null);
   const [habitSelection, setHabitSelection] = useState<string | null>(null);
   const [customHabitType, setCustomHabitType] = useState<"make" | "break" | null>(null);
   const [showHabitSelection, setShowHabitSelection] = useState(false);
@@ -121,9 +121,10 @@ export default function Page() {
   }, []);
 
   // Handle user login/registration
-  const handleUserSubmit = (userData: { username: string; age: number; email: string }) => {
+  const handleUserSubmit = (userData: { username: string; age: string; email: string }) => {
     setUser(userData);
     localStorage.setItem("currentUser", JSON.stringify(userData));
+    setShowSplashScreen(false); // Ensure splash screen is hidden
     
     // Load existing habits for this user
     const userHabitsKey = `habits_${userData.email}`;
@@ -132,14 +133,22 @@ export default function Page() {
       try {
         const userHabits = JSON.parse(savedUserHabits);
         setHabits(userHabits);
-        // If user has habits, don't show habit selection
+        // If user has habits, mark as existing user
         if (userHabits.length > 0) {
           setHabitSelection("existing"); // Mark that user has existing habits
+        } else {
+          // User has no habits, should show habit selection
+          setHabitSelection(null);
         }
       } catch {
         // If there's an error loading habits, start fresh
         setHabits([]);
+        setHabitSelection(null);
       }
+    } else {
+      // New user with no saved habits - should show habit selection
+      setHabits([]);
+      setHabitSelection(null);
     }
   };
 
@@ -221,17 +230,21 @@ export default function Page() {
   if (!user) {
     return (
       <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
-        <FirstUserForm onSubmit={handleUserSubmit} />
+        <FirstUserForm 
+          onSubmit={handleUserSubmit} 
+          onBack={() => setShowSplashScreen(true)}
+        />
       </main>
     );
   }
 
   // Show habit selection after onboarding (only if user doesn't have existing habits)
-  if (!habitSelection && !customHabitType && habits.length === 0) {
+  if (user && habitSelection !== "existing" && !customHabitType && habits.length === 0) {
     return (
       <main className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted">
         <HabitSelection
-          userAge={user?.age || 25}
+          userName={user?.username?.split(' ')[0]}
+          userAge={typeof user?.age === 'string' ? parseInt(user.age) || 25 : 25}
           onSelect={(habit) => {
             if (habit === "custom_make") {
               setCustomHabitType("make");
@@ -285,7 +298,7 @@ export default function Page() {
         {showHabitSelection ? (
           <HabitSelection
             userName={user?.username}
-            userAge={user?.age || 25}
+            userAge={typeof user?.age === 'string' ? (user.age === 'under_18' ? 16 : user.age === '18_24' ? 21 : user.age === '25_34' ? 30 : user.age === '35_44' ? 40 : 50) : 25}
             onBack={() => setShowHabitSelection(false)}
             onSelect={(habit) => {
               if (habit === "custom_make") {
@@ -405,7 +418,7 @@ export default function Page() {
             <div className="bg-muted/50 border-b border-foreground/10 p-3 mx-4 mt-2 rounded-lg">
               <div className="flex justify-between items-center text-sm">
                 <div className="flex flex-col items-center">
-                  <span className="font-semibold text-foreground">Successful days</span>
+                  <span className="font-semibold text-foreground">Successful</span>
                   <span className="text-lg font-bold text-green-600">
                     {(() => {
                       const records = habits[currentHabitIndex]?.dayRecords || [];
@@ -430,30 +443,20 @@ export default function Page() {
                         return successfulDays;
                       })();
                       
-                      // Chart view always shows X/30, Calendar view shows dynamic days, Companion view shows pattern-based limit
-                      if (currentView === 'chart') {
-                        // Chart view always shows /30 constant
+                      // Chart view always shows X/30, Calendar view shows X/30, Companion view shows pattern-based limit
+                      if (currentView === 'chart' || currentView === 'calendar') {
+                        // Chart and Calendar views always show /30 constant
                         return `${completed}/30`;
-                      } else if (currentView === 'companion') {
+                      } else {
                         // Companion view shows pattern-based limit: lock=30, unicorn=60
                         const maxDots = habit?.companionPattern === 'lock' ? 30 : 60;
                         return `${completed}/${maxDots}`;
-                      } else {
-                        // Calculate challenge days based on habit creation date for calendar view
-                        const currentDate = new Date();
-                        const startDate = new Date(habit?.createdAt || '');
-                        const currentMonth = currentDate.getMonth();
-                        const currentYear = currentDate.getFullYear();
-                        const habitStartDay = startDate.getDate();
-                        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-                        const challengeDays = daysInMonth - habitStartDay + 1;
-                        return `${completed}/${challengeDays}`;
                       }
                     })()}
                   </span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="font-semibold text-foreground">Missed days</span>
+                  <span className="font-semibold text-foreground">Missed</span>
                   <span className="text-lg font-bold text-red-500">
                     {(() => {
                       const records = habits[currentHabitIndex]?.dayRecords || [];
@@ -477,7 +480,7 @@ export default function Page() {
                   </span>
                 </div>
                 <div className="flex flex-col items-center">
-                  <span className="font-semibold text-foreground">Conversion</span>
+                  <span className="font-semibold text-foreground">Consistency</span>
                   <span className="text-lg font-bold text-primary">
                     {(() => {
                       const habit = habits[currentHabitIndex];

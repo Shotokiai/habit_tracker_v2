@@ -42,9 +42,9 @@ export default function HabitGrid({ dayRecords }: HabitGridProps) {
 
     const points: string[] = []
     dayRecords.forEach((record) => {
-      // Use the exact same positioning as the diagonal line and circles
-      const x = record.x * spacing - spacing / 2 + 8
-      const y = (gridSize - record.y + 1) * spacing - spacing / 2 + 8
+      // Account for container padding (p-1 = 4px)
+      const x = record.x * spacing - spacing / 2 + 4
+      const y = (gridSize - record.y + 1) * spacing - spacing / 2 + 4
       points.push(`${x},${y}`)
     })
 
@@ -52,17 +52,17 @@ export default function HabitGrid({ dayRecords }: HabitGridProps) {
   }, [dayRecords, gridSize, spacing])
 
   return (
-    <div className="flex flex-col items-center gap-2 pl-8 pr-8 py-2 w-full h-full">
+    <div className="flex flex-col items-center gap-2 pl-6 pr-4 py-2 w-full h-full">
       <div className="relative flex-shrink-0">
         <div
-          className="absolute -left-10 top-0 flex flex-col justify-between text-xs font-semibold text-foreground"
+          className="absolute -left-6 top-0 flex flex-col justify-between text-xs font-semibold text-foreground"
           style={{ height: gridHeight + 16, paddingTop: 8, paddingBottom: 8 }}
         >
           {Array.from({ length: gridSize }, (_, i) => {
             const num = gridSize - i;
             return (
-              <div key={num} className="flex items-center justify-end w-8" style={{ height: spacing }}>
-                <span className="text-right pr-2 text-gray-700" style={{ fontSize: '11px', lineHeight: '12px', fontWeight: '600' }}>{num % 5 === 0 ? num : ''}</span>
+              <div key={num} className="flex items-center justify-end w-5" style={{ height: spacing }}>
+                <span className="text-right text-gray-700" style={{ fontSize: '10px', lineHeight: '12px', fontWeight: '600' }}>{num % 5 === 0 ? num : ''}</span>
               </div>
             );
           })}
@@ -76,10 +76,10 @@ export default function HabitGrid({ dayRecords }: HabitGridProps) {
           <svg width={gridWidth + 32} height={gridHeight + 32} className="absolute inset-0 pointer-events-none">
             {/* Diagonal guide line from center of (1,1) to center of (30,30) */}
             <line
-              x1={1 * spacing - spacing / 2 + 8}
-              y1={(gridSize - 1 + 1) * spacing - spacing / 2 + 8}
-              x2={30 * spacing - spacing / 2 + 8}
-              y2={(gridSize - 30 + 1) * spacing - spacing / 2 + 8}
+              x1={1 * spacing - spacing / 2 + 4}
+              y1={(gridSize - 1 + 1) * spacing - spacing / 2 + 4}
+              x2={30 * spacing - spacing / 2 + 4}
+              y2={(gridSize - 30 + 1) * spacing - spacing / 2 + 4}
               stroke="black"
               strokeWidth="1"
             />

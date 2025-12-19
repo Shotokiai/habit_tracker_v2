@@ -1,22 +1,24 @@
 import { useState, useEffect } from "react"
 
 interface FirstUserFormProps {
-  onSubmit: (user: { username: string; email: string; age: number }) => void
+  onSubmit: (user: { username: string; email: string; age: string }) => void
+  onBack?: () => void
 }
 
 interface SavedUser {
   username: string;
   email: string;
-  age: number;
+  age: string;
 }
 
-export default function FirstUserForm({ onSubmit }: FirstUserFormProps) {
+export default function FirstUserForm({ onSubmit, onBack }: FirstUserFormProps) {
   const [username, setUsername] = useState("")
-  const [age, setAge] = useState<number | "">("")
+  const [age, setAge] = useState("")
   const [email, setEmail] = useState("")
   const [error, setError] = useState("")
   const [savedUsers, setSavedUsers] = useState<SavedUser[]>([])
   const [showLogin, setShowLogin] = useState(false)
+  const [showAllUsers, setShowAllUsers] = useState(false)
 
   const isFormFilled = username.trim() && age !== "" && email.trim();
 
@@ -47,31 +49,32 @@ export default function FirstUserForm({ onSubmit }: FirstUserFormProps) {
       return
     }
     setError("")
-    // POST to our API which forwards to SheetDB
+    
+    // Handle registration asynchronously
     ;(async () => {
+      const newUser = { username, age, email }
+      
+      // Try to POST to our API, but continue even if it fails
       try {
         const res = await fetch('/api/register-user', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, age, email }),
         })
+        
         if (!res.ok) {
-          const json = await res.json().catch(() => ({}))
-          setError(json.error || 'Failed to register')
-          return
+          console.warn('API registration failed, but continuing locally')
         }
-        
-        // Save user to localStorage for future logins
-        const newUser = { username, age: age as number, email }
-        const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
-        localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
-        
-        // success
-        onSubmit(newUser)
       } catch (err) {
-        console.error(err)
-        setError('Network error')
+        console.warn('Network error during registration, but continuing locally:', err)
       }
+      
+      // Save user to localStorage for future logins regardless of API status
+      const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
+      localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
+      
+      // Always continue to next step
+      onSubmit(newUser)
     })()
   }
 
@@ -80,224 +83,192 @@ export default function FirstUserForm({ onSubmit }: FirstUserFormProps) {
   }
 
   return (
-    <div 
-      className="flex items-center justify-center min-h-screen p-4"
-      style={{ backgroundColor: '#f3f4f6' }}
-    >
-      <div 
-        className="w-full max-w-sm rounded-xl shadow-lg p-8 text-center"
-        style={{ backgroundColor: '#ffffff' }}
-      >
-        {/* App Icon */}
-        <div className="mb-6">
-          <div 
-            className="w-16 h-16 mx-auto rounded-xl flex items-center justify-center"
-            style={{ background: 'linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%)' }}
-          >
-            <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
-          </div>
-        </div>
-
-        {!showLogin ? (
-          <>
-            {/* Header */}
-            <h1 
-              className="text-2xl font-bold mb-2"
-              style={{ color: '#1f2937' }}
-            >
-              Join Our Community
-            </h1>
-            <p 
-              className="mb-8"
-              style={{ color: '#6b7280' }}
-            >
-              Become part of something great
-            </p>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                type="text"
-                placeholder="What's your name?"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                className="w-full px-4 py-3 border-0 rounded-lg"
-                style={{
-                  backgroundColor: '#f9fafb',
-                  color: '#374151',
-                  outline: 'none'
-                }}
-                onFocus={(e) => e.target.style.outline = '2px solid #22d3ee'}
-                onBlur={(e) => e.target.style.outline = 'none'}
-                required
-              />
-              
-              <div className="relative">
-                <select
-                  value={age}
-                  onChange={e => setAge(Number(e.target.value))}
-                  className="w-full px-4 py-3 border-0 rounded-lg appearance-none"
-                  style={{
-                    backgroundColor: '#f9fafb',
-                    color: age === '' ? '#9ca3af' : '#374151',
-                    outline: 'none'
-                  }}
-                  onFocus={(e) => e.target.style.outline = '2px solid #22d3ee'}
-                  onBlur={(e) => e.target.style.outline = 'none'}
-                  required
+    <div className="bg-gray-100 min-h-screen flex items-center justify-center p-0 m-0 font-sans antialiased">
+      <main className="w-[360px] h-[740px] bg-white overflow-hidden relative flex flex-col mx-auto shrink-0">
+        <div className="flex-1 flex flex-col px-8 pt-12 pb-12 h-full">
+          
+          {!showLogin ? (
+            <>
+              {/* Back Button */}
+              <div className="flex items-center justify-start">
+                <button
+                  onClick={onBack}
+                  className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
                 >
-                  <option value="" style={{ color: '#9ca3af' }}>How old are you?</option>
-                  {Array.from({ length: 66 }, (_, i) => 15 + i).map(num => (
-                    <option key={num} value={num} style={{ color: '#374151' }}>{num}</option>
-                  ))}
-                </select>
-                <span 
-                  className="pointer-events-none absolute inset-y-0 right-3 flex items-center"
-                  style={{ color: '#9ca3af' }}
-                >
-                  ▼
-                </span>
+                  <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
               </div>
-              
-              <input
-                type="email"
-                placeholder="Your email address"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border-0 rounded-lg"
-                style={{
-                  backgroundColor: '#f9fafb',
-                  color: '#374151',
-                  outline: 'none'
-                }}
-                onFocus={(e) => e.target.style.outline = '2px solid #22d3ee'}
-                onBlur={(e) => e.target.style.outline = 'none'}
-                required
-              />
-              
-              {error && (
-                <div 
-                  className="text-sm text-center"
-                  style={{ color: '#ef4444' }}
-                >
-                  {error}
-                </div>
-              )}
-              
-              <button
-                type="submit"
-                className="w-full px-4 py-3 font-semibold rounded-lg transition-all"
-                style={{
-                  background: isFormFilled 
-                    ? 'linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%)' 
-                    : '#d1d5db',
-                  color: isFormFilled ? '#ffffff' : '#6b7280',
-                  cursor: isFormFilled ? 'pointer' : 'not-allowed',
-                  boxShadow: isFormFilled ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none'
-                }}
-                disabled={!isFormFilled}
-              >
-                Let's Go!
-              </button>
-            </form>
 
-            {/* Login Option for Returning Users */}
-            {savedUsers.length > 0 && (
-              <div 
-                className="mt-6 pt-4"
-                style={{ borderTop: '1px solid #e5e7eb' }}
-              >
-                <p 
-                  className="text-sm mb-2"
-                  style={{ color: '#6b7280' }}
+              {/* Header */}
+              <div className="mt-10 mb-8">
+                <h1 className="text-[26px] leading-tight font-bold text-gray-900 mb-2 tracking-tight">
+                  Join Our Community
+                </h1>
+                <p className="text-gray-500 text-[15px] font-medium">
+                  Become part of something great
+                </p>
+              </div>
+
+              {/* Form */}
+              <form className="flex flex-col gap-5 w-full" onSubmit={handleSubmit}>
+                <div className="group">
+                  <input 
+                    className="w-full h-[52px] bg-gray-50 border border-gray-200 rounded-xl px-4 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" 
+                    placeholder="What's your name?" 
+                    type="text" 
+                    value={username} 
+                    onChange={e => setUsername(e.target.value)} 
+                    required 
+                  />
+                </div>
+                
+                <div className="group relative">
+                  <select 
+                    className="w-full h-[52px] bg-gray-50 border border-gray-200 rounded-xl px-4 pr-10 text-[15px] font-medium text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200 appearance-none cursor-pointer invalid:text-gray-400" 
+                    value={age} 
+                    onChange={e => setAge(e.target.value)} 
+                    required
+                    style={{ 
+                      color: age === '' ? '#9CA3AF' : '#111827'
+                    }}
+                  >
+                    <option value="" disabled style={{display: 'none'}}>How old are you?</option>
+                    {Array.from({length: 66}, (_, i) => i + 15).map(num => (
+                      <option key={num} value={num}>{num}</option>
+                    ))}
+                  </select>
+                  <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 flex items-center">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M7 10l5 5 5-5z"/>
+                    </svg>
+                  </div>
+                </div>
+                
+                <div className="group">
+                  <input 
+                    className="w-full h-[52px] bg-gray-50 border border-gray-200 rounded-xl px-4 text-[15px] font-medium text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all duration-200" 
+                    placeholder="Your email address" 
+                    type="email" 
+                    value={email} 
+                    onChange={e => setEmail(e.target.value)} 
+                    required 
+                  />
+                </div>
+                
+                {error && <div className="text-red-500 text-sm text-center">{error}</div>}
+                
+                <button 
+                  className="mt-4 w-full h-[54px] bg-indigo-500 hover:bg-indigo-600 text-white text-[16px] font-semibold rounded-xl shadow-[0_10px_15px_-3px_rgba(99,102,241,0.3)] active:scale-[0.98] transition-all duration-200 flex items-center justify-center tracking-wide" 
+                  type="submit"
                 >
-                  Been here before?{' '}
-                  <button
+                  Let's Go!
+                </button>
+              </form>
+
+              {/* Footer */}
+              <div className="mt-auto mb-1 text-center">
+                <p className="text-[14px] text-gray-500 font-medium">
+                  Been here before? 
+                  <button 
+                    className="text-indigo-500 font-bold hover:text-indigo-600 transition-colors ml-1" 
                     onClick={() => setShowLogin(true)}
-                    className="font-medium hover:underline"
-                    style={{ color: '#22d3ee' }}
+                    type="button"
                   >
                     Log In
                   </button>
                 </p>
               </div>
-            )}
-          </>
-        ) : (
-          // Login Screen for Returning Users
-          <>
-            <h1 
-              className="text-2xl font-bold mb-2"
-              style={{ color: '#1f2937' }}
-            >
-              Welcome Back!
-            </h1>
-            <p 
-              className="mb-6"
-              style={{ color: '#6b7280' }}
-            >
-              Select your account to continue
-            </p>
-
-            <div className="space-y-3">
-              {savedUsers.map((user, index) => (
+            </>
+          ) : (
+            <>
+              {/* Back Button with Title */}
+              <div className="flex items-center gap-3">
                 <button
-                  key={index}
-                  onClick={() => handleUserLogin(user)}
-                  className="w-full p-4 rounded-lg text-left transition-colors border"
-                  style={{
-                    backgroundColor: '#f9fafb',
-                    borderColor: '#e5e7eb'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#f3f4f6';
-                    e.currentTarget.style.borderColor = '#22d3ee';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#f9fafb';
-                    e.currentTarget.style.borderColor = '#e5e7eb';
-                  }}
+                  onClick={() => setShowLogin(false)}
+                  className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
                 >
-                  <div className="flex items-center gap-3">
-                    <div 
-                      className="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold"
-                      style={{ background: 'linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%)' }}
-                    >
-                      {user.username.charAt(0).toUpperCase()}
-                    </div>
-                    <div className="flex-1">
-                      <div 
-                        className="font-medium"
-                        style={{ color: '#1f2937' }}
-                      >
-                        {user.username}
-                      </div>
-                      <div 
-                        className="text-sm"
-                        style={{ color: '#6b7280' }}
-                      >
-                        {user.email}
-                      </div>
-                    </div>
-                  </div>
+                  <svg className="w-4 h-4 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
                 </button>
-              ))}
-            </div>
+                <h1 className="text-[19px] font-bold text-gray-900 tracking-tight">
+                  Select your account
+                </h1>
+              </div>
 
-            <button
-              onClick={() => setShowLogin(false)}
-              className="mt-4 text-sm font-medium"
-              style={{ color: '#6b7280' }}
-              onMouseEnter={(e) => (e.target as HTMLElement).style.color = '#22d3ee'}
-              onMouseLeave={(e) => (e.target as HTMLElement).style.color = '#6b7280'}
-            >
-              ← Back to Sign Up
-            </button>
-          </>
-        )}
-      </div>
+              {/* Spacer to maintain same spacing */}
+              <div className="mt-4 mb-4"></div>
+              
+              {/* Email List Container */}
+              <div className={`${showAllUsers && savedUsers.length > 5 ? 'overflow-y-scroll' : ''} space-y-3`} 
+                   style={showAllUsers && savedUsers.length > 5 ? {maxHeight: 'calc(100vh - 320px)'} : {}}>
+                {savedUsers.length > 0 ? (
+                  <>
+                    {[...savedUsers].reverse().slice(0, showAllUsers ? savedUsers.length : 5).map((user, index) => (
+                      <button
+                        key={index}
+                        onClick={() => handleUserLogin(user)}
+                        className="w-full p-4 bg-gray-50 hover:bg-gray-100 rounded-xl text-left transition-all duration-200 border border-transparent hover:border-indigo-200"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-semibold text-gray-900">{user.username}</p>
+                            <p className="text-sm text-gray-500">{user.email}</p>
+                          </div>
+                          <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                          </svg>
+                        </div>
+                      </button>
+                    ))}
+                  </>
+                ) : (
+                  <p className="text-gray-500 text-center py-4">No saved accounts found</p>
+                )}
+              </div>
+
+              {/* View All Button - Only show when not expanded */}
+              {!showAllUsers && savedUsers.length > 5 && (
+                <div className="mt-3">
+                  <button
+                    onClick={() => setShowAllUsers(true)}
+                    className="w-full p-3 bg-white border border-gray-300 hover:border-indigo-400 rounded-xl text-center transition-all duration-200 hover:bg-gray-50"
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-sm font-medium text-gray-600 hover:text-indigo-600">
+                        View All ({savedUsers.length - 5} more)
+                      </span>
+                      <svg 
+                        className="w-4 h-4 text-gray-400 transition-transform duration-200 rotate-0" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </div>
+                  </button>
+                </div>
+              )}
+              
+              <div className="mt-auto mb-1 text-center">
+                <p className="text-[14px] text-gray-500 font-medium">
+                  New here? 
+                  <button 
+                    className="text-indigo-500 font-bold hover:text-indigo-600 transition-colors ml-1" 
+                    onClick={() => setShowLogin(false)}
+                    type="button"
+                  >
+                    Create Account
+                  </button>
+                </p>
+              </div>
+            </>
+          )}
+        </div>
+      </main>
     </div>
   )
 }

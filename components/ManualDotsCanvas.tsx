@@ -37,12 +37,12 @@ export function ManualDotsCanvas({
 
   return (
     <div className="w-full">
-      <div className="relative w-full border border-gray-200 rounded-lg overflow-hidden aspect-square">
+      <div className="relative w-full overflow-hidden aspect-square">
         <svg 
           width="100%" 
           height="100%" 
           viewBox={`0 0 ${imageWidth} ${imageHeight}`}
-          className="w-full h-full border border-gray-300 rounded-lg shadow-sm"
+          className="w-full h-full"
           style={{ backgroundColor: 'white' }}
           preserveAspectRatio="xMidYMid meet"
         >

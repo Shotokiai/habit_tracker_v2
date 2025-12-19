@@ -57,9 +57,9 @@ export default function DotGrid({ gridSize, spacing, dotSize, dayRecords }: DotG
               key={`${x}-${y}`}
               className={`absolute rounded-full transition-all ${
                 recordType === 'success' 
-                  ? 'bg-primary scale-150 shadow-lg' 
+                  ? 'scale-150' 
                   : recordType === 'missed'
-                  ? 'bg-red-500 scale-150 shadow-lg'
+                  ? 'scale-150'
                   : 'bg-muted scale-100'
               }`}
               style={{
@@ -68,6 +68,16 @@ export default function DotGrid({ gridSize, spacing, dotSize, dayRecords }: DotG
                 left: posX,
                 top: posY,
                 transform: "translate(-50%, -50%)",
+                backgroundColor: recordType === 'success' 
+                  ? '#10B981' 
+                  : recordType === 'missed'
+                  ? '#D97706'
+                  : undefined,
+                boxShadow: recordType === 'success'
+                  ? '0 0 8px rgba(16, 185, 129, 0.6), 0 0 16px rgba(16, 185, 129, 0.3)'
+                  : recordType === 'missed'
+                  ? '0 0 6px rgba(217, 119, 6, 0.5)'
+                  : 'none'
               }}
             />
           )

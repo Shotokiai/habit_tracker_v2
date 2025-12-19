@@ -41,7 +41,7 @@ const getHabitsForAge = (age: number, type: 'make' | 'break') => {
     return type === 'make' ? [
       { key: "familyChat", label: "Family chat 15 mins", emoji: "👨‍👩‍👧‍👦" },
       { key: "strength", label: "Strength train 20 mins", emoji: "💪" },
-      { key: "breathing", label: "Deep breaths morning", emoji: "🫑" },
+      { key: "breathing", label: "Deep breaths morning", emoji: "�" },
       { key: "journal", label: "Journal before bed", emoji: "📝" },
     ] : [
       { key: "singleTask", label: "Single-task only", emoji: "🎯" },
@@ -122,146 +122,161 @@ export default function HabitSelection({
 
   const isFormValid = selected || customHabit.trim();
 
+  const getColorClasses = (index: number) => {
+    const colors = [
+      { bg: 'bg-orange-50', border: 'border-orange-100', text: 'text-orange-600', hover: 'hover:border-orange-500 hover:text-orange-600' },
+      { bg: 'bg-blue-50', border: 'border-blue-100', text: 'text-blue-600', hover: 'hover:border-blue-500 hover:text-blue-600' },
+      { bg: 'bg-purple-50', border: 'border-purple-100', text: 'text-purple-600', hover: 'hover:border-purple-500 hover:text-purple-600' },
+      { bg: 'bg-green-50', border: 'border-green-100', text: 'text-green-600', hover: 'hover:border-green-500 hover:text-green-600' },
+    ];
+    return colors[index % colors.length];
+  };
+
   return (
-    <div 
-      className="flex items-center justify-center min-h-screen p-4"
-      style={{ backgroundColor: '#f3f4f6' }}
-    >
-      <div 
-        className="w-full max-w-md rounded-xl shadow-lg p-3 mx-2"
-        style={{ backgroundColor: '#ffffff' }}
-      >
-        {/* Header with back button and welcome message - only show if onBack is provided */}
-        {onBack && (
-          <div className="flex items-center mb-6">
-            <button
+    <div className="min-h-screen bg-white relative font-sans text-gray-900 overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="fixed top-[-10%] left-[-10%] w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-teal-400/20 rounded-full blur-[80px] opacity-60 pointer-events-none animate-pulse"></div>
+      <div className="fixed bottom-[-10%] right-[-10%] w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] bg-indigo-500/20 rounded-full blur-[80px] opacity-60 pointer-events-none"></div>
+      
+      <div className="w-full h-full flex flex-col relative z-10">
+        {/* Header */}
+        <div className="pt-8 px-6 pb-2 flex items-center gap-4 z-20 relative">
+          {onBack && (
+            <button 
               onClick={onBack}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors mr-4"
-              style={{ color: '#6b7280' }}
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-100 text-gray-700 hover:scale-110 active:scale-95 transition-all duration-200 group"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
-            <h1 
-              className="text-lg font-bold"
-              style={{ color: '#1f2937' }}
-            >
+          )}
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-extrabold text-gray-900 tracking-tight">
               Welcome, {userName || 'User'}!
             </h1>
-          </div>
-        )}
-
-        {/* Tab Buttons */}
-        <div className="flex mb-6">
-          <button
-            className={`flex-1 px-4 py-3 font-semibold border-2 rounded-l-lg transition-colors ${
-              tab === 'make' 
-                ? 'border-gray-800 bg-white text-gray-800' 
-                : 'border-gray-300 bg-gray-100 text-gray-600'
-            }`}
-            onClick={() => {
-              setTab('make');
-              setSelected('');
-              setCustomHabit('');
-            }}
-          >
-            Make Habit
-          </button>
-          <button
-            className={`flex-1 px-4 py-3 font-semibold border-2 border-l-0 rounded-r-lg transition-colors ${
-              tab === 'break' 
-                ? 'border-gray-800 bg-white text-gray-800' 
-                : 'border-gray-300 bg-gray-100 text-gray-600'
-            }`}
-            onClick={() => {
-              setTab('break');
-              setSelected('');
-              setCustomHabit('');
-            }}
-          >
-            Break Habit
-          </button>
-        </div>
-
-        {/* Habit Options */}
-        <div className="mb-4">
-          <div className="grid grid-cols-2 gap-3">
-            {habits.map(habit => (
-              <button
-                key={habit.key}
-                className={`p-3 rounded-xl text-center transition-all border-2 flex flex-col items-center gap-2 ${
-                  selected === habit.key 
-                    ? 'border-gray-400 bg-gray-200' 
-                    : 'border-gray-200 bg-gray-50 hover:border-gray-300'
-                }`}
-                onClick={() => {
-                  setSelected(selected === habit.key ? '' : habit.key);
-                  if (customHabit) setCustomHabit(''); // Clear custom habit when selecting predefined
-                }}
-              >
-                <span className="text-2xl">{habit.emoji}</span>
-                <span className="text-sm font-medium text-gray-700 leading-tight">
-                  {habit.label}
-                </span>
-              </button>
-            ))}
+            <span className="text-xs font-semibold text-teal-600 mb-4">Ready to build new habits?</span>
           </div>
         </div>
 
-        {/* Custom Habit Input */}
-        <div className="mb-3">
-          <div className="flex gap-1 items-stretch">
-            <input
-              type="text"
-              placeholder="Create your own habit..."
-              value={customHabit}
-              maxLength={maxCustomLength}
-              onChange={(e) => {
-                setCustomHabit(e.target.value);
-                if (selected) setSelected(''); // Clear selection when typing custom
+        {/* Content */}
+        <div className="flex-1 px-6 pb-4 pt-2">
+          {/* Make/Break Toggle */}
+          <div className="p-1.5 bg-gray-100 rounded-2xl flex relative mb-6 shadow-inner border border-gray-200 max-w-md mx-auto w-full">
+            <button 
+              onClick={() => {
+                setTab('make');
+                setSelected("");
+                setCustomHabit("");
               }}
-              className="flex-1 px-2 py-3 text-base border-2 border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-              style={{ color: '#374151', minWidth: 0 }}
-            />
-            <button
-              onClick={() => customHabit && handleStartBuilding()}
-              disabled={!customHabit.trim()}
-              className={`px-2 py-3 rounded-lg font-semibold text-base transition-all w-12 flex items-center justify-center border-2 flex-shrink-0 ${
-                customHabit.trim()
-                  ? 'bg-gray-800 text-white hover:bg-gray-700 shadow-lg border-gray-800'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300'
+              className={`flex-1 py-3 px-2 rounded-xl text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 ${
+                tab === 'make' 
+                  ? 'shadow-md bg-teal-500 text-white scale-100' 
+                  : 'text-gray-500 hover:bg-white/50 hover:text-teal-500'
               }`}
             >
-              <span className="text-base font-bold">+</span>
+              <span className="text-[18px]">✓</span>
+              Make Habit
+            </button>
+            <button 
+              onClick={() => {
+                setTab('break');
+                setSelected("");
+                setCustomHabit("");
+              }}
+              className={`flex-1 py-3 px-2 rounded-xl text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 ${
+                tab === 'break' 
+                  ? 'shadow-md bg-rose-500 text-white scale-100' 
+                  : 'text-gray-500 hover:bg-white/50 hover:text-rose-500'
+              }`}
+            >
+              <span className="text-[18px]">⊘</span>
+              Break Habit
             </button>
           </div>
-          {/* Character count indicator */}
-          {customHabit && (
-            <div className="text-right mt-2">
-              <span 
-                className="text-sm"
-                style={{ color: customHabit.length >= maxCustomLength ? '#ef4444' : '#6b7280' }}
-              >
-                {customHabit.length}/{maxCustomLength}
-              </span>
-            </div>
-          )}
-        </div>
 
-        {/* Start Building Button */}
-        <button
-          onClick={handleStartBuilding}
-          className="w-full px-4 py-3 font-semibold rounded-lg transition-all"
-          style={{
-            backgroundColor: isFormValid ? '#1f2937' : '#d1d5db',
-            color: isFormValid ? '#ffffff' : '#6b7280',
-            cursor: isFormValid ? 'pointer' : 'not-allowed'
-          }}
-          disabled={!isFormValid}
-        >
-          Start Building
-        </button>
+          <div className="max-w-md mx-auto w-full">
+            {/* Habit Grid */}
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              {habits.map((habit, index) => {
+                const colors = getColorClasses(index);
+                const isSelected = selected === habit.key;
+                
+                return (
+                  <button
+                    key={habit.key}
+                    onClick={() => {
+                      setSelected(habit.key);
+                      setCustomHabit("");
+                    }}
+                    className={`group relative flex flex-col p-3 bg-white rounded-2xl border shadow-sm transition-all duration-300 text-left overflow-hidden h-[130px] ${
+                      isSelected 
+                        ? 'border-teal-500 ring-4 ring-teal-500/15' 
+                        : `${colors.border} ${colors.hover} hover:shadow-lg`
+                    }`}
+                  >
+                    <div className={`absolute -right-6 -top-6 w-20 h-20 ${colors.bg} rounded-full blur-2xl group-hover:opacity-80 transition-opacity`}></div>
+                    <div className={`w-10 h-10 rounded-xl ${colors.bg} ${colors.text} flex items-center justify-center mb-auto group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 text-xl border ${colors.border}`}>
+                      {habit.emoji}
+                    </div>
+                    <div className="relative z-10 mt-2">
+                      <span className={`block text-sm font-bold leading-tight transition-colors ${
+                        isSelected ? 'text-teal-600' : `text-gray-900 ${colors.hover.split(' ')[1]}`
+                      }`}>
+                        {habit.label}
+                      </span>
+                    </div>
+                    {isSelected && (
+                      <div className="absolute top-3 right-3">
+                        <div className="w-6 h-6 bg-teal-500 text-white rounded-full flex items-center justify-center">
+                          <span className="text-xs">✓</span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                      <span className="text-teal-500 text-xl">+</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Custom Habit Input */}
+            <div className="mb-3 group">
+              <label className="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wide px-1 group-focus-within:text-teal-500 transition-colors">
+                Create your own habit...
+              </label>
+              <div className={`bg-white p-2 rounded-2xl border shadow-sm transition-all ${
+                customHabit ? 'border-teal-500 ring-4 ring-teal-500/15' : 'border-gray-200 focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-500/15'
+              }`}>
+                <input 
+                  value={customHabit}
+                  onChange={(e) => {
+                    setCustomHabit(e.target.value);
+                    setSelected("");
+                  }}
+                  className="w-full bg-transparent border-none p-3 text-sm font-medium text-gray-900 placeholder-gray-400 focus:ring-0 focus:outline-none" 
+                  placeholder="e.g. Wake up at 7:00 AM" 
+                  type="text"
+                  maxLength={maxCustomLength}
+                />
+              </div>
+            </div>
+
+            {/* Start Building Button */}
+            <div className="w-full mt-6 mb-4">
+              <button 
+                onClick={handleStartBuilding}
+                disabled={!isFormValid}
+                className="w-full h-12 bg-gradient-to-r from-teal-600 to-indigo-600 text-white font-bold text-base rounded-2xl shadow-xl shadow-teal-500/30 hover:shadow-teal-500/50 hover:translate-y-[-2px] active:translate-y-[1px] transition-all flex items-center justify-center gap-2 group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+              >
+                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                <span className="relative">Start Building</span>
+                <span className="relative group-hover:translate-x-1 transition-transform">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

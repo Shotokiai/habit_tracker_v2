@@ -6,6 +6,7 @@ import type { Habit, DayRecord } from "@/lib/types"
 import HabitGrid from "@/components/habit-grid"
 import HabitHeader from "@/components/habit-header"
 import HabitCalendar from "@/components/habit-calendar"
+import CompanionView from "./companion-view"
 import CompanionViewV3 from "./CompanionViewV3"
 import LockView from "@/components/LockView"
 
@@ -36,19 +37,13 @@ export default function HabitTracker({
   const [hasUsedCalendar, setHasUsedCalendar] = useState(false)
   const [companionPattern, setCompanionPattern] = useState<'unicorn' | 'lock'>(habit?.companionPattern || 'unicorn')
   const [showPatternSelection, setShowPatternSelection] = useState(!habit?.companionPattern)
+  const [isCompanionCanvasShowing, setIsCompanionCanvasShowing] = useState(false)
 
   // Auto-select pattern based on existing progress when switching to companion view
   useEffect(() => {
     if (currentView === 'companion' && !habit?.companionPattern && dayRecords.length > 0) {
-      // If user has existing progress, auto-select based on chart view (30 dots = lock pattern)
-      const currentProgress = dayRecords[dayRecords.length - 1]?.y || 0;
-      if (currentProgress <= 30) {
-        setCompanionPattern('lock');
-        if (onUpdateHabit && habit) {
-          onUpdateHabit({...habit, companionPattern: 'lock'});
-        }
-        setShowPatternSelection(false);
-      }
+      // Show pattern selection instead of auto-selecting
+      setShowPatternSelection(true);
     }
   }, [currentView, habit?.companionPattern, dayRecords, onUpdateHabit]);
 
@@ -203,183 +198,161 @@ export default function HabitTracker({
     return <HabitHeader onSave={handleSaveHabit} isSaved={false} habitData={{ name: "", person: "" }} />
   }
 
+  // Handle null habit state - show message to create a habit
+  if (!habit) {
+    return (
+      <div className="flex flex-col h-full px-4 py-8 items-center justify-center text-center">
+        <div className="bg-gray-50 rounded-lg p-6 max-w-sm">
+          <h2 className="text-lg font-semibold text-gray-800 mb-3">No Habits Yet</h2>
+          <p className="text-gray-600 mb-4">
+            You haven't created any habits yet. Start your journey by creating your first habit!
+          </p>
+          <button
+            onClick={() => {
+              // This should trigger the habit selection flow
+              window.location.reload();
+            }}
+            className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+          >
+            Create Your First Habit
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full px-4 py-2">
       {habit && isSaved && (
         <>
-          {/* Chart view dropdown */}
-          <div className="relative flex items-center justify-end py-2 flex-shrink-0">
-            <button
-              onClick={() => setShowViewDropdown(!showViewDropdown)}
-              className="flex items-center gap-1 text-base font-semibold text-right hover:text-primary transition-colors"
-            >
-              {currentView === 'chart' ? 'Chart view' : currentView === 'calendar' ? 'Calendar view' : 'Companion view'}
-              <span className={`transform transition-transform ${showViewDropdown ? 'rotate-180' : ''}`}>
-                ▼
-              </span>
-            </button>
-            
-            {showViewDropdown && (
-              <div 
-                className="absolute top-8 right-0 bg-background border border-foreground/20 rounded-md shadow-lg z-10 min-w-32"
-                onClick={(e) => e.stopPropagation()}
+          {/* View Dropdown */}
+          <div className="flex items-center justify-end py-2 relative">
+            <div className="relative">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowViewDropdown(!showViewDropdown);
+                }}
+                className="flex items-center justify-between w-44 px-3 py-2 text-sm border border-gray-200 rounded-md bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 whitespace-nowrap"
               >
-                <button
-                  onClick={() => {
-                    setCurrentView('chart')
-                    setShowViewDropdown(false)
-                    onViewChange?.('chart')
-                    if (habit && onUpdateHabit) {
-                      onUpdateHabit({...habit, preferredView: 'chart'})
-                    }
+                <span className="text-gray-900 truncate">{currentView.charAt(0).toUpperCase() + currentView.slice(1)} View</span>
+                <svg className={`ml-2 h-5 w-5 text-gray-400 transition-transform duration-200 ${showViewDropdown ? 'rotate-180' : ''}`} viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+              
+              {showViewDropdown && (
+                <div className="absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+                  <div className="py-1" role="menu">
+                    {currentView !== 'chart' && (
+                      <button
+                        onClick={() => {
+                          setCurrentView('chart');
+                          onViewChange?.('chart');
+                          setShowViewDropdown(false);
+                        }}
+                        className="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
+                        role="menuitem"
+                      >
+                        Chart View
+                      </button>
+                    )}
+                    {currentView !== 'calendar' && (
+                      <button
+                        onClick={() => {
+                          setCurrentView('calendar');
+                          onViewChange?.('calendar');
+                          setShowViewDropdown(false);
+                        }}
+                        className="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
+                        role="menuitem"
+                      >
+                        Calendar View
+                      </button>
+                    )}
+                    {currentView !== 'companion' && (
+                      <button
+                        onClick={() => {
+                          setCurrentView('companion');
+                          onViewChange?.('companion');
+                          setShowViewDropdown(false);
+                          setShowPatternSelection(true); // Always show pattern selection when switching to companion
+                        }}
+                        className="text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900"
+                        role="menuitem"
+                      >
+                        Companion View
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Main view rendering */}
+          <div className="flex-1 pb-24">
+            {currentView === 'chart' && (
+              <div className="w-full flex items-center justify-center">
+                <HabitGrid dayRecords={dayRecords} />
+              </div>
+            )}
+            {currentView === 'calendar' && (
+              <div className="w-full flex items-center justify-center pt-2">
+                <HabitCalendar dayRecords={dayRecords} habitStartDate={habit.createdAt} />
+              </div>
+            )}
+            {currentView === 'companion' && (
+              <div className="w-full flex items-center justify-center pt-2">
+                <CompanionView 
+                  habit={habit} 
+                  dayRecords={dayRecords} 
+                  onPatternChange={(pattern) => {
+                    setCompanionPattern(pattern);
+                    onUpdateHabit({...habit, companionPattern: pattern});
                   }}
-                  className={`w-full px-3 py-2 text-left hover:bg-muted transition-colors text-sm ${
-                    currentView === 'chart' ? 'bg-muted font-semibold' : ''
-                  }`}
-                >
-                  Chart view
-                </button>
-                <button
-                  onClick={() => {
-                    setCurrentView('calendar')
-                    setHasUsedCalendar(true)
-                    setShowViewDropdown(false)
-                    onViewChange?.('calendar')
-                    if (habit && onUpdateHabit) {
-                      onUpdateHabit({...habit, preferredView: 'calendar'})
-                    }
-                  }}
-                  className={`w-full px-3 py-2 text-left hover:bg-muted transition-colors text-sm ${
-                    currentView === 'calendar' ? 'bg-muted font-semibold' : ''
-                  }`}
-                >
-                  Calendar view
-                </button>
-                <button
-                  onClick={() => {
-                    setCurrentView('companion')
-                    setShowViewDropdown(false)
-                    onViewChange?.('companion')
-                    if (habit && onUpdateHabit) {
-                      onUpdateHabit({...habit, preferredView: 'companion'})
-                    }
-                  }}
-                  className={`w-full px-3 py-2 text-left hover:bg-muted transition-colors text-sm ${
-                    currentView === 'companion' ? 'bg-muted font-semibold' : ''
-                  }`}
-                >
-                  Companion view
-                </button>
+                  currentPattern={companionPattern}
+                  onComplete={handleLetGo}
+                  onMiss={handleHabitMissed}
+                  onCanvasStateChange={setIsCompanionCanvasShowing}
+                />
               </div>
             )}
           </div>
 
-          {/* Dotted structure grid, Calendar view, or Companion view */}
-          <div className="w-full py-4">
-            {currentView === 'chart' ? (
-              <div className="w-full h-full flex items-center justify-center">
-                <HabitGrid dayRecords={dayRecords} />
-              </div>
-            ) : currentView === 'calendar' ? (
-              <HabitCalendar 
-                dayRecords={dayRecords} 
-                habitStartDate={habit.createdAt}
-              />
-            ) : (
-              <div className="w-full">
-                {showPatternSelection ? (
-                  /* Pattern Selection Screen */
-                  <div className="flex flex-col items-center space-y-6 py-8">
-                    <h2 className="text-xl font-bold text-center">Choose Your Drawing Pattern</h2>
-                    
-                    <div className="grid grid-cols-2 gap-4 w-full max-w-md">
-                      {/* Unicorn Pattern Box */}
-                      <div 
-                        onClick={() => setCompanionPattern('unicorn')}
-                        className={`border-2 rounded-lg p-4 text-center cursor-pointer transition-all ${
-                          companionPattern === 'unicorn' 
-                            ? 'border-blue-500 bg-blue-50' 
-                            : 'border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        <div className="text-lg font-semibold">🦄 Unicorn</div>
-                        <div className="text-sm text-gray-600 mt-1">60 dots journey</div>
-                      </div>
-                      
-                      {/* Lock Pattern Box */}
-                      <div 
-                        onClick={() => setCompanionPattern('lock')}
-                        className={`border-2 rounded-lg p-4 text-center cursor-pointer transition-all ${
-                          companionPattern === 'lock' 
-                            ? 'border-blue-500 bg-blue-50' 
-                            : 'border-gray-300 hover:border-gray-400'
-                        }`}
-                      >
-                        <div className="text-lg font-semibold">🔒 Lock</div>
-                        <div className="text-sm text-gray-600 mt-1">30 dots journey</div>
-                      </div>
-                    </div>
-                    
+          {/* Fixed positioned CTAs - only show when content is loaded and companion is in drawing mode */}
+          {(currentView === 'chart' || currentView === 'calendar' || 
+            (currentView === 'companion' && isCompanionCanvasShowing)) && (
+            <div className="fixed bottom-8 left-0 right-0 bg-white p-4 z-10">
+              <div className="max-w-sm mx-auto">
+                <div className="flex gap-2 mb-3">
+                  <button
+                    onClick={handleLetGo}
+                    className="flex-1 px-3 py-2.5 bg-green-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all active:scale-95 shadow-lg text-center text-sm flex items-center justify-center h-14 rounded-2xl"
+                    style={{ backgroundColor: '#10B981', boxShadow: '0 10px 25px -5px rgba(16, 185, 129, 0.3)' }}
+                  >
+                    <span className="text-[15px] font-bold whitespace-nowrap">Completed Habit!</span>
+                  </button>
+                  <button
+                    onClick={handleHabitMissed}
+                    className="flex-1 px-3 py-2.5 bg-amber-100 hover:bg-amber-200 text-amber-700 font-semibold rounded-lg border border-amber-200 transition-all active:scale-95 text-center text-sm flex items-center justify-center h-14 rounded-2xl"
+                  >
+                    <span className="text-[15px] font-bold">Missed Today</span>
+                  </button>
+                </div>
+                
+                {/* Want to give up text */}
+                {dayRecords.length > 0 && dayRecords[dayRecords.length - 1]?.y > 0 && (
+                  <div className="w-full text-center text-sm font-semibold">
                     <button
-                      onClick={() => {
-                        setShowPatternSelection(false);
-                        // Store the selected pattern in the habit
-                        if (onUpdateHabit && habit) {
-                          onUpdateHabit({...habit, companionPattern});
-                        }
-                      }}
-                      className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors"
+                      onClick={handleGiveUpClick}
+                      className="underline text-foreground hover:text-muted-foreground transition-colors"
                     >
-                      Continue
+                      Want to give up
                     </button>
-                  </div>
-                ) : (
-                  /* Show Selected Pattern */
-                  <div className="w-full">
-                    {companionPattern === 'unicorn' ? (
-                      <CompanionViewV3 
-                        habit={habit}
-                        dayRecords={dayRecords}
-                      />
-                    ) : (
-                      <LockView 
-                        habit={habit}
-                        dayRecords={dayRecords}
-                      />
-                    )}
                   </div>
                 )}
               </div>
-            )}
-          </div>
-
-          {/* Two CTAs side by side - only show when not in pattern selection */}
-          {!(currentView === 'companion' && showPatternSelection) && (
-            <div className="flex gap-2 flex-shrink-0 px-2">
-              <button
-                onClick={handleLetGo}
-                className="flex-1 px-3 py-2.5 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-opacity border-2 border-primary shadow-md text-center text-sm"
-              >
-                Let's Go
-              </button>
-              <button
-                onClick={handleHabitMissed}
-                className="flex-1 px-3 py-2.5 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors border-2 border-red-500 shadow-md text-center text-sm"
-              >
-                Habit missed
-              </button>
-            </div>
-          )}
-
-          {/* Want to give up text at bottom - only show if habit journey started and not in pattern selection */}
-          {!(currentView === 'companion' && showPatternSelection) && dayRecords.length > 0 && dayRecords[dayRecords.length - 1]?.y > 0 && (
-            <div className="w-full text-center text-sm font-semibold py-3 flex-shrink-0">
-              <button
-                onClick={handleGiveUpClick}
-                className="underline text-foreground hover:text-muted-foreground transition-colors"
-              >
-                Want to give up
-              </button>
             </div>
           )}
 

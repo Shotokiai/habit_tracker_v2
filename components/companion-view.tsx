@@ -67,25 +67,11 @@ export default function CompanionView({ habit, dayRecords, onPatternChange, curr
       <div className="flex flex-col space-y-4 p-4">
         {/* Pattern Selection */}
         <div className="bg-white rounded-lg p-4 border border-gray-200 mb-4">
-          <h3 className="text-lg font-semibold text-center mb-4">Choose Your Pattern</h3>
-          <div className="flex gap-4">
-            <button
-              onClick={() => handlePatternChange('unicorn')}
-              className={`flex-1 p-4 rounded-lg border-2 transition-all ${
-                selectedIllustration === 'unicorn'
-                  ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 bg-gray-50'
-              }`}
-            >
-              <div className="text-center">
-                <div className="text-4xl mb-2">🦄</div>
-                <h4 className="font-semibold">Unicorn</h4>
-                <p className="text-xs text-gray-600">60 dots journey</p>
-              </div>
-            </button>
+          <h3 className="text-lg font-semibold text-center mb-4">Choose Your Drawing</h3>
+          <div className="flex justify-center">
             <button
               onClick={() => handlePatternChange('lock')}
-              className={`flex-1 p-4 rounded-lg border-2 transition-all ${
+              className={`p-4 rounded-lg border-2 transition-all ${
                 selectedIllustration === 'lock'
                   ? 'border-blue-500 bg-blue-50'
                   : 'border-gray-200 bg-gray-50'

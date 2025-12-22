@@ -90,8 +90,8 @@ export default function HabitCalendar({ dayRecords, habitStartDate }: HabitCalen
             isToday ? 'ring-1 ring-blue-400' : ''
           }`}
           style={{
-            backgroundColor: status === 'inactive' ? '#f3f4f6' : status === 'completed' ? '#22c55e' : '#ffffff',
-            color: status === 'inactive' ? '#9ca3af' : status === 'completed' ? '#ffffff' : '#374151',
+            backgroundColor: status === 'inactive' ? '#f3f4f6' : status === 'completed' ? '#22c55e' : status === 'missed' ? '#ef4444' : '#ffffff',
+            color: status === 'inactive' ? '#9ca3af' : (status === 'completed' || status === 'missed') ? '#ffffff' : '#374151',
             border: '1px solid #e5e7eb',
             borderRadius: '2px'
           }}
@@ -109,18 +109,12 @@ export default function HabitCalendar({ dayRecords, habitStartDate }: HabitCalen
           )}
           
           {status === 'missed' && (
-            <>
-              <div 
-                className="absolute inset-0 rounded-sm"
-                style={{ backgroundColor: 'rgba(239, 68, 68, 0.15)' }}
-              />
-              <div 
-                className="absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-bold"
-                style={{ backgroundColor: '#ef4444' }}
-              >
-                ✗
-              </div>
-            </>
+            <div 
+              className="absolute top-0.5 right-0.5 text-white text-xs leading-none"
+              style={{ fontSize: '10px' }}
+            >
+              ✕
+            </div>
           )}
         </div>
       )

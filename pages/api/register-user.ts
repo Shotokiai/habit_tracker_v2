@@ -27,7 +27,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ data: { username, email, age: ageNum, new_habit_creation: '', createdAt: new Date().toISOString() } }),
+      body: JSON.stringify({
+        data: [{ 
+          username, 
+          email, 
+          age: ageNum, 
+          new_habit_creation: '', 
+          createdAt: new Date().toISOString(),
+          habit_created_at: '',
+          habit_started_at: ''
+        }]
+      }),
     })
 
     if (!response.ok) {

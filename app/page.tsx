@@ -11,6 +11,9 @@ import type { Habit, DayRecord } from "@/lib/types"
 
 
 export default function Page() {
+  const [showLoggedMsg, setShowLoggedMsg] = useState(false);
+  const [messageType, setMessageType] = useState<'logged' | 'not-started' | 'limit-reached'>('logged');
+  const [dailyInteractions, setDailyInteractions] = useState<{[habitId: string]: number}>({});
   const [habits, setHabits] = useState<Habit[]>([]);
   const [currentHabitIndex, setCurrentHabitIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -160,7 +163,7 @@ export default function Page() {
     }
   }, [habits, isLoaded, user]);
 
-  const addHabit = (name: string, person: string) => {
+  const addHabit = async (name: string, person: string) => {
     const currentMonthYear = new Date().toISOString().slice(0, 7);
     const newHabit: Habit = {
       id: Date.now().toString(),
@@ -172,9 +175,47 @@ export default function Page() {
     };
     setHabits([...habits, newHabit]);
     setCurrentHabitIndex(habits.length);
+
+    // Track habit creation in Supabase
+    if (user) {
+      try {
+        await fetch('/api/track-habit-created', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: user.email,
+            habitName: name,
+            habitCreatedAt: new Date().toISOString()
+          })
+        });
+      } catch (error) {
+        console.warn('Failed to track habit creation:', error);
+      }
+    }
   };
-  const updateHabitRecords = (habitId: string, dayRecords: DayRecord[]) => {
+  const updateHabitRecords = async (habitId: string, dayRecords: DayRecord[]) => {
+    const habit = habits.find(h => h.id === habitId);
+    const hadNoRecords = habit && habit.dayRecords.length === 0;
+    const hasRecordsNow = dayRecords.length > 0;
+    
     setHabits(habits.map((habit) => (habit.id === habitId ? { ...habit, dayRecords } : habit)));
+
+    // Track habit start (first time logging) in Supabase
+    if (hadNoRecords && hasRecordsNow && user && habit) {
+      try {
+        await fetch('/api/track-habit-started', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: user.email,
+            habitName: habit.name,
+            habitStartedAt: new Date().toISOString()
+          })
+        });
+      } catch (error) {
+        console.warn('Failed to track habit start:', error);
+      }
+    }
   };
   
   const updateHabit = (habitId: string, updatedFields: Partial<Habit>) => {
@@ -367,6 +408,18 @@ export default function Page() {
             onUpdateHabit={() => {}}
             onViewChange={setCurrentView}
             isNewHabitMode={true}
+            onShowLoggedMsg={(type) => {
+              setMessageType(type);
+              setShowLoggedMsg(true);
+              setTimeout(() => setShowLoggedMsg(false), 3000);
+            }}
+            onNextHabit={() => {
+              const nextIndex = currentHabitIndex < habits.length - 1 ? currentHabitIndex + 1 : 0;
+              setCurrentHabitIndex(nextIndex);
+            }}
+            dailyInteractions={dailyInteractions}
+            setDailyInteractions={setDailyInteractions}
+            totalHabits={habits.length}
           />
         ) : (
           <>
@@ -396,17 +449,53 @@ export default function Page() {
                 <h1 className="text-base font-bold text-foreground truncate" style={{ maxWidth: 'calc(100vw - 120px)' }}>
                   {getHabitNameFromKey(habits[currentHabitIndex]?.name) || habits[currentHabitIndex]?.name}
                 </h1>
-                <div className="text-xs text-muted-foreground">
-                  Created: {new Date(habits[currentHabitIndex]?.createdAt || '').toLocaleDateString('en-US', { 
-                    month: 'short', 
-                    day: 'numeric', 
-                    year: 'numeric' 
-                  })}
+                <div className="text-xs text-muted-foreground h-6 flex items-center">
+                  {showLoggedMsg ? (
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full border font-semibold text-xs animate-fade-in h-6 ${
+                      messageType === 'logged' 
+                        ? 'border-green-600 bg-green-100 text-green-700'
+                        : messageType === 'not-started'
+                        ? 'border-amber-600 bg-amber-100 text-amber-700'
+                        : 'border-blue-600 bg-blue-100 text-blue-700'
+                    }`}>
+                      <svg className={`w-4 h-4 mr-1 ${
+                        messageType === 'logged' ? 'text-green-600' : messageType === 'not-started' ? 'text-amber-600' : 'text-blue-600'
+                      }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {messageType === 'logged' ? (
+                          <>
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" fill="white" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4" stroke={messageType === 'logged' ? 'green' : 'currentColor'} />
+                          </>
+                        ) : messageType === 'not-started' ? (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        ) : (
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        )}
+                      </svg>
+                      {messageType === 'logged' ? 'LOGGED FOR TODAY!' : messageType === 'not-started' ? 'HABIT NOT STARTED YET' : '3-HABIT LIMIT REACHED'}
+                    </span>
+                  ) : (
+                    <span className="h-6 flex items-center">Created: {new Date(habits[currentHabitIndex]?.createdAt || '').toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric'
+                    })}</span>
+                  )}
                 </div>
               </div>
               <button
-                onClick={() => setShowHabitSelection(true)}
-                className="bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity px-3 py-2"
+                onClick={() => {
+                  if (habits.length >= 3) {
+                    setMessageType('limit-reached');
+                    setShowLoggedMsg(true);
+                    setTimeout(() => setShowLoggedMsg(false), 3000);
+                  } else {
+                    setShowHabitSelection(true);
+                  }
+                }}
+                className={`bg-primary text-primary-foreground font-semibold rounded text-xs transition-opacity px-3 py-2 ${
+                  habits.length >= 3 ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'
+                }`}
                 title="Add new habit"
                 style={{ minWidth: '60px', height: '32px' }}
               >
@@ -448,8 +537,8 @@ export default function Page() {
                         // Chart and Calendar views always show /30 constant
                         return `${completed}/30`;
                       } else {
-                        // Companion view shows pattern-based limit: lock=30, unicorn=60
-                        const maxDots = habit?.companionPattern === 'lock' ? 30 : 60;
+                        // Companion view always shows 30 dots (lock pattern only)
+                        const maxDots = 30;
                         return `${completed}/${maxDots}`;
                       }
                     })()}
@@ -529,6 +618,18 @@ export default function Page() {
                 onUpdateHabit={(updatedFields) => updateHabit(habits[currentHabitIndex].id, updatedFields)}
                 onViewChange={setCurrentView}
                 isNewHabitMode={false}
+                onShowLoggedMsg={(type) => {
+                  setMessageType(type);
+                  setShowLoggedMsg(true);
+                  setTimeout(() => setShowLoggedMsg(false), 3000);
+                }}
+                onNextHabit={() => {
+                  const nextIndex = currentHabitIndex < habits.length - 1 ? currentHabitIndex + 1 : 0;
+                  setCurrentHabitIndex(nextIndex);
+                }}
+                dailyInteractions={dailyInteractions}
+                setDailyInteractions={setDailyInteractions}
+                totalHabits={habits.length}
               />
             </div>
           </>

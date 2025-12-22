@@ -18,6 +18,11 @@ interface HabitTrackerProps {
   isNewHabitMode: boolean
   onUpdateHabit?: (habit: Habit) => void
   onViewChange?: (view: 'chart' | 'calendar' | 'companion') => void
+  onShowLoggedMsg?: (type: 'logged' | 'not-started' | 'limit-reached') => void
+  onNextHabit?: () => void
+  dailyInteractions?: {[habitId: string]: number}
+  setDailyInteractions?: (interactions: {[habitId: string]: number}) => void
+  totalHabits?: number
 }
 
 export default function HabitTracker({
@@ -28,6 +33,11 @@ export default function HabitTracker({
   isNewHabitMode,
   onUpdateHabit,
   onViewChange,
+  onShowLoggedMsg,
+  onNextHabit,
+  dailyInteractions = {},
+  setDailyInteractions,
+  totalHabits = 1,
 }: HabitTrackerProps) {
   const [dayRecords, setDayRecords] = useState<DayRecord[]>([])
   const [isSaved, setIsSaved] = useState(false)
@@ -35,7 +45,7 @@ export default function HabitTracker({
   const [showViewDropdown, setShowViewDropdown] = useState(false)
   const [currentView, setCurrentView] = useState<'chart' | 'calendar' | 'companion'>(habit?.preferredView || 'chart')
   const [hasUsedCalendar, setHasUsedCalendar] = useState(false)
-  const [companionPattern, setCompanionPattern] = useState<'unicorn' | 'lock'>(habit?.companionPattern || 'unicorn')
+  const [companionPattern, setCompanionPattern] = useState<'unicorn' | 'lock'>(habit?.companionPattern || 'lock')
   const [showPatternSelection, setShowPatternSelection] = useState(!habit?.companionPattern)
   const [isCompanionCanvasShowing, setIsCompanionCanvasShowing] = useState(false)
 
@@ -100,7 +110,24 @@ export default function HabitTracker({
 
 
   const handleLetGo = () => {
-
+    if (!habit) return;
+    
+    const today = new Date().toDateString();
+    const habitId = habit.id;
+    const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
+    
+    // If this is the second or more interaction today, just show message
+    if (todayInteractions >= 1) {
+      onShowLoggedMsg?.('logged');
+      return;
+    }
+    
+    // First interaction - update state and increment counter
+    setDailyInteractions?.({
+      ...dailyInteractions,
+      [`${habitId}-${today}`]: todayInteractions + 1
+    });
+    
     setDayRecords((prev) => {
       const lastRecord = prev[prev.length - 1]
       if (!lastRecord) {
@@ -108,19 +135,17 @@ export default function HabitTracker({
       }
       const newX = lastRecord.x + 1
       const newY = lastRecord.y + 1
-      
       // Set limits based on view type
       let maxDots, maxY
       if (currentView === 'companion') {
         // Companion view: dynamic limit based on pattern
-        maxDots = companionPattern === 'lock' ? 30 : 60
+        maxDots = 30  // Always use lock pattern (30 dots)
         maxY = maxDots
       } else {
         // Chart/Calendar view: always 30x30 grid
         maxDots = 30
         maxY = 30
       }
-      
       if (newX <= maxDots && newY <= maxY) {
         return [...prev, { x: newX, y: newY }]
       }
@@ -137,8 +162,8 @@ export default function HabitTracker({
       }
       const newX = lastRecord.x + 1
       const newY = Math.max(0, lastRecord.y - 1)
-      // Dynamic limit based on companion pattern - lock: 30 dots, unicorn: 60 dots  
-      const maxDots = currentView === 'companion' && companionPattern === 'lock' ? 30 : 60
+      // Always use lock pattern - 30 dots  
+      const maxDots = 30
       if (newX <= maxDots) {
         return [...prev, { x: newX, y: newY }]
       }
@@ -165,24 +190,50 @@ export default function HabitTracker({
   }
 
   const handleHabitMissed = () => {
-    // Only track missed habits if habit tracking has already started
+    if (!habit) return;
+    
+    // If habit hasn't started yet (no records), show "not started" message
     if (dayRecords.length === 0) {
-      // Don't start habit tracking on missed click - only on Let's Go
+      onShowLoggedMsg?.('not-started');
       return;
     }
+    
+    const today = new Date().toDateString();
+    const habitId = habit.id;
+    const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
+    
+    // If this is the second or more interaction today, just show message
+    if (todayInteractions >= 1) {
+      onShowLoggedMsg?.('logged');
+      return;
+    }
+    
+    // First interaction - update state and increment counter
+    setDailyInteractions?.({
+      ...dailyInteractions,
+      [`${habitId}-${today}`]: todayInteractions + 1
+    });
     
     setDayRecords((prev) => {
       const lastRecord = prev[prev.length - 1]
       
-      // Missed habit: x increases (day advances) and y DECREASES (goes down)
-      // This creates the red dot below the previous position
+      // For Day 2 missed: create dot at X=2, Y=1 (next to Day 1 green circle)
+      // For subsequent days: follow previous miss logic
       const newX = lastRecord.x + 1
-      const newY = Math.max(0, lastRecord.y - 1) // Decrease Y by 1, minimum 0
+      let newY;
+      
+      if (newX === 2 && lastRecord.y > 0) {
+        // Day 2 miss: set Y to 1 to appear next to Day 1 green circle
+        newY = 1;
+      } else {
+        // Regular miss logic: decrease Y by 1, minimum 0
+        newY = Math.max(0, lastRecord.y - 1);
+      }
       
       // Set limits based on view type
       let maxDays
       if (currentView === 'companion') {
-        maxDays = companionPattern === 'lock' ? 30 : 60
+        maxDays = 30  // Always use lock pattern (30 dots)
       } else {
         maxDays = 30 // Chart/Calendar view limit
       }
@@ -329,7 +380,6 @@ export default function HabitTracker({
                   <button
                     onClick={handleLetGo}
                     className="flex-1 px-3 py-2.5 bg-green-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all active:scale-95 shadow-lg text-center text-sm flex items-center justify-center h-14 rounded-2xl"
-                    style={{ backgroundColor: '#10B981', boxShadow: '0 10px 25px -5px rgba(16, 185, 129, 0.3)' }}
                   >
                     <span className="text-[15px] font-bold whitespace-nowrap">Completed Habit!</span>
                   </button>
@@ -341,14 +391,28 @@ export default function HabitTracker({
                   </button>
                 </div>
                 
-                {/* Want to give up text */}
-                {dayRecords.length > 0 && dayRecords[dayRecords.length - 1]?.y > 0 && (
-                  <div className="w-full text-center text-sm font-semibold">
+                {/* Navigation row */}
+                {habit && (
+                  <div className="w-full flex justify-between items-center text-sm font-semibold px-4">
                     <button
                       onClick={handleGiveUpClick}
-                      className="underline text-foreground hover:text-muted-foreground transition-colors"
+                      className="text-muted-foreground/60 hover:text-muted-foreground/80 transition-colors"
                     >
-                      Want to give up
+                      Want to give up?
+                    </button>
+                    <button
+                      onClick={() => totalHabits > 1 && onNextHabit?.()}
+                      className={`flex items-center transition-colors ${
+                        totalHabits > 1
+                          ? 'text-foreground/80 hover:text-foreground cursor-pointer'
+                          : 'text-muted-foreground/60 cursor-not-allowed'
+                      }`}
+                      disabled={totalHabits <= 1}
+                    >
+                      Next habit
+                      <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                      </svg>
                     </button>
                   </div>
                 )}

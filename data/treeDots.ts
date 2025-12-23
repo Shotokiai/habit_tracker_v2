@@ -1,134 +1,172 @@
-export const treeDotsData = [
-  { "x": 227, "y": 394 },
-  { "x": 180, "y": 419 },
-  { "x": 118, "y": 403 },
-  { "x": 74,  "y": 362 },
-  { "x": 55,  "y": 307 },
-  { "x": 84,  "y": 246 },
-  { "x": 87,  "y": 162 },
-  { "x": 128, "y": 90 },
-  { "x": 202, "y": 61 },
-  { "x": 278, "y": 46 },
-  { "x": 317, "y": 73 },
-  { "x": 382, "y": 56 },
-  { "x": 452, "y": 79 },
-  { "x": 480, "y": 127 },
-  { "x": 476, "y": 176 },
-  { "x": 460, "y": 209 },
-  { "x": 526, "y": 234 },
-  { "x": 540, "y": 276 },
-  { "x": 542, "y": 324 },
-  { "x": 513, "y": 375 },
-  { "x": 458, "y": 397 },
-  { "x": 417, "y": 403 },
-  { "x": 335, "y": 389 },
-  { "x": 325, "y": 306 },
-  { "x": 286, "y": 375 },
-  { "x": 228, "y": 306 },
-  { "x": 230, "y": 410 },
-  { "x": 227, "y": 515 },
-  { "x": 192, "y": 608 },
-  { "x": 288, "y": 614 },
-  { "x": 386, "y": 616 },
-  { "x": 347, "y": 548 },
-  { "x": 332, "y": 471 },
-  { "x": 327, "y": 392 }
+// Drawing 1 - Updated Pattern with Invisible Dots (new coordinates)
+export const drawing1DotsData = [
+  { "x": 362, "y": 611, "visible": true },   // 1
+  { "x": 342, "y": 703, "visible": false },  // invisible
+  { "x": 378, "y": 729, "visible": false },  // invisible
+  { "x": 382, "y": 762, "visible": true },   // 2
+  { "x": 286, "y": 755, "visible": true },   // 3
+  { "x": 282, "y": 646, "visible": false },  // invisible
+  { "x": 271, "y": 756, "visible": true },   // 4
+  { "x": 172, "y": 753, "visible": true },   // 5
+  { "x": 181, "y": 711, "visible": false },  // invisible
+  { "x": 224, "y": 698, "visible": true },   // 6
+  { "x": 214, "y": 583, "visible": false },  // invisible
+  { "x": 256, "y": 521, "visible": true },   // 7
+  { "x": 361, "y": 542, "visible": true },   // 8
+  { "x": 369, "y": 478, "visible": false },  // invisible
+  { "x": 283, "y": 444, "visible": true },   // 9
+  { "x": 249, "y": 506, "visible": false },  // invisible
+  { "x": 147, "y": 519, "visible": true },   // 10
+  { "x": 109, "y": 449, "visible": false },  // invisible
+  { "x": 161, "y": 392, "visible": true },   // 11
+  { "x": 268, "y": 437, "visible": false },  // invisible
+  { "x": 190, "y": 385, "visible": true },   // 12
+  { "x": 155, "y": 279, "visible": true },   // 13
+  { "x": 257, "y": 210, "visible": true },   // 14
+  { "x": 343, "y": 244, "visible": false },  // invisible
+  { "x": 341, "y": 322, "visible": true },   // 15
+  { "x": 247, "y": 288, "visible": false },  // invisible
+  { "x": 278, "y": 36, "visible": true },    // 16
+  { "x": 353, "y": 164, "visible": true },   // 17
+  { "x": 496, "y": 226, "visible": true },   // 18
+  { "x": 646, "y": 190, "visible": true },   // 19
+  { "x": 493, "y": 376, "visible": true },   // 20
+  { "x": 402, "y": 342, "visible": false },  // invisible
+  { "x": 455, "y": 289, "visible": true },   // 21
+  { "x": 540, "y": 321, "visible": false },  // invisible
+  { "x": 564, "y": 445, "visible": true },   // 22
+  { "x": 479, "y": 491, "visible": true },   // 23
+  { "x": 385, "y": 480, "visible": false },  // invisible
+  { "x": 501, "y": 516, "visible": true },   // 24
+  { "x": 511, "y": 586, "visible": false },  // invisible
+  { "x": 425, "y": 622, "visible": true },   // 25
+  { "x": 367, "y": 559, "visible": false },  // invisible
+  { "x": 451, "y": 700, "visible": true },   // 26
+  { "x": 537, "y": 682, "visible": false },  // invisible
+  { "x": 598, "y": 578, "visible": true },   // 27
+  { "x": 671, "y": 546, "visible": false },  // invisible
+  { "x": 705, "y": 602, "visible": true },   // 28
+  { "x": 670, "y": 697, "visible": false },  // invisible
+  { "x": 553, "y": 751, "visible": true },   // 29
+  { "x": 457, "y": 727, "visible": false },  // invisible
+  { "x": 400, "y": 754, "visible": true }    // 30
 ];
 
-// Unicorn coordinates - 60 dots total
-export const unicornDotsData = [
-  { "x": 228, "y": 118 },
-  { "x": 229, "y": 180 },
-  { "x": 245, "y": 158 },
-  { "x": 262, "y": 116 },
-  { "x": 281, "y": 74 },
-  { "x": 306, "y": 35 },
-  { "x": 327, "y": 90 },
-  { "x": 340, "y": 134 },
-  { "x": 355, "y": 172 },
-  { "x": 446, "y": 232 },
-  { "x": 466, "y": 317 },
-  { "x": 446, "y": 403 },
-  { "x": 466, "y": 457 },
-  { "x": 525, "y": 455 },
-  { "x": 521, "y": 475 },
-  { "x": 562, "y": 490 },
-  { "x": 626, "y": 423 },
-  { "x": 711, "y": 391 },
-  { "x": 760, "y": 429 },
-  { "x": 762, "y": 490 },
-  { "x": 739, "y": 556 },
-  { "x": 676, "y": 532 },
-  { "x": 602, "y": 541 },
-  { "x": 601, "y": 587 },
-  { "x": 585, "y": 640 },
-  { "x": 643, "y": 680 },
-  { "x": 658, "y": 720 },
-  { "x": 605, "y": 748 },
-  { "x": 564, "y": 693 },
-  { "x": 586, "y": 749 },
-  { "x": 529, "y": 771 },
-  { "x": 496, "y": 731 },
-  { "x": 443, "y": 707 },
-  { "x": 358, "y": 714 },
-  { "x": 248, "y": 662 },
-  { "x": 183, "y": 709 },
-  { "x": 152, "y": 739 },
-  { "x": 91, "y": 704 },
-  { "x": 102, "y": 686 },
-  { "x": 52, "y": 658 },
-  { "x": 73, "y": 615 },
-  { "x": 166, "y": 518 },
-  { "x": 161, "y": 485 },
-  { "x": 100, "y": 460 },
-  { "x": 41, "y": 401 },
-  { "x": 29, "y": 323 },
-  { "x": 61, "y": 267 },
-  { "x": 123, "y": 260 },
-  { "x": 170, "y": 248 },
-  { "x": 232, "y": 294 },
-  { "x": 319, "y": 292 },
-  { "x": 369, "y": 262 },
-  { "x": 402, "y": 307 },
-  { "x": 373, "y": 346 },
-  { "x": 332, "y": 358 },
-  { "x": 314, "y": 410 },
-  { "x": 309, "y": 467 },
-  { "x": 339, "y": 529 },
-  { "x": 410, "y": 562 },
-  { "x": 470, "y": 543 }
+// Drawing 2 - New Pattern with Invisible Dots (all coordinates provided)
+export const drawing2DotsData = [
+  { "x": 532, "y": 251, "visible": true },   // 1
+  { "x": 536, "y": 317, "visible": true },   // 2
+  { "x": 505, "y": 305, "visible": false },  // invisible
+  { "x": 463, "y": 350, "visible": true },   // 3
+  { "x": 420, "y": 323, "visible": true },   // 4
+  { "x": 413, "y": 386, "visible": true },   // 5
+  { "x": 598, "y": 450, "visible": true },   // 6
+  { "x": 636, "y": 422, "visible": false },  // invisible
+  { "x": 700, "y": 413, "visible": true },   // 7
+  { "x": 759, "y": 445, "visible": false },  // invisible
+  { "x": 758, "y": 489, "visible": true },   // 8
+  { "x": 713, "y": 528, "visible": false },  // invisible
+  { "x": 617, "y": 520, "visible": true },   // 9
+  { "x": 591, "y": 475, "visible": true },   // 10
+  { "x": 545, "y": 464, "visible": false },  // invisible
+  { "x": 496, "y": 482, "visible": false },  // invisible
+  { "x": 455, "y": 466, "visible": true },   // 11
+  { "x": 467, "y": 415, "visible": false },  // invisible
+  { "x": 434, "y": 484, "visible": true },   // 12
+  { "x": 350, "y": 454, "visible": false },  // invisible
+  { "x": 318, "y": 379, "visible": false },  // invisible
+  { "x": 338, "y": 434, "visible": true },   // 13
+  { "x": 350, "y": 591, "visible": true },   // 14
+  { "x": 259, "y": 597, "visible": true },   // 15
+  { "x": 258, "y": 638, "visible": true },   // 16
+  { "x": 373, "y": 634, "visible": true },   // 17
+  { "x": 325, "y": 594, "visible": true },   // 18
+  { "x": 217, "y": 594, "visible": false },  // invisible
+  { "x": 168, "y": 575, "visible": true },   // 19
+  { "x": 170, "y": 627, "visible": false },  // invisible
+  { "x": 148, "y": 646, "visible": true },   // 20
+  { "x": 88, "y": 558, "visible": true },    // 21
+  { "x": 110, "y": 523, "visible": false },  // invisible
+  { "x": 156, "y": 566, "visible": false },  // invisible
+  { "x": 80, "y": 494, "visible": true },    // 22
+  { "x": 180, "y": 319, "visible": false },  // invisible
+  { "x": 316, "y": 247, "visible": true },   // 23
+  { "x": 327, "y": 189, "visible": false },  // invisible
+  { "x": 316, "y": 269, "visible": false },  // invisible
+  { "x": 401, "y": 326, "visible": true },   // 24
+  { "x": 448, "y": 263, "visible": true },   // 25
+  { "x": 316, "y": 171, "visible": true },   // 26
+  { "x": 391, "y": 170, "visible": false },  // invisible
+  { "x": 417, "y": 107, "visible": true },   // 27
+  { "x": 484, "y": 130, "visible": false },  // invisible
+  { "x": 558, "y": 118, "visible": true },   // 28
+  { "x": 562, "y": 193, "visible": false },  // invisible
+  { "x": 631, "y": 237, "visible": true },   // 29
+  { "x": 567, "y": 255, "visible": false },  // invisible
+  { "x": 420, "y": 230, "visible": true }    // 30
 ];
 
-// Lock coordinates - 30 dots total
-export const lockDotsData = [
-  { "x": 334, "y": 458 },
-  { "x": 242, "y": 414 },
-  { "x": 178, "y": 320 },
-  { "x": 180, "y": 230 },
-  { "x": 141, "y": 203 },
-  { "x": 156, "y": 148 },
-  { "x": 218, "y": 150 },
-  { "x": 284, "y": 109 },
-  { "x": 367, "y": 84 },
-  { "x": 457, "y": 98 },
-  { "x": 539, "y": 137 },
-  { "x": 587, "y": 208 },
-  { "x": 600, "y": 304 },
-  { "x": 552, "y": 408 },
-  { "x": 479, "y": 450 },
-  { "x": 486, "y": 474 },
-  { "x": 543, "y": 494 },
-  { "x": 576, "y": 544 },
-  { "x": 574, "y": 623 },
-  { "x": 539, "y": 680 },
-  { "x": 462, "y": 711 },
-  { "x": 369, "y": 709 },
-  { "x": 290, "y": 674 },
-  { "x": 253, "y": 597 },
-  { "x": 275, "y": 518 },
-  { "x": 330, "y": 483 },
-  { "x": 343, "y": 540 },
-  { "x": 482, "y": 524 },
-  { "x": 517, "y": 577 },
-  { "x": 495, "y": 645 }
+// Drawing 3 - Tree Pattern with Invisible Dots
+export const drawing3DotsData = [
+  { "x": 126, "y": 461, "visible": true },   // 1
+  { "x": 193, "y": 378, "visible": false },  // invisible
+  { "x": 265, "y": 372, "visible": true },   // 2
+  { "x": 294, "y": 396, "visible": false },  // invisible
+  { "x": 285, "y": 437, "visible": true },   // 3
+  { "x": 331, "y": 497, "visible": false },  // invisible
+  { "x": 424, "y": 556, "visible": true },   // 4
+  { "x": 338, "y": 545, "visible": false },  // invisible
+  { "x": 276, "y": 495, "visible": true },   // 5
+  { "x": 243, "y": 430, "visible": false },  // invisible
+  { "x": 211, "y": 414, "visible": false },  // invisible
+  { "x": 174, "y": 426, "visible": true },   // 6
+  { "x": 137, "y": 460, "visible": false },  // invisible
+  { "x": 99, "y": 533, "visible": true },    // 7
+  { "x": 107, "y": 476, "visible": false },  // invisible
+  { "x": 130, "y": 426, "visible": false },  // invisible
+  { "x": 145, "y": 396, "visible": true },   // 8
+  { "x": 155, "y": 345, "visible": false },  // invisible
+  { "x": 185, "y": 306, "visible": true },   // 9
+  { "x": 246, "y": 301, "visible": false },  // invisible
+  { "x": 333, "y": 325, "visible": true },   // 10
+  { "x": 358, "y": 236, "visible": false },  // invisible
+  { "x": 338, "y": 138, "visible": true },   // 11
+  { "x": 320, "y": 210, "visible": false },  // invisible
+  { "x": 331, "y": 250, "visible": true },   // 12
+  { "x": 335, "y": 211, "visible": false },  // invisible
+  { "x": 301, "y": 88, "visible": true },    // 13
+  { "x": 288, "y": 220, "visible": false },  // invisible
+  { "x": 297, "y": 235, "visible": true },   // 14
+  { "x": 297, "y": 208, "visible": false },  // invisible
+  { "x": 243, "y": 61, "visible": true },    // 15
+  { "x": 247, "y": 184, "visible": false },  // invisible
+  { "x": 294, "y": 310, "visible": true },   // 16
+  { "x": 355, "y": 337, "visible": false },  // invisible
+  { "x": 412, "y": 379, "visible": true },   // 17
+  { "x": 414, "y": 400, "visible": false },  // invisible
+  { "x": 377, "y": 371, "visible": false },  // invisible
+  { "x": 353, "y": 336, "visible": true },   // 18
+  { "x": 666, "y": 155, "visible": false },  // invisible
+  { "x": 683, "y": 155, "visible": true },   // 19
+  { "x": 671, "y": 176, "visible": false },  // invisible
+  { "x": 454, "y": 339, "visible": true },   // 20
+  { "x": 650, "y": 284, "visible": true },   // 21
+  { "x": 450, "y": 384, "visible": true },   // 22
+  { "x": 617, "y": 369, "visible": true },   // 23
+  { "x": 405, "y": 431, "visible": true },   // 24
+  { "x": 396, "y": 422, "visible": false },  // invisible
+  { "x": 446, "y": 426, "visible": true },   // 25
+  { "x": 545, "y": 564, "visible": false },  // invisible
+  { "x": 580, "y": 650, "visible": true },   // 26
+  { "x": 534, "y": 596, "visible": true },   // 27
+  { "x": 552, "y": 678, "visible": false },  // invisible
+  { "x": 515, "y": 612, "visible": true },   // 28
+  { "x": 507, "y": 685, "visible": true },   // 29
+  { "x": 495, "y": 630, "visible": false },  // invisible
+  { "x": 475, "y": 578, "visible": false },  // invisible
+  { "x": 433, "y": 544, "visible": true }    // 30
 ];
+
+// Legacy exports for backward compatibility
+export const treeDotsData = drawing1DotsData;
+export const lockDotsData = drawing1DotsData;

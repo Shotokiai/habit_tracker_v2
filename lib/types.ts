@@ -6,7 +6,7 @@ export interface Habit {
   createdAt: string;
   monthYear: string;
   preferredView?: 'chart' | 'calendar' | 'companion';
-  companionPattern?: 'unicorn' | 'lock';
+  companionPattern?: 'drawing1' | 'drawing2';
 }
 
 export interface DayRecord {

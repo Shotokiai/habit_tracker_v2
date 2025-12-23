@@ -45,7 +45,7 @@ export default function HabitTracker({
   const [showViewDropdown, setShowViewDropdown] = useState(false)
   const [currentView, setCurrentView] = useState<'chart' | 'calendar' | 'companion'>(habit?.preferredView || 'chart')
   const [hasUsedCalendar, setHasUsedCalendar] = useState(false)
-  const [companionPattern, setCompanionPattern] = useState<'unicorn' | 'lock'>(habit?.companionPattern || 'lock')
+  const [companionPattern, setCompanionPattern] = useState<'drawing1' | 'drawing2' | 'drawing3'>(habit?.companionPattern || 'drawing1')
   const [showPatternSelection, setShowPatternSelection] = useState(!habit?.companionPattern)
   const [isCompanionCanvasShowing, setIsCompanionCanvasShowing] = useState(false)
 
@@ -366,6 +366,8 @@ export default function HabitTracker({
                   onComplete={handleLetGo}
                   onMiss={handleHabitMissed}
                   onCanvasStateChange={setIsCompanionCanvasShowing}
+                  onNextHabit={onNextHabit}
+                  totalHabits={totalHabits}
                 />
               </div>
             )}

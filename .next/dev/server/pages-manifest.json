@@ -1,7 +1,5 @@
 {
-  "/_app": "pages/_app.js",
-  "/_document": "pages/_document.js",
-  "/_error": "pages/_error.js",
   "/api/register-user": "pages/api/register-user.js",
-  "/api/track-custom-habit": "pages/api/track-custom-habit.js"
+  "/api/track-habit-created": "pages/api/track-habit-created.js",
+  "/api/track-habit-started": "pages/api/track-habit-started.js"
 }

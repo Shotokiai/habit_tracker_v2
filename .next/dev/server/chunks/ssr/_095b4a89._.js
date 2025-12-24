@@ -459,8 +459,8 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
             calendarDays.push(/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: `w-10 h-10 flex items-center justify-center text-sm font-medium relative ${isToday ? 'ring-1 ring-blue-400' : ''}`,
                 style: {
-                    backgroundColor: status === 'inactive' ? '#f3f4f6' : status === 'completed' ? '#22c55e' : '#ffffff',
-                    color: status === 'inactive' ? '#9ca3af' : status === 'completed' ? '#ffffff' : '#374151',
+                    backgroundColor: status === 'inactive' ? '#f3f4f6' : status === 'completed' ? '#22c55e' : status === 'missed' ? '#ef4444' : '#ffffff',
+                    color: status === 'inactive' ? '#9ca3af' : status === 'completed' || status === 'missed' ? '#ffffff' : '#374151',
                     border: '1px solid #e5e7eb',
                     borderRadius: '2px'
                 },
@@ -484,31 +484,17 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                         lineNumber: 89,
                         columnNumber: 38
                     }, this),
-                    status === 'missed' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "absolute inset-0 rounded-sm",
-                                style: {
-                                    backgroundColor: 'rgba(239, 68, 68, 0.15)'
-                                }
-                            }, void 0, false, {
-                                fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 96,
-                                columnNumber: 15
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-bold",
-                                style: {
-                                    backgroundColor: '#ef4444'
-                                },
-                                children: "✗"
-                            }, void 0, false, {
-                                fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 99,
-                                columnNumber: 15
-                            }, this)
-                        ]
-                    }, void 0, true)
+                    status === 'missed' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "absolute top-0.5 right-0.5 text-white text-xs leading-none",
+                        style: {
+                            fontSize: '10px'
+                        },
+                        children: "✕"
+                    }, void 0, false, {
+                        fileName: "[project]/components/habit-calendar.tsx",
+                        lineNumber: 95,
+                        columnNumber: 35
+                    }, this)
                 ]
             }, day, true, {
                 fileName: "[project]/components/habit-calendar.tsx",
@@ -564,13 +550,13 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                         children: "←"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 149,
+                        lineNumber: 144,
                         columnNumber: 30
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-8 h-8"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 151,
+                        lineNumber: 146,
                         columnNumber: 23
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -578,7 +564,7 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                         children: monthNames[viewingMonth]
                     }, void 0, false, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 153,
+                        lineNumber: 148,
                         columnNumber: 9
                     }, this),
                     canNavigateNext() ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -587,19 +573,19 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                         children: "→"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 157,
+                        lineNumber: 152,
                         columnNumber: 30
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-8 h-8"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 159,
+                        lineNumber: 154,
                         columnNumber: 23
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/habit-calendar.tsx",
-                lineNumber: 148,
+                lineNumber: 143,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -618,14 +604,14 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                             children: day
                         }, day, false, {
                             fileName: "[project]/components/habit-calendar.tsx",
-                            lineNumber: 165,
+                            lineNumber: 160,
                             columnNumber: 66
                         }, this)),
                     generateMonthCalendar()
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/habit-calendar.tsx",
-                lineNumber: 163,
+                lineNumber: 158,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -641,20 +627,20 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 176,
+                                lineNumber: 171,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "Inactive"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 179,
+                                lineNumber: 174,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 175,
+                        lineNumber: 170,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -665,20 +651,20 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                                 children: "✓"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 182,
+                                lineNumber: 177,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "Done"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 183,
+                                lineNumber: 178,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 181,
+                        lineNumber: 176,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -689,32 +675,32 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                                 children: "✗"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 186,
+                                lineNumber: 181,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "Missed"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 187,
+                                lineNumber: 182,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 185,
+                        lineNumber: 180,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/habit-calendar.tsx",
-                lineNumber: 174,
+                lineNumber: 169,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/habit-calendar.tsx",
-        lineNumber: 146,
+        lineNumber: 141,
         columnNumber: 10
     }, this);
 }
@@ -731,6 +717,32 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ne
 "use client";
 ;
 ;
+// Helper function to determine connection end index based on completed visible dots
+function getConnectionEndIndex(dotsData, completedVisibleDots) {
+    if (completedVisibleDots <= 0) return 0;
+    let visibleCount = 0;
+    let endIndex = 0;
+    // Find the index of the last completed visible dot
+    for(let i = 0; i < dotsData.length; i++){
+        if (dotsData[i].visible !== false) {
+            visibleCount++;
+            if (visibleCount === completedVisibleDots) {
+                endIndex = i + 1; // Include this dot
+                break;
+            }
+        }
+    }
+    // Include any invisible dots that come immediately after the last completed visible dot
+    // until we reach the next visible dot or end of array
+    while(endIndex < dotsData.length && dotsData[endIndex].visible === false){
+        endIndex++;
+    }
+    // If we reach another visible dot, include it in the connection
+    if (endIndex < dotsData.length && dotsData[endIndex].visible !== false) {
+        endIndex++;
+    }
+    return endIndex;
+}
 function ManualDotsCanvas({ imagePath, dotsData, completedDays, imageWidth = 600, imageHeight = 600, imageOpacity = 0.35 }) {
     const [imageLoaded, setImageLoaded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [imageError, setImageError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -742,15 +754,39 @@ function ManualDotsCanvas({ imagePath, dotsData, completedDays, imageWidth = 600
                 children: "No dot data provided"
             }, void 0, false, {
                 fileName: "[project]/components/ManualDotsCanvas.tsx",
-                lineNumber: 28,
+                lineNumber: 59,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/ManualDotsCanvas.tsx",
-            lineNumber: 27,
+            lineNumber: 58,
             columnNumber: 12
         }, this);
     }
+    // Take only first 30 dots as per requirement, but for Drawing 2 we need more to get 30 visible
+    const limitedDotsData = dotsData.slice(0, dotsData.length);
+    // Create visible dots array with sequential numbering
+    const visibleDots = limitedDotsData.map((dot, originalIndex)=>({
+            ...dot,
+            originalIndex
+        })).filter((dot)=>dot.visible !== false) // Show dots that are explicitly visible or undefined (default visible)
+    .slice(0, 30); // Limit to 30 visible dots
+    // Debug logging
+    console.log('🔍 Canvas Debug:', {
+        totalDots: dotsData.length,
+        limitedDots: limitedDotsData.length,
+        visibleDots: visibleDots.length,
+        visibleDotsData: visibleDots.slice(0, 5),
+        // First 5 visible dots
+        lastVisibleDots: visibleDots.slice(-5),
+        // Last 5 visible dots
+        completedDays,
+        imagePath,
+        imageWidth,
+        imageHeight,
+        imageLoaded,
+        imageError
+    });
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "w-full",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -779,26 +815,28 @@ function ManualDotsCanvas({ imagePath, dotsData, completedDays, imageWidth = 600
                                 height: imageHeight,
                                 opacity: imageOpacity,
                                 onLoad: ()=>{
-                                    console.log('✅ Image loaded:', imagePath);
+                                    console.log('✅ Image loaded successfully:', imagePath);
                                     setImageLoaded(true);
+                                    setImageError(false);
                                 },
                                 onError: (e)=>{
-                                    console.error('❌ Ghoda image failed:', imagePath, e);
+                                    console.error('❌ Image failed to load:', imagePath, e);
                                     setImageError(true);
+                                    setImageLoaded(false);
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/ManualDotsCanvas.tsx",
-                                lineNumber: 39,
+                                lineNumber: 97,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/ManualDotsCanvas.tsx",
-                            lineNumber: 38,
+                            lineNumber: 96,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/components/ManualDotsCanvas.tsx",
-                        lineNumber: 37,
+                        lineNumber: 95,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
@@ -807,21 +845,21 @@ function ManualDotsCanvas({ imagePath, dotsData, completedDays, imageWidth = 600
                         fill: imageLoaded && !imageError ? "url(#backgroundImage)" : "white"
                     }, void 0, false, {
                         fileName: "[project]/components/ManualDotsCanvas.tsx",
-                        lineNumber: 50,
+                        lineNumber: 110,
                         columnNumber: 11
                     }, this),
-                    dotsData.map((dot, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
+                    visibleDots.map((dot, visibleIndex)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
                                     cx: dot.x,
                                     cy: dot.y,
-                                    r: "12",
-                                    fill: index < completedDays ? "#000000" : "#ffffff",
+                                    r: "15",
+                                    fill: visibleIndex < completedDays ? "#000000" : "#ffffff",
                                     stroke: "#1f2937",
-                                    strokeWidth: "2"
+                                    strokeWidth: "3"
                                 }, void 0, false, {
                                     fileName: "[project]/components/ManualDotsCanvas.tsx",
-                                    lineNumber: 54,
+                                    lineNumber: 114,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
@@ -829,51 +867,67 @@ function ManualDotsCanvas({ imagePath, dotsData, completedDays, imageWidth = 600
                                     y: dot.y + 5,
                                     textAnchor: "middle",
                                     className: "text-sm font-bold",
-                                    fill: "#000000",
-                                    fontSize: "12",
-                                    children: index + 1
+                                    fill: visibleIndex < completedDays ? "#ffffff" : "#000000",
+                                    fontSize: "14",
+                                    fontWeight: "bold",
+                                    children: visibleIndex + 1
                                 }, void 0, false, {
                                     fileName: "[project]/components/ManualDotsCanvas.tsx",
-                                    lineNumber: 55,
+                                    lineNumber: 115,
                                     columnNumber: 15
                                 }, this)
                             ]
-                        }, index, true, {
+                        }, dot.originalIndex, true, {
                             fileName: "[project]/components/ManualDotsCanvas.tsx",
-                            lineNumber: 53,
-                            columnNumber: 41
+                            lineNumber: 113,
+                            columnNumber: 51
                         }, this)),
-                    completedDays > 0 && dotsData.slice(0, completedDays + 1).map((dot, index)=>{
-                        if (index === 0) return null;
-                        const prevDot = dotsData[index - 1];
-                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
-                            x1: prevDot.x,
-                            y1: prevDot.y,
-                            x2: dot.x,
-                            y2: dot.y,
-                            stroke: "#000000",
-                            strokeWidth: "4",
-                            strokeLinecap: "round"
-                        }, `line-${index}`, false, {
-                            fileName: "[project]/components/ManualDotsCanvas.tsx",
-                            lineNumber: 64,
-                            columnNumber: 18
-                        }, this);
-                    })
+                    (()=>{
+                        const connectionEndIndex = getConnectionEndIndex(dotsData, completedDays);
+                        const connectionDots = dotsData.slice(0, connectionEndIndex);
+                        console.log('🔗 Connection Debug:', {
+                            completedDays,
+                            connectionEndIndex,
+                            connectionDotsLength: connectionDots.length,
+                            connectionDots: connectionDots.map((d, i)=>({
+                                    index: i,
+                                    x: d.x,
+                                    y: d.y,
+                                    visible: d.visible
+                                }))
+                        });
+                        return connectionDots.map((dot, index)=>{
+                            if (index === 0) return null;
+                            const prevDot = connectionDots[index - 1];
+                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
+                                x1: prevDot.x,
+                                y1: prevDot.y,
+                                x2: dot.x,
+                                y2: dot.y,
+                                stroke: "#000000",
+                                strokeWidth: "4",
+                                strokeLinecap: "round"
+                            }, `line-${index}`, false, {
+                                fileName: "[project]/components/ManualDotsCanvas.tsx",
+                                lineNumber: 138,
+                                columnNumber: 20
+                            }, this);
+                        });
+                    })()
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/ManualDotsCanvas.tsx",
-                lineNumber: 33,
+                lineNumber: 91,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/ManualDotsCanvas.tsx",
-            lineNumber: 32,
+            lineNumber: 90,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/ManualDotsCanvas.tsx",
-        lineNumber: 31,
+        lineNumber: 89,
         columnNumber: 10
     }, this);
 }
@@ -881,516 +935,966 @@ function ManualDotsCanvas({ imagePath, dotsData, completedDays, imageWidth = 600
 "[project]/data/treeDots.ts [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
+// Drawing 1 - Updated Pattern with Invisible Dots (new coordinates)
 __turbopack_context__.s([
+    "drawing1DotsData",
+    ()=>drawing1DotsData,
+    "drawing2DotsData",
+    ()=>drawing2DotsData,
+    "drawing3DotsData",
+    ()=>drawing3DotsData,
     "lockDotsData",
     ()=>lockDotsData,
     "treeDotsData",
-    ()=>treeDotsData,
-    "unicornDotsData",
-    ()=>unicornDotsData
+    ()=>treeDotsData
 ]);
-const treeDotsData = [
+const drawing1DotsData = [
     {
-        "x": 227,
-        "y": 394
+        "x": 362,
+        "y": 611,
+        "visible": true
     },
+    // 1
     {
-        "x": 180,
-        "y": 419
+        "x": 342,
+        "y": 703,
+        "visible": false
     },
+    // invisible
     {
-        "x": 118,
-        "y": 403
+        "x": 378,
+        "y": 729,
+        "visible": false
     },
-    {
-        "x": 74,
-        "y": 362
-    },
-    {
-        "x": 55,
-        "y": 307
-    },
-    {
-        "x": 84,
-        "y": 246
-    },
-    {
-        "x": 87,
-        "y": 162
-    },
-    {
-        "x": 128,
-        "y": 90
-    },
-    {
-        "x": 202,
-        "y": 61
-    },
-    {
-        "x": 278,
-        "y": 46
-    },
-    {
-        "x": 317,
-        "y": 73
-    },
+    // invisible
     {
         "x": 382,
-        "y": 56
+        "y": 762,
+        "visible": true
     },
-    {
-        "x": 452,
-        "y": 79
-    },
-    {
-        "x": 480,
-        "y": 127
-    },
-    {
-        "x": 476,
-        "y": 176
-    },
-    {
-        "x": 460,
-        "y": 209
-    },
-    {
-        "x": 526,
-        "y": 234
-    },
-    {
-        "x": 540,
-        "y": 276
-    },
-    {
-        "x": 542,
-        "y": 324
-    },
-    {
-        "x": 513,
-        "y": 375
-    },
-    {
-        "x": 458,
-        "y": 397
-    },
-    {
-        "x": 417,
-        "y": 403
-    },
-    {
-        "x": 335,
-        "y": 389
-    },
-    {
-        "x": 325,
-        "y": 306
-    },
+    // 2
     {
         "x": 286,
-        "y": 375
+        "y": 755,
+        "visible": true
     },
+    // 3
     {
-        "x": 228,
-        "y": 306
+        "x": 282,
+        "y": 646,
+        "visible": false
     },
+    // invisible
     {
-        "x": 230,
-        "y": 410
+        "x": 271,
+        "y": 756,
+        "visible": true
     },
+    // 4
     {
-        "x": 227,
-        "y": 515
+        "x": 172,
+        "y": 753,
+        "visible": true
     },
+    // 5
     {
-        "x": 192,
-        "y": 608
+        "x": 181,
+        "y": 711,
+        "visible": false
     },
+    // invisible
     {
-        "x": 288,
-        "y": 614
+        "x": 224,
+        "y": 698,
+        "visible": true
     },
+    // 6
     {
-        "x": 386,
-        "y": 616
+        "x": 214,
+        "y": 583,
+        "visible": false
     },
+    // invisible
     {
-        "x": 347,
-        "y": 548
+        "x": 256,
+        "y": 521,
+        "visible": true
     },
+    // 7
     {
-        "x": 332,
-        "y": 471
+        "x": 361,
+        "y": 542,
+        "visible": true
     },
+    // 8
     {
-        "x": 327,
-        "y": 392
-    }
-];
-const unicornDotsData = [
-    {
-        "x": 228,
-        "y": 118
+        "x": 369,
+        "y": 478,
+        "visible": false
     },
+    // invisible
     {
-        "x": 229,
-        "y": 180
+        "x": 283,
+        "y": 444,
+        "visible": true
     },
+    // 9
     {
-        "x": 245,
-        "y": 158
+        "x": 249,
+        "y": 506,
+        "visible": false
     },
+    // invisible
     {
-        "x": 262,
-        "y": 116
+        "x": 147,
+        "y": 519,
+        "visible": true
     },
+    // 10
     {
-        "x": 281,
-        "y": 74
+        "x": 109,
+        "y": 449,
+        "visible": false
     },
-    {
-        "x": 306,
-        "y": 35
-    },
-    {
-        "x": 327,
-        "y": 90
-    },
-    {
-        "x": 340,
-        "y": 134
-    },
-    {
-        "x": 355,
-        "y": 172
-    },
-    {
-        "x": 446,
-        "y": 232
-    },
-    {
-        "x": 466,
-        "y": 317
-    },
-    {
-        "x": 446,
-        "y": 403
-    },
-    {
-        "x": 466,
-        "y": 457
-    },
-    {
-        "x": 525,
-        "y": 455
-    },
-    {
-        "x": 521,
-        "y": 475
-    },
-    {
-        "x": 562,
-        "y": 490
-    },
-    {
-        "x": 626,
-        "y": 423
-    },
-    {
-        "x": 711,
-        "y": 391
-    },
-    {
-        "x": 760,
-        "y": 429
-    },
-    {
-        "x": 762,
-        "y": 490
-    },
-    {
-        "x": 739,
-        "y": 556
-    },
-    {
-        "x": 676,
-        "y": 532
-    },
-    {
-        "x": 602,
-        "y": 541
-    },
-    {
-        "x": 601,
-        "y": 587
-    },
-    {
-        "x": 585,
-        "y": 640
-    },
-    {
-        "x": 643,
-        "y": 680
-    },
-    {
-        "x": 658,
-        "y": 720
-    },
-    {
-        "x": 605,
-        "y": 748
-    },
-    {
-        "x": 564,
-        "y": 693
-    },
-    {
-        "x": 586,
-        "y": 749
-    },
-    {
-        "x": 529,
-        "y": 771
-    },
-    {
-        "x": 496,
-        "y": 731
-    },
-    {
-        "x": 443,
-        "y": 707
-    },
-    {
-        "x": 358,
-        "y": 714
-    },
-    {
-        "x": 248,
-        "y": 662
-    },
-    {
-        "x": 183,
-        "y": 709
-    },
-    {
-        "x": 152,
-        "y": 739
-    },
-    {
-        "x": 91,
-        "y": 704
-    },
-    {
-        "x": 102,
-        "y": 686
-    },
-    {
-        "x": 52,
-        "y": 658
-    },
-    {
-        "x": 73,
-        "y": 615
-    },
-    {
-        "x": 166,
-        "y": 518
-    },
+    // invisible
     {
         "x": 161,
-        "y": 485
+        "y": 392,
+        "visible": true
     },
+    // 11
     {
-        "x": 100,
-        "y": 460
+        "x": 268,
+        "y": 437,
+        "visible": false
     },
+    // invisible
     {
-        "x": 41,
-        "y": 401
+        "x": 190,
+        "y": 385,
+        "visible": true
     },
+    // 12
     {
-        "x": 29,
-        "y": 323
+        "x": 155,
+        "y": 279,
+        "visible": true
     },
+    // 13
     {
-        "x": 61,
-        "y": 267
+        "x": 257,
+        "y": 210,
+        "visible": true
     },
-    {
-        "x": 123,
-        "y": 260
-    },
-    {
-        "x": 170,
-        "y": 248
-    },
-    {
-        "x": 232,
-        "y": 294
-    },
-    {
-        "x": 319,
-        "y": 292
-    },
-    {
-        "x": 369,
-        "y": 262
-    },
-    {
-        "x": 402,
-        "y": 307
-    },
-    {
-        "x": 373,
-        "y": 346
-    },
-    {
-        "x": 332,
-        "y": 358
-    },
-    {
-        "x": 314,
-        "y": 410
-    },
-    {
-        "x": 309,
-        "y": 467
-    },
-    {
-        "x": 339,
-        "y": 529
-    },
-    {
-        "x": 410,
-        "y": 562
-    },
-    {
-        "x": 470,
-        "y": 543
-    }
-];
-const lockDotsData = [
-    {
-        "x": 334,
-        "y": 458
-    },
-    {
-        "x": 242,
-        "y": 414
-    },
-    {
-        "x": 178,
-        "y": 320
-    },
-    {
-        "x": 180,
-        "y": 230
-    },
-    {
-        "x": 141,
-        "y": 203
-    },
-    {
-        "x": 156,
-        "y": 148
-    },
-    {
-        "x": 218,
-        "y": 150
-    },
-    {
-        "x": 284,
-        "y": 109
-    },
-    {
-        "x": 367,
-        "y": 84
-    },
-    {
-        "x": 457,
-        "y": 98
-    },
-    {
-        "x": 539,
-        "y": 137
-    },
-    {
-        "x": 587,
-        "y": 208
-    },
-    {
-        "x": 600,
-        "y": 304
-    },
-    {
-        "x": 552,
-        "y": 408
-    },
-    {
-        "x": 479,
-        "y": 450
-    },
-    {
-        "x": 486,
-        "y": 474
-    },
-    {
-        "x": 543,
-        "y": 494
-    },
-    {
-        "x": 576,
-        "y": 544
-    },
-    {
-        "x": 574,
-        "y": 623
-    },
-    {
-        "x": 539,
-        "y": 680
-    },
-    {
-        "x": 462,
-        "y": 711
-    },
-    {
-        "x": 369,
-        "y": 709
-    },
-    {
-        "x": 290,
-        "y": 674
-    },
-    {
-        "x": 253,
-        "y": 597
-    },
-    {
-        "x": 275,
-        "y": 518
-    },
-    {
-        "x": 330,
-        "y": 483
-    },
+    // 14
     {
         "x": 343,
-        "y": 540
+        "y": 244,
+        "visible": false
     },
+    // invisible
     {
-        "x": 482,
-        "y": 524
+        "x": 341,
+        "y": 322,
+        "visible": true
     },
+    // 15
     {
-        "x": 517,
-        "y": 577
+        "x": 247,
+        "y": 288,
+        "visible": false
     },
+    // invisible
+    {
+        "x": 278,
+        "y": 36,
+        "visible": true
+    },
+    // 16
+    {
+        "x": 353,
+        "y": 164,
+        "visible": true
+    },
+    // 17
+    {
+        "x": 496,
+        "y": 226,
+        "visible": true
+    },
+    // 18
+    {
+        "x": 646,
+        "y": 190,
+        "visible": true
+    },
+    // 19
+    {
+        "x": 493,
+        "y": 376,
+        "visible": true
+    },
+    // 20
+    {
+        "x": 402,
+        "y": 342,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 455,
+        "y": 289,
+        "visible": true
+    },
+    // 21
+    {
+        "x": 540,
+        "y": 321,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 564,
+        "y": 445,
+        "visible": true
+    },
+    // 22
+    {
+        "x": 479,
+        "y": 491,
+        "visible": true
+    },
+    // 23
+    {
+        "x": 385,
+        "y": 480,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 501,
+        "y": 516,
+        "visible": true
+    },
+    // 24
+    {
+        "x": 511,
+        "y": 586,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 425,
+        "y": 622,
+        "visible": true
+    },
+    // 25
+    {
+        "x": 367,
+        "y": 559,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 451,
+        "y": 700,
+        "visible": true
+    },
+    // 26
+    {
+        "x": 537,
+        "y": 682,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 598,
+        "y": 578,
+        "visible": true
+    },
+    // 27
+    {
+        "x": 671,
+        "y": 546,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 705,
+        "y": 602,
+        "visible": true
+    },
+    // 28
+    {
+        "x": 670,
+        "y": 697,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 553,
+        "y": 751,
+        "visible": true
+    },
+    // 29
+    {
+        "x": 457,
+        "y": 727,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 400,
+        "y": 754,
+        "visible": true
+    } // 30
+];
+const drawing2DotsData = [
+    {
+        "x": 532,
+        "y": 251,
+        "visible": true
+    },
+    // 1
+    {
+        "x": 536,
+        "y": 317,
+        "visible": true
+    },
+    // 2
+    {
+        "x": 505,
+        "y": 305,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 463,
+        "y": 350,
+        "visible": true
+    },
+    // 3
+    {
+        "x": 420,
+        "y": 323,
+        "visible": true
+    },
+    // 4
+    {
+        "x": 413,
+        "y": 386,
+        "visible": true
+    },
+    // 5
+    {
+        "x": 598,
+        "y": 450,
+        "visible": true
+    },
+    // 6
+    {
+        "x": 636,
+        "y": 422,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 700,
+        "y": 413,
+        "visible": true
+    },
+    // 7
+    {
+        "x": 759,
+        "y": 445,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 758,
+        "y": 489,
+        "visible": true
+    },
+    // 8
+    {
+        "x": 713,
+        "y": 528,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 617,
+        "y": 520,
+        "visible": true
+    },
+    // 9
+    {
+        "x": 591,
+        "y": 475,
+        "visible": true
+    },
+    // 10
+    {
+        "x": 545,
+        "y": 464,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 496,
+        "y": 482,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 455,
+        "y": 466,
+        "visible": true
+    },
+    // 11
+    {
+        "x": 467,
+        "y": 415,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 434,
+        "y": 484,
+        "visible": true
+    },
+    // 12
+    {
+        "x": 350,
+        "y": 454,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 318,
+        "y": 379,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 338,
+        "y": 434,
+        "visible": true
+    },
+    // 13
+    {
+        "x": 350,
+        "y": 591,
+        "visible": true
+    },
+    // 14
+    {
+        "x": 259,
+        "y": 597,
+        "visible": true
+    },
+    // 15
+    {
+        "x": 258,
+        "y": 638,
+        "visible": true
+    },
+    // 16
+    {
+        "x": 373,
+        "y": 634,
+        "visible": true
+    },
+    // 17
+    {
+        "x": 325,
+        "y": 594,
+        "visible": true
+    },
+    // 18
+    {
+        "x": 217,
+        "y": 594,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 168,
+        "y": 575,
+        "visible": true
+    },
+    // 19
+    {
+        "x": 170,
+        "y": 627,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 148,
+        "y": 646,
+        "visible": true
+    },
+    // 20
+    {
+        "x": 88,
+        "y": 558,
+        "visible": true
+    },
+    // 21
+    {
+        "x": 110,
+        "y": 523,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 156,
+        "y": 566,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 80,
+        "y": 494,
+        "visible": true
+    },
+    // 22
+    {
+        "x": 180,
+        "y": 319,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 316,
+        "y": 247,
+        "visible": true
+    },
+    // 23
+    {
+        "x": 327,
+        "y": 189,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 316,
+        "y": 269,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 401,
+        "y": 326,
+        "visible": true
+    },
+    // 24
+    {
+        "x": 448,
+        "y": 263,
+        "visible": true
+    },
+    // 25
+    {
+        "x": 316,
+        "y": 171,
+        "visible": true
+    },
+    // 26
+    {
+        "x": 391,
+        "y": 170,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 417,
+        "y": 107,
+        "visible": true
+    },
+    // 27
+    {
+        "x": 484,
+        "y": 130,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 558,
+        "y": 118,
+        "visible": true
+    },
+    // 28
+    {
+        "x": 562,
+        "y": 193,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 631,
+        "y": 237,
+        "visible": true
+    },
+    // 29
+    {
+        "x": 567,
+        "y": 255,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 420,
+        "y": 230,
+        "visible": true
+    } // 30
+];
+const drawing3DotsData = [
+    {
+        "x": 126,
+        "y": 461,
+        "visible": true
+    },
+    // 1
+    {
+        "x": 193,
+        "y": 378,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 265,
+        "y": 372,
+        "visible": true
+    },
+    // 2
+    {
+        "x": 294,
+        "y": 396,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 285,
+        "y": 437,
+        "visible": true
+    },
+    // 3
+    {
+        "x": 331,
+        "y": 497,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 424,
+        "y": 556,
+        "visible": true
+    },
+    // 4
+    {
+        "x": 338,
+        "y": 545,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 276,
+        "y": 495,
+        "visible": true
+    },
+    // 5
+    {
+        "x": 243,
+        "y": 430,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 211,
+        "y": 414,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 174,
+        "y": 426,
+        "visible": true
+    },
+    // 6
+    {
+        "x": 137,
+        "y": 460,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 99,
+        "y": 533,
+        "visible": true
+    },
+    // 7
+    {
+        "x": 107,
+        "y": 476,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 130,
+        "y": 426,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 145,
+        "y": 396,
+        "visible": true
+    },
+    // 8
+    {
+        "x": 155,
+        "y": 345,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 185,
+        "y": 306,
+        "visible": true
+    },
+    // 9
+    {
+        "x": 246,
+        "y": 301,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 333,
+        "y": 325,
+        "visible": true
+    },
+    // 10
+    {
+        "x": 358,
+        "y": 236,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 338,
+        "y": 138,
+        "visible": true
+    },
+    // 11
+    {
+        "x": 320,
+        "y": 210,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 331,
+        "y": 250,
+        "visible": true
+    },
+    // 12
+    {
+        "x": 335,
+        "y": 211,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 301,
+        "y": 88,
+        "visible": true
+    },
+    // 13
+    {
+        "x": 288,
+        "y": 220,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 297,
+        "y": 235,
+        "visible": true
+    },
+    // 14
+    {
+        "x": 297,
+        "y": 208,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 243,
+        "y": 61,
+        "visible": true
+    },
+    // 15
+    {
+        "x": 247,
+        "y": 184,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 294,
+        "y": 310,
+        "visible": true
+    },
+    // 16
+    {
+        "x": 355,
+        "y": 337,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 412,
+        "y": 379,
+        "visible": true
+    },
+    // 17
+    {
+        "x": 414,
+        "y": 400,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 377,
+        "y": 371,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 353,
+        "y": 336,
+        "visible": true
+    },
+    // 18
+    {
+        "x": 666,
+        "y": 155,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 683,
+        "y": 155,
+        "visible": true
+    },
+    // 19
+    {
+        "x": 671,
+        "y": 176,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 454,
+        "y": 339,
+        "visible": true
+    },
+    // 20
+    {
+        "x": 650,
+        "y": 284,
+        "visible": true
+    },
+    // 21
+    {
+        "x": 450,
+        "y": 384,
+        "visible": true
+    },
+    // 22
+    {
+        "x": 617,
+        "y": 369,
+        "visible": true
+    },
+    // 23
+    {
+        "x": 405,
+        "y": 431,
+        "visible": true
+    },
+    // 24
+    {
+        "x": 396,
+        "y": 422,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 446,
+        "y": 426,
+        "visible": true
+    },
+    // 25
+    {
+        "x": 545,
+        "y": 564,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 580,
+        "y": 650,
+        "visible": true
+    },
+    // 26
+    {
+        "x": 534,
+        "y": 596,
+        "visible": true
+    },
+    // 27
+    {
+        "x": 552,
+        "y": 678,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 515,
+        "y": 612,
+        "visible": true
+    },
+    // 28
+    {
+        "x": 507,
+        "y": 685,
+        "visible": true
+    },
+    // 29
     {
         "x": 495,
-        "y": 645
-    }
+        "y": 630,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 475,
+        "y": 578,
+        "visible": false
+    },
+    // invisible
+    {
+        "x": 433,
+        "y": 544,
+        "visible": true
+    } // 30
 ];
+const treeDotsData = drawing1DotsData;
+const lockDotsData = drawing1DotsData;
 }),
 "[project]/components/companion-view.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
@@ -1408,17 +1912,73 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$treeDots$2e$ts__$5b$
 ;
 ;
 ;
-function CompanionView({ habit, dayRecords, onPatternChange, currentPattern = 'unicorn', onComplete, onMiss, onCanvasStateChange }) {
+// Available drawings configuration
+const availableDrawings = [
+    {
+        id: 'drawing1',
+        name: 'Drawing 1',
+        imagePath: '/images/Drawing 1.png',
+        data: __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$treeDots$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["drawing1DotsData"]
+    },
+    {
+        id: 'drawing2',
+        name: 'Drawing 2',
+        imagePath: '/images/Drawing 2.jpg',
+        data: __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$treeDots$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["drawing2DotsData"]
+    },
+    {
+        id: 'drawing3',
+        name: 'Drawing 3',
+        imagePath: '/images/Drawing 3.jpg',
+        data: __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$treeDots$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["drawing3DotsData"]
+    }
+];
+function CompanionView({ habit, dayRecords, onPatternChange, currentPattern = 'drawing1', onComplete, onMiss, onCanvasStateChange, onNextHabit, totalHabits = 1 }) {
     const [selectedIllustration, setSelectedIllustration] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(currentPattern);
-    // Always start with pattern selection screen, don't auto-show canvas
-    const [showCanvas, setShowCanvas] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [showBottomSheet, setShowBottomSheet] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [selectedDrawing, setSelectedDrawing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [showHabitTracker, setShowHabitTracker] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Use persisted drawing if habit has one locked, otherwise default
+    const [lockedDrawing, setLockedDrawing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(habit?.companionPattern || null);
+    // If we have a locked drawing for this habit, skip selection and go straight to tracker
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (lockedDrawing) {
+            setSelectedDrawing(lockedDrawing);
+            setShowHabitTracker(true);
+        }
+    }, [
+        lockedDrawing
+    ]);
+    // Check which images actually exist
+    const [existingDrawings, setExistingDrawings] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(availableDrawings);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        // Check which images exist by trying to load them
+        const checkImages = async ()=>{
+            const validDrawings = [];
+            for (const drawing of availableDrawings){
+                try {
+                    const img = new Image();
+                    await new Promise((resolve, reject)=>{
+                        img.onload = resolve;
+                        img.onerror = reject;
+                        img.src = drawing.imagePath;
+                    });
+                    validDrawings.push(drawing);
+                } catch (error) {
+                    console.log(`Image not found: ${drawing.imagePath}`);
+                }
+            }
+            setExistingDrawings(validDrawings);
+        };
+        checkImages();
+    }, []);
     // Notify parent when canvas state changes
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
         if (onCanvasStateChange) {
-            onCanvasStateChange(showCanvas);
+            onCanvasStateChange(showBottomSheet);
         }
     }, [
-        showCanvas,
+        showBottomSheet,
         onCanvasStateChange
     ]);
     // Calculate completion progress - count days where y value increased 
@@ -1437,175 +1997,326 @@ function CompanionView({ habit, dayRecords, onPatternChange, currentPattern = 'u
     }, [
         dayRecords
     ]);
-    // Update selectedIllustration when currentPattern prop changes
-    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>{
-        setSelectedIllustration(currentPattern);
-    }, [
-        currentPattern
-    ]);
-    const handlePatternChange = (pattern)=>{
-        setSelectedIllustration(pattern);
+    const handleDrawingSelect = (drawingId)=>{
+        setSelectedDrawing(drawingId);
+        setShowBottomSheet(true);
         if (onPatternChange) {
-            onPatternChange(pattern);
+            onPatternChange(drawingId);
         }
     };
-    const handleContinue = ()=>{
-        setShowCanvas(true);
+    const handleCloseBottomSheet = ()=>{
+        setShowBottomSheet(false);
+        setSelectedDrawing(null);
     };
-    // Show pattern selection screen
-    if (!showCanvas) {
+    const handleContinue = ()=>{
+        // Lock the selected drawing to this habit and persist it
+        if (selectedDrawing && onPatternChange) {
+            onPatternChange(selectedDrawing);
+            setLockedDrawing(selectedDrawing);
+        }
+        // Close the bottom sheet and show the habit tracker
+        setShowBottomSheet(false);
+        setShowHabitTracker(true);
+        if (onCanvasStateChange) {
+            onCanvasStateChange(true);
+        }
+    };
+    // Show habit tracking interface after Continue
+    if (showHabitTracker && selectedDrawing) {
+        const selectedDrawingData = existingDrawings.find((d)=>d.id === selectedDrawing);
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "flex flex-col space-y-4 p-4",
+            className: "flex flex-col h-full",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "bg-white rounded-lg p-4 border border-gray-200 mb-4",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                            className: "text-lg font-semibold text-center mb-4",
-                            children: "Choose Your Pattern"
+                    className: "flex-1 pt-2",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "w-full flex items-center justify-center",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "w-full max-w-[800px] aspect-square mx-auto",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ManualDotsCanvas$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ManualDotsCanvas"], {
+                                imagePath: selectedDrawingData?.imagePath || '',
+                                dotsData: selectedDrawingData?.data || [],
+                                completedDays: completedDays,
+                                imageWidth: 800,
+                                imageHeight: 800,
+                                imageOpacity: 0.30
+                            }, void 0, false, {
+                                fileName: "[project]/components/companion-view.tsx",
+                                lineNumber: 142,
+                                columnNumber: 15
+                            }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/companion-view.tsx",
-                            lineNumber: 70,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex gap-4",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    onClick: ()=>handlePatternChange('unicorn'),
-                                    className: `flex-1 p-4 rounded-lg border-2 transition-all ${selectedIllustration === 'unicorn' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'}`,
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "text-center",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "text-4xl mb-2",
-                                                children: "🦄"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/companion-view.tsx",
-                                                lineNumber: 74,
-                                                columnNumber: 17
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
-                                                className: "font-semibold",
-                                                children: "Unicorn"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/companion-view.tsx",
-                                                lineNumber: 75,
-                                                columnNumber: 17
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                className: "text-xs text-gray-600",
-                                                children: "60 dots journey"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/companion-view.tsx",
-                                                lineNumber: 76,
-                                                columnNumber: 17
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/components/companion-view.tsx",
-                                        lineNumber: 73,
-                                        columnNumber: 15
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/components/companion-view.tsx",
-                                    lineNumber: 72,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    onClick: ()=>handlePatternChange('lock'),
-                                    className: `flex-1 p-4 rounded-lg border-2 transition-all ${selectedIllustration === 'lock' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'}`,
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "text-center",
-                                        children: [
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                className: "text-4xl mb-2",
-                                                children: "🔒"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/companion-view.tsx",
-                                                lineNumber: 81,
-                                                columnNumber: 17
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
-                                                className: "font-semibold",
-                                                children: "Lock"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/companion-view.tsx",
-                                                lineNumber: 82,
-                                                columnNumber: 17
-                                            }, this),
-                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                                className: "text-xs text-gray-600",
-                                                children: "30 dots journey"
-                                            }, void 0, false, {
-                                                fileName: "[project]/components/companion-view.tsx",
-                                                lineNumber: 83,
-                                                columnNumber: 17
-                                            }, this)
-                                        ]
-                                    }, void 0, true, {
-                                        fileName: "[project]/components/companion-view.tsx",
-                                        lineNumber: 80,
-                                        columnNumber: 15
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/components/companion-view.tsx",
-                                    lineNumber: 79,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/components/companion-view.tsx",
-                            lineNumber: 71,
-                            columnNumber: 11
+                            lineNumber: 141,
+                            columnNumber: 13
                         }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/components/companion-view.tsx",
-                    lineNumber: 69,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "mt-4",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: handleContinue,
-                        className: "w-full bg-blue-500 text-white py-4 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-colors",
-                        children: "Continue"
                     }, void 0, false, {
                         fileName: "[project]/components/companion-view.tsx",
-                        lineNumber: 91,
+                        lineNumber: 140,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/companion-view.tsx",
-                    lineNumber: 90,
+                    lineNumber: 139,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "fixed bottom-8 left-0 right-0 bg-white p-4 z-10",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "max-w-sm mx-auto",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex gap-2 mb-3",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>{
+                                            if (onComplete) onComplete();
+                                        },
+                                        className: "flex-1 px-3 py-2.5 bg-green-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all active:scale-95 shadow-lg text-center text-sm flex items-center justify-center h-14 rounded-2xl",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "text-[15px] font-bold whitespace-nowrap",
+                                            children: "Completed Habit!"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/companion-view.tsx",
+                                            lineNumber: 154,
+                                            columnNumber: 17
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/companion-view.tsx",
+                                        lineNumber: 151,
+                                        columnNumber: 15
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>{
+                                            if (onMiss) onMiss();
+                                        },
+                                        className: "flex-1 px-3 py-2.5 bg-amber-100 hover:bg-amber-200 text-amber-700 font-semibold rounded-lg border border-amber-200 transition-all active:scale-95 text-center text-sm flex items-center justify-center h-14 rounded-2xl",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "text-[15px] font-bold",
+                                            children: "Missed Today"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/companion-view.tsx",
+                                            lineNumber: 159,
+                                            columnNumber: 17
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/companion-view.tsx",
+                                        lineNumber: 156,
+                                        columnNumber: 15
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/companion-view.tsx",
+                                lineNumber: 150,
+                                columnNumber: 13
+                            }, this),
+                            habit && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "w-full flex justify-between items-center text-sm font-semibold px-4",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        className: "text-muted-foreground/60 hover:text-muted-foreground/80 transition-colors",
+                                        children: "Want to give up?"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/companion-view.tsx",
+                                        lineNumber: 165,
+                                        columnNumber: 17
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>onNextHabit && totalHabits > 1 && onNextHabit(),
+                                        className: `flex items-center transition-colors ${totalHabits > 1 ? 'text-foreground/80 hover:text-foreground cursor-pointer' : 'text-muted-foreground/60 cursor-not-allowed'}`,
+                                        disabled: totalHabits <= 1,
+                                        children: [
+                                            "Next habit",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                className: "w-4 h-4 ml-1",
+                                                fill: "none",
+                                                stroke: "currentColor",
+                                                viewBox: "0 0 24 24",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                    strokeLinecap: "round",
+                                                    strokeLinejoin: "round",
+                                                    strokeWidth: "2",
+                                                    d: "M9 5l7 7-7 7"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/companion-view.tsx",
+                                                    lineNumber: 171,
+                                                    columnNumber: 21
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/companion-view.tsx",
+                                                lineNumber: 170,
+                                                columnNumber: 19
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/companion-view.tsx",
+                                        lineNumber: 168,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/companion-view.tsx",
+                                lineNumber: 164,
+                                columnNumber: 23
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/companion-view.tsx",
+                        lineNumber: 149,
+                        columnNumber: 11
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/components/companion-view.tsx",
+                    lineNumber: 148,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/components/companion-view.tsx",
-            lineNumber: 67,
+            lineNumber: 137,
             columnNumber: 12
         }, this);
     }
-    // Show dotted canvas screen (after Continue is clicked)
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "bg-white rounded-lg p-4 shadow-sm border border-gray-200 max-w-sm mx-auto",
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ManualDotsCanvas$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ManualDotsCanvas"], {
-            imagePath: selectedIllustration === 'lock' ? "/illustrations/Lock.jpg" : "/illustrations/ghoda.png",
-            dotsData: selectedIllustration === 'lock' ? __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$treeDots$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["lockDotsData"] : __TURBOPACK__imported__module__$5b$project$5d2f$data$2f$treeDots$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["unicornDotsData"],
-            completedDays: completedDays,
-            imageWidth: 800,
-            imageHeight: 800,
-            imageOpacity: 0.35
+    // Show bottom sheet with canvas
+    if (showBottomSheet && selectedDrawing) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "fixed inset-0 z-50 flex items-end",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "bg-white rounded-t-2xl w-full max-h-[90vh] overflow-hidden",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex justify-between items-center p-4 border-b border-gray-200",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                className: "text-lg font-semibold",
+                                children: existingDrawings.find((d)=>d.id === selectedDrawing)?.name || 'Drawing'
+                            }, void 0, false, {
+                                fileName: "[project]/components/companion-view.tsx",
+                                lineNumber: 186,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: handleCloseBottomSheet,
+                                className: "w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors",
+                                children: "✕"
+                            }, void 0, false, {
+                                fileName: "[project]/components/companion-view.tsx",
+                                lineNumber: 189,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/companion-view.tsx",
+                        lineNumber: 185,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "p-4 flex justify-center bg-white",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "w-full max-w-[800px] aspect-square",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ManualDotsCanvas$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ManualDotsCanvas"], {
+                                imagePath: existingDrawings.find((d)=>d.id === selectedDrawing)?.imagePath || '',
+                                dotsData: existingDrawings.find((d)=>d.id === selectedDrawing)?.data || [],
+                                completedDays: completedDays,
+                                imageWidth: 800,
+                                imageHeight: 800,
+                                imageOpacity: 0.30
+                            }, void 0, false, {
+                                fileName: "[project]/components/companion-view.tsx",
+                                lineNumber: 197,
+                                columnNumber: 15
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/components/companion-view.tsx",
+                            lineNumber: 196,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/components/companion-view.tsx",
+                        lineNumber: 195,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "p-4 bg-white",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: handleContinue,
+                            className: "w-full bg-blue-500 text-white py-4 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-colors",
+                            children: "Continue"
+                        }, void 0, false, {
+                            fileName: "[project]/components/companion-view.tsx",
+                            lineNumber: 203,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/components/companion-view.tsx",
+                        lineNumber: 202,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/companion-view.tsx",
+                lineNumber: 183,
+                columnNumber: 9
+            }, this)
         }, void 0, false, {
             fileName: "[project]/components/companion-view.tsx",
-            lineNumber: 100,
+            lineNumber: 182,
+            columnNumber: 12
+        }, this);
+    }
+    // Show main selection screen
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "flex flex-col space-y-4 px-2",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "bg-white rounded-lg p-6 border border-gray-200 mb-4 mx-2",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                    className: "text-lg font-semibold text-center mb-6",
+                    children: "Choose your drawing"
+                }, void 0, false, {
+                    fileName: "[project]/components/companion-view.tsx",
+                    lineNumber: 215,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "grid grid-cols-3 gap-6",
+                    children: existingDrawings.map((drawing)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            onClick: ()=>handleDrawingSelect(drawing.id),
+                            className: "py-6 px-3 rounded-lg border-2 border-gray-200 bg-gray-50 hover:border-blue-500 hover:bg-blue-50 transition-all min-h-[80px] flex items-center justify-center",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "text-center",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                    className: "font-semibold text-sm leading-tight",
+                                    children: drawing.name
+                                }, void 0, false, {
+                                    fileName: "[project]/components/companion-view.tsx",
+                                    lineNumber: 219,
+                                    columnNumber: 17
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/components/companion-view.tsx",
+                                lineNumber: 218,
+                                columnNumber: 15
+                            }, this)
+                        }, drawing.id, false, {
+                            fileName: "[project]/components/companion-view.tsx",
+                            lineNumber: 217,
+                            columnNumber: 44
+                        }, this))
+                }, void 0, false, {
+                    fileName: "[project]/components/companion-view.tsx",
+                    lineNumber: 216,
+                    columnNumber: 9
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/components/companion-view.tsx",
+            lineNumber: 214,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/companion-view.tsx",
-        lineNumber: 99,
+        lineNumber: 212,
         columnNumber: 10
     }, this);
 }
@@ -1630,14 +2341,14 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$companion$2d$v
 ;
 ;
 ;
-function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNewHabitMode, onUpdateHabit, onViewChange }) {
+function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNewHabitMode, onUpdateHabit, onViewChange, onShowLoggedMsg, onNextHabit, dailyInteractions = {}, setDailyInteractions, totalHabits = 1 }) {
     const [dayRecords, setDayRecords] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [isSaved, setIsSaved] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [showViewDropdown, setShowViewDropdown] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     const [currentView, setCurrentView] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(habit?.preferredView || 'chart');
     const [hasUsedCalendar, setHasUsedCalendar] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [companionPattern, setCompanionPattern] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(habit?.companionPattern || 'unicorn');
+    const [companionPattern, setCompanionPattern] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(habit?.companionPattern || 'drawing1');
     const [showPatternSelection, setShowPatternSelection] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(!habit?.companionPattern);
     const [isCompanionCanvasShowing, setIsCompanionCanvasShowing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
     // Auto-select pattern based on existing progress when switching to companion view
@@ -1707,6 +2418,20 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
         isSaved
     ]);
     const handleLetGo = ()=>{
+        if (!habit) return;
+        const today = new Date().toDateString();
+        const habitId = habit.id;
+        const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
+        // If this is the second or more interaction today, just show message
+        if (todayInteractions >= 1) {
+            onShowLoggedMsg?.('logged');
+            return;
+        }
+        // First interaction - update state and increment counter
+        setDailyInteractions?.({
+            ...dailyInteractions,
+            [`${habitId}-${today}`]: todayInteractions + 1
+        });
         setDayRecords((prev)=>{
             const lastRecord = prev[prev.length - 1];
             if (!lastRecord) {
@@ -1723,7 +2448,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
             let maxDots, maxY;
             if (currentView === 'companion') {
                 // Companion view: dynamic limit based on pattern
-                maxDots = companionPattern === 'lock' ? 30 : 60;
+                maxDots = 30; // Always use lock pattern (30 dots)
                 maxY = maxDots;
             } else {
                 // Chart/Calendar view: always 30x30 grid
@@ -1755,8 +2480,8 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
             }
             const newX = lastRecord.x + 1;
             const newY = Math.max(0, lastRecord.y - 1);
-            // Dynamic limit based on companion pattern - lock: 30 dots, unicorn: 60 dots  
-            const maxDots = currentView === 'companion' && companionPattern === 'lock' ? 30 : 60;
+            // Always use lock pattern - 30 dots  
+            const maxDots = 30;
             if (newX <= maxDots) {
                 return [
                     ...prev,
@@ -1784,21 +2509,42 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
         setShowDeleteConfirmation(false);
     };
     const handleHabitMissed = ()=>{
-        // Only track missed habits if habit tracking has already started
+        if (!habit) return;
+        // If habit hasn't started yet (no records), show "not started" message
         if (dayRecords.length === 0) {
-            // Don't start habit tracking on missed click - only on Let's Go
+            onShowLoggedMsg?.('not-started');
             return;
         }
+        const today = new Date().toDateString();
+        const habitId = habit.id;
+        const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
+        // If this is the second or more interaction today, just show message
+        if (todayInteractions >= 1) {
+            onShowLoggedMsg?.('logged');
+            return;
+        }
+        // First interaction - update state and increment counter
+        setDailyInteractions?.({
+            ...dailyInteractions,
+            [`${habitId}-${today}`]: todayInteractions + 1
+        });
         setDayRecords((prev)=>{
             const lastRecord = prev[prev.length - 1];
-            // Missed habit: x increases (day advances) and y DECREASES (goes down)
-            // This creates the red dot below the previous position
+            // For Day 2 missed: create dot at X=2, Y=1 (next to Day 1 green circle)
+            // For subsequent days: follow previous miss logic
             const newX = lastRecord.x + 1;
-            const newY = Math.max(0, lastRecord.y - 1); // Decrease Y by 1, minimum 0
+            let newY;
+            if (newX === 2 && lastRecord.y > 0) {
+                // Day 2 miss: set Y to 1 to appear next to Day 1 green circle
+                newY = 1;
+            } else {
+                // Regular miss logic: decrease Y by 1, minimum 0
+                newY = Math.max(0, lastRecord.y - 1);
+            }
             // Set limits based on view type
             let maxDays;
             if (currentView === 'companion') {
-                maxDays = companionPattern === 'lock' ? 30 : 60;
+                maxDays = 30; // Always use lock pattern (30 dots)
             } else {
                 maxDays = 30; // Chart/Calendar view limit
             }
@@ -1824,7 +2570,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
             }
         }, void 0, false, {
             fileName: "[project]/components/habit-tracker.tsx",
-            lineNumber: 192,
+            lineNumber: 245,
             columnNumber: 12
         }, this);
     }
@@ -1840,7 +2586,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "No Habits Yet"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 202,
+                        lineNumber: 255,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1848,7 +2594,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "You haven't created any habits yet. Start your journey by creating your first habit!"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 203,
+                        lineNumber: 256,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1860,18 +2606,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "Create Your First Habit"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 206,
+                        lineNumber: 259,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/habit-tracker.tsx",
-                lineNumber: 201,
+                lineNumber: 254,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/habit-tracker.tsx",
-            lineNumber: 200,
+            lineNumber: 253,
             columnNumber: 12
         }, this);
     }
@@ -1899,7 +2645,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 224,
+                                        lineNumber: 277,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -1912,18 +2658,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             clipRule: "evenodd"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 226,
+                                            lineNumber: 279,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 225,
+                                        lineNumber: 278,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 220,
+                                lineNumber: 273,
                                 columnNumber: 15
                             }, this),
                             showViewDropdown && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1943,7 +2689,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Chart View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 232,
+                                            lineNumber: 285,
                                             columnNumber: 49
                                         }, this),
                                         currentView !== 'calendar' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1957,7 +2703,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Calendar View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 239,
+                                            lineNumber: 292,
                                             columnNumber: 52
                                         }, this),
                                         currentView !== 'companion' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1972,29 +2718,29 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Companion View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 246,
+                                            lineNumber: 299,
                                             columnNumber: 53
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/habit-tracker.tsx",
-                                    lineNumber: 231,
+                                    lineNumber: 284,
                                     columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 230,
+                                lineNumber: 283,
                                 columnNumber: 36
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 219,
+                        lineNumber: 272,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 218,
+                    lineNumber: 271,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2006,12 +2752,12 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 dayRecords: dayRecords
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 262,
+                                lineNumber: 315,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 261,
+                            lineNumber: 314,
                             columnNumber: 41
                         }, this),
                         currentView === 'calendar' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2021,12 +2767,12 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 habitStartDate: habit.createdAt
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 265,
+                                lineNumber: 318,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 264,
+                            lineNumber: 317,
                             columnNumber: 44
                         }, this),
                         currentView === 'companion' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2044,21 +2790,23 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 currentPattern: companionPattern,
                                 onComplete: handleLetGo,
                                 onMiss: handleHabitMissed,
-                                onCanvasStateChange: setIsCompanionCanvasShowing
+                                onCanvasStateChange: setIsCompanionCanvasShowing,
+                                onNextHabit: onNextHabit,
+                                totalHabits: totalHabits
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 268,
+                                lineNumber: 321,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 267,
+                            lineNumber: 320,
                             columnNumber: 45
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 260,
+                    lineNumber: 313,
                     columnNumber: 11
                 }, this),
                 (currentView === 'chart' || currentView === 'calendar' || currentView === 'companion' && isCompanionCanvasShowing) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2072,21 +2820,17 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         onClick: handleLetGo,
                                         className: "flex-1 px-3 py-2.5 bg-green-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all active:scale-95 shadow-lg text-center text-sm flex items-center justify-center h-14 rounded-2xl",
-                                        style: {
-                                            backgroundColor: '#10B981',
-                                            boxShadow: '0 10px 25px -5px rgba(16, 185, 129, 0.3)'
-                                        },
                                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                             className: "text-[15px] font-bold whitespace-nowrap",
                                             children: "Completed Habit!"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 286,
+                                            lineNumber: 336,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 282,
+                                        lineNumber: 335,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2097,45 +2841,79 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Missed Today"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 289,
+                                            lineNumber: 339,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 288,
+                                        lineNumber: 338,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 281,
+                                lineNumber: 334,
                                 columnNumber: 17
                             }, this),
-                            dayRecords.length > 0 && dayRecords[dayRecords.length - 1]?.y > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "w-full text-center text-sm font-semibold",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    onClick: handleGiveUpClick,
-                                    className: "underline text-foreground hover:text-muted-foreground transition-colors",
-                                    children: "Want to give up"
-                                }, void 0, false, {
-                                    fileName: "[project]/components/habit-tracker.tsx",
-                                    lineNumber: 295,
-                                    columnNumber: 21
-                                }, this)
-                            }, void 0, false, {
+                            habit && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "w-full flex justify-between items-center text-sm font-semibold px-4",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: handleGiveUpClick,
+                                        className: "text-muted-foreground/60 hover:text-muted-foreground/80 transition-colors",
+                                        children: "Want to give up?"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/habit-tracker.tsx",
+                                        lineNumber: 345,
+                                        columnNumber: 21
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>totalHabits > 1 && onNextHabit?.(),
+                                        className: `flex items-center transition-colors ${totalHabits > 1 ? 'text-foreground/80 hover:text-foreground cursor-pointer' : 'text-muted-foreground/60 cursor-not-allowed'}`,
+                                        disabled: totalHabits <= 1,
+                                        children: [
+                                            "Next habit",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                className: "w-4 h-4 ml-1",
+                                                fill: "none",
+                                                stroke: "currentColor",
+                                                viewBox: "0 0 24 24",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                    strokeLinecap: "round",
+                                                    strokeLinejoin: "round",
+                                                    strokeWidth: "2",
+                                                    d: "M9 5l7 7-7 7"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/habit-tracker.tsx",
+                                                    lineNumber: 351,
+                                                    columnNumber: 25
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/habit-tracker.tsx",
+                                                lineNumber: 350,
+                                                columnNumber: 23
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/habit-tracker.tsx",
+                                        lineNumber: 348,
+                                        columnNumber: 21
+                                    }, this)
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 294,
-                                columnNumber: 87
+                                lineNumber: 344,
+                                columnNumber: 27
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 280,
+                        lineNumber: 333,
                         columnNumber: 15
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 279,
+                    lineNumber: 332,
                     columnNumber: 130
                 }, this),
                 showDeleteConfirmation && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2148,7 +2926,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 children: "Do you really don't want to continue?"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 305,
+                                lineNumber: 361,
                                 columnNumber: 17
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2160,7 +2938,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "Yes"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 309,
+                                        lineNumber: 365,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2169,31 +2947,31 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "No"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 312,
+                                        lineNumber: 368,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 308,
+                                lineNumber: 364,
                                 columnNumber: 17
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 304,
+                        lineNumber: 360,
                         columnNumber: 15
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 303,
+                    lineNumber: 359,
                     columnNumber: 38
                 }, this)
             ]
         }, void 0, true)
     }, void 0, false, {
         fileName: "[project]/components/habit-tracker.tsx",
-        lineNumber: 215,
+        lineNumber: 268,
         columnNumber: 10
     }, this);
 }
@@ -4984,6 +5762,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$splash$2d$scre
 ;
 ;
 function Page() {
+    const [showLoggedMsg, setShowLoggedMsg] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [messageType, setMessageType] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])('logged');
+    const [dailyInteractions, setDailyInteractions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])({});
     const [habits, setHabits] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])([]);
     const [currentHabitIndex, setCurrentHabitIndex] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(0);
     const [isLoaded, setIsLoaded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -5276,7 +6057,7 @@ function Page() {
         isLoaded,
         user
     ]);
-    const addHabit = (name, person)=>{
+    const addHabit = async (name, person)=>{
         const currentMonthYear = new Date().toISOString().slice(0, 7);
         const newHabit = {
             id: Date.now().toString(),
@@ -5291,12 +6072,51 @@ function Page() {
             newHabit
         ]);
         setCurrentHabitIndex(habits.length);
+        // Track habit creation in Supabase
+        if (user) {
+            try {
+                await fetch('/api/track-habit-created', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: user.email,
+                        habitName: name,
+                        habitCreatedAt: new Date().toISOString()
+                    })
+                });
+            } catch (error) {
+                console.warn('Failed to track habit creation:', error);
+            }
+        }
     };
-    const updateHabitRecords = (habitId, dayRecords)=>{
+    const updateHabitRecords = async (habitId, dayRecords)=>{
+        const habit = habits.find((h)=>h.id === habitId);
+        const hadNoRecords = habit && habit.dayRecords.length === 0;
+        const hasRecordsNow = dayRecords.length > 0;
         setHabits(habits.map((habit)=>habit.id === habitId ? {
                 ...habit,
                 dayRecords
             } : habit));
+        // Track habit start (first time logging) in Supabase
+        if (hadNoRecords && hasRecordsNow && user && habit) {
+            try {
+                await fetch('/api/track-habit-started', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: user.email,
+                        habitName: habit.name,
+                        habitStartedAt: new Date().toISOString()
+                    })
+                });
+            } catch (error) {
+                console.warn('Failed to track habit start:', error);
+            }
+        }
     };
     const updateHabit = (habitId, updatedFields)=>{
         setHabits(habits.map((habit)=>habit.id === habitId ? {
@@ -5337,7 +6157,7 @@ function Page() {
                         className: "animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 319,
+                        lineNumber: 365,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -5345,18 +6165,18 @@ function Page() {
                         children: "Loading your habits..."
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 320,
+                        lineNumber: 366,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 318,
+                lineNumber: 364,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 317,
+            lineNumber: 363,
             columnNumber: 12
         }, this);
     }
@@ -5368,12 +6188,12 @@ function Page() {
                 onContinue: ()=>setShowSplashScreen(false)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 328,
+                lineNumber: 374,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 327,
+            lineNumber: 373,
             columnNumber: 12
         }, this);
     }
@@ -5386,12 +6206,12 @@ function Page() {
                 onBack: ()=>setShowSplashScreen(true)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 335,
+                lineNumber: 381,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 334,
+            lineNumber: 380,
             columnNumber: 12
         }, this);
     }
@@ -5425,12 +6245,12 @@ function Page() {
                 }
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 342,
+                lineNumber: 388,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 341,
+            lineNumber: 387,
             columnNumber: 12
         }, this);
     }
@@ -5450,17 +6270,17 @@ function Page() {
                     onBack: ()=>setCustomHabitType(null)
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 370,
+                    lineNumber: 416,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 369,
+                lineNumber: 415,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 368,
+            lineNumber: 414,
             columnNumber: 12
         }, this);
     }
@@ -5541,7 +6361,7 @@ function Page() {
                     }
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 380,
+                    lineNumber: 426,
                     columnNumber: 31
                 }, this) : habits.length === 0 || currentHabitIndex === habits.length ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$habit$2d$tracker$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
                     habit: null,
@@ -5550,10 +6370,22 @@ function Page() {
                     onDeleteHabit: ()=>{},
                     onUpdateHabit: ()=>{},
                     onViewChange: setCurrentView,
-                    isNewHabitMode: true
+                    isNewHabitMode: true,
+                    onShowLoggedMsg: (type)=>{
+                        setMessageType(type);
+                        setShowLoggedMsg(true);
+                        setTimeout(()=>setShowLoggedMsg(false), 3000);
+                    },
+                    onNextHabit: ()=>{
+                        const nextIndex = currentHabitIndex < habits.length - 1 ? currentHabitIndex + 1 : 0;
+                        setCurrentHabitIndex(nextIndex);
+                    },
+                    dailyInteractions: dailyInteractions,
+                    setDailyInteractions: setDailyInteractions,
+                    totalHabits: habits.length
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 436,
+                    lineNumber: 482,
                     columnNumber: 76
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
                     children: [
@@ -5586,17 +6418,17 @@ function Page() {
                                             d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 448,
+                                            lineNumber: 501,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 447,
+                                        lineNumber: 500,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 446,
+                                    lineNumber: 499,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5610,33 +6442,112 @@ function Page() {
                                             children: getHabitNameFromKey(habits[currentHabitIndex]?.name) || habits[currentHabitIndex]?.name
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 452,
+                                            lineNumber: 505,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "text-xs text-muted-foreground",
-                                            children: [
-                                                "Created: ",
-                                                new Date(habits[currentHabitIndex]?.createdAt || '').toLocaleDateString('en-US', {
-                                                    month: 'short',
-                                                    day: 'numeric',
-                                                    year: 'numeric'
-                                                })
-                                            ]
-                                        }, void 0, true, {
+                                            className: "text-xs text-muted-foreground h-6 flex items-center",
+                                            children: showLoggedMsg ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: `inline-flex items-center px-3 py-1 rounded-full border font-semibold text-xs animate-fade-in h-6 ${messageType === 'logged' ? 'border-green-600 bg-green-100 text-green-700' : messageType === 'not-started' ? 'border-amber-600 bg-amber-100 text-amber-700' : 'border-blue-600 bg-blue-100 text-blue-700'}`,
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                        className: `w-4 h-4 mr-1 ${messageType === 'logged' ? 'text-green-600' : messageType === 'not-started' ? 'text-amber-600' : 'text-blue-600'}`,
+                                                        fill: "none",
+                                                        stroke: "currentColor",
+                                                        viewBox: "0 0 24 24",
+                                                        children: messageType === 'logged' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                                                                    cx: "12",
+                                                                    cy: "12",
+                                                                    r: "10",
+                                                                    stroke: "currentColor",
+                                                                    strokeWidth: "2",
+                                                                    fill: "white"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/page.tsx",
+                                                                    lineNumber: 514,
+                                                                    columnNumber: 29
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                                    strokeLinecap: "round",
+                                                                    strokeLinejoin: "round",
+                                                                    strokeWidth: "2",
+                                                                    d: "M9 12l2 2 4-4",
+                                                                    stroke: messageType === 'logged' ? 'green' : 'currentColor'
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/page.tsx",
+                                                                    lineNumber: 515,
+                                                                    columnNumber: 29
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true) : messageType === 'not-started' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                            strokeLinecap: "round",
+                                                            strokeLinejoin: "round",
+                                                            strokeWidth: "2",
+                                                            d: "M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/page.tsx",
+                                                            lineNumber: 516,
+                                                            columnNumber: 65
+                                                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                            strokeLinecap: "round",
+                                                            strokeLinejoin: "round",
+                                                            strokeWidth: "2",
+                                                            d: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/page.tsx",
+                                                            lineNumber: 516,
+                                                            columnNumber: 191
+                                                        }, this)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/page.tsx",
+                                                        lineNumber: 512,
+                                                        columnNumber: 23
+                                                    }, this),
+                                                    messageType === 'logged' ? 'LOGGED FOR TODAY!' : messageType === 'not-started' ? 'HABIT NOT STARTED YET' : '3-HABIT LIMIT REACHED'
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/page.tsx",
+                                                lineNumber: 511,
+                                                columnNumber: 36
+                                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: "h-6 flex items-center",
+                                                children: [
+                                                    "Created: ",
+                                                    new Date(habits[currentHabitIndex]?.createdAt || '').toLocaleDateString('en-US', {
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                        year: 'numeric'
+                                                    })
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/page.tsx",
+                                                lineNumber: 519,
+                                                columnNumber: 31
+                                            }, this)
+                                        }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 457,
+                                            lineNumber: 510,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 451,
+                                    lineNumber: 504,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    onClick: ()=>setShowHabitSelection(true),
-                                    className: "bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity px-3 py-2",
+                                    onClick: ()=>{
+                                        if (habits.length >= 3) {
+                                            setMessageType('limit-reached');
+                                            setShowLoggedMsg(true);
+                                            setTimeout(()=>setShowLoggedMsg(false), 3000);
+                                        } else {
+                                            setShowHabitSelection(true);
+                                        }
+                                    },
+                                    className: `bg-primary text-primary-foreground font-semibold rounded text-xs transition-opacity px-3 py-2 ${habits.length >= 3 ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}`,
                                     title: "Add new habit",
                                     style: {
                                         minWidth: '60px',
@@ -5645,13 +6556,13 @@ function Page() {
                                     children: "+ Add"
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 465,
+                                    lineNumber: 526,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 437,
+                            lineNumber: 490,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5667,7 +6578,7 @@ function Page() {
                                                 children: "Successful"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 477,
+                                                lineNumber: 546,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5698,20 +6609,20 @@ function Page() {
                                                         // Chart and Calendar views always show /30 constant
                                                         return `${completed}/30`;
                                                     } else {
-                                                        // Companion view shows pattern-based limit: lock=30, unicorn=60
-                                                        const maxDots = habit?.companionPattern === 'lock' ? 30 : 60;
+                                                        // Companion view always shows 30 dots (lock pattern only)
+                                                        const maxDots = 30;
                                                         return `${completed}/${maxDots}`;
                                                     }
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 478,
+                                                lineNumber: 547,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 476,
+                                        lineNumber: 545,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5722,7 +6633,7 @@ function Page() {
                                                 children: "Missed"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 515,
+                                                lineNumber: 584,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5746,13 +6657,13 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 516,
+                                                lineNumber: 585,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 514,
+                                        lineNumber: 583,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5763,7 +6674,7 @@ function Page() {
                                                 children: "Consistency"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 538,
+                                                lineNumber: 607,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5798,24 +6709,24 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 539,
+                                                lineNumber: 608,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 537,
+                                        lineNumber: 606,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 475,
+                                lineNumber: 544,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 474,
+                            lineNumber: 543,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5827,15 +6738,27 @@ function Page() {
                                 onDeleteHabit: ()=>deleteHabit(habits[currentHabitIndex].id),
                                 onUpdateHabit: (updatedFields)=>updateHabit(habits[currentHabitIndex].id, updatedFields),
                                 onViewChange: setCurrentView,
-                                isNewHabitMode: false
+                                isNewHabitMode: false,
+                                onShowLoggedMsg: (type)=>{
+                                    setMessageType(type);
+                                    setShowLoggedMsg(true);
+                                    setTimeout(()=>setShowLoggedMsg(false), 3000);
+                                },
+                                onNextHabit: ()=>{
+                                    const nextIndex = currentHabitIndex < habits.length - 1 ? currentHabitIndex + 1 : 0;
+                                    setCurrentHabitIndex(nextIndex);
+                                },
+                                dailyInteractions: dailyInteractions,
+                                setDailyInteractions: setDailyInteractions,
+                                totalHabits: habits.length
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 577,
+                                lineNumber: 646,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 576,
+                            lineNumber: 645,
                             columnNumber: 13
                         }, this)
                     ]
@@ -5848,7 +6771,7 @@ function Page() {
                             onClick: ()=>setShowProfileDrawer(false)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 585,
+                            lineNumber: 661,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5864,7 +6787,7 @@ function Page() {
                                                 children: "Profile"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 591,
+                                                lineNumber: 667,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5882,23 +6805,23 @@ function Page() {
                                                         d: "M6 18L18 6M6 6l12 12"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 594,
+                                                        lineNumber: 670,
                                                         columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 593,
+                                                    lineNumber: 669,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 592,
+                                                lineNumber: 668,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 590,
+                                        lineNumber: 666,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5921,17 +6844,17 @@ function Page() {
                                                                 d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 604,
+                                                                lineNumber: 680,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/page.tsx",
-                                                            lineNumber: 603,
+                                                            lineNumber: 679,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 602,
+                                                        lineNumber: 678,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5941,7 +6864,7 @@ function Page() {
                                                                 children: user?.username || 'User'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 608,
+                                                                lineNumber: 684,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5949,19 +6872,19 @@ function Page() {
                                                                 children: user?.email || 'user@example.com'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 611,
+                                                                lineNumber: 687,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 607,
+                                                        lineNumber: 683,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 601,
+                                                lineNumber: 677,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5972,7 +6895,7 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 617,
+                                                lineNumber: 693,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5983,13 +6906,13 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 621,
+                                                lineNumber: 697,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 600,
+                                        lineNumber: 676,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6003,7 +6926,7 @@ function Page() {
                                                     children: "Log out"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 629,
+                                                    lineNumber: 705,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6011,35 +6934,35 @@ function Page() {
                                                     children: "Sign out of your account"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 630,
+                                                    lineNumber: 706,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 628,
+                                            lineNumber: 704,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 627,
+                                        lineNumber: 703,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 589,
+                                lineNumber: 665,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 588,
+                            lineNumber: 664,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 583,
+                    lineNumber: 659,
                     columnNumber: 31
                 }, this),
                 showLogoutConfirmation && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6052,7 +6975,7 @@ function Page() {
                                 children: "Do you want to log out?"
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 640,
+                                lineNumber: 716,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6075,7 +6998,7 @@ function Page() {
                                         children: "Yes"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 644,
+                                        lineNumber: 720,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -6084,35 +7007,35 @@ function Page() {
                                         children: "No"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 658,
+                                        lineNumber: 734,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 643,
+                                lineNumber: 719,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 639,
+                        lineNumber: 715,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 638,
+                    lineNumber: 714,
                     columnNumber: 36
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 379,
+            lineNumber: 425,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/page.tsx",
-        lineNumber: 378,
+        lineNumber: 424,
         columnNumber: 10
     }, this);
 }

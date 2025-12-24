@@ -126,9 +126,9 @@ function HabitGrid({ dayRecords }) {
             const points = [];
             dayRecords.forEach({
                 "HabitGrid.useMemo[linePath]": (record)=>{
-                    // Use the exact same positioning as the diagonal line and circles
-                    const x = record.x * spacing - spacing / 2 + 8;
-                    const y = (gridSize - record.y + 1) * spacing - spacing / 2 + 8;
+                    // Account for container padding (p-1 = 4px)
+                    const x = record.x * spacing - spacing / 2 + 4;
+                    const y = (gridSize - record.y + 1) * spacing - spacing / 2 + 4;
                     points.push(`${x},${y}`);
                 }
             }["HabitGrid.useMemo[linePath]"]);
@@ -197,10 +197,10 @@ function HabitGrid({ dayRecords }) {
                             className: "absolute inset-0 pointer-events-none",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
-                                    x1: 1 * spacing - spacing / 2 + 8,
-                                    y1: (gridSize - 1 + 1) * spacing - spacing / 2 + 8,
-                                    x2: 30 * spacing - spacing / 2 + 8,
-                                    y2: (gridSize - 30 + 1) * spacing - spacing / 2 + 8,
+                                    x1: 1 * spacing - spacing / 2 + 4,
+                                    y1: (gridSize - 1 + 1) * spacing - spacing / 2 + 4,
+                                    x2: 30 * spacing - spacing / 2 + 4,
+                                    y2: (gridSize - 30 + 1) * spacing - spacing / 2 + 4,
                                     stroke: "black",
                                     strokeWidth: "1"
                                 }, void 0, false, {
@@ -493,8 +493,8 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
             calendarDays.push(/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: `w-10 h-10 flex items-center justify-center text-sm font-medium relative ${isToday ? 'ring-1 ring-blue-400' : ''}`,
                 style: {
-                    backgroundColor: status === 'inactive' ? '#f3f4f6' : status === 'completed' ? '#22c55e' : '#ffffff',
-                    color: status === 'inactive' ? '#9ca3af' : status === 'completed' ? '#ffffff' : '#374151',
+                    backgroundColor: status === 'inactive' ? '#f3f4f6' : status === 'completed' ? '#22c55e' : status === 'missed' ? '#ef4444' : '#ffffff',
+                    color: status === 'inactive' ? '#9ca3af' : status === 'completed' || status === 'missed' ? '#ffffff' : '#374151',
                     border: '1px solid #e5e7eb',
                     borderRadius: '2px'
                 },
@@ -518,31 +518,17 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                         lineNumber: 89,
                         columnNumber: 38
                     }, this),
-                    status === 'missed' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "absolute inset-0 rounded-sm",
-                                style: {
-                                    backgroundColor: 'rgba(239, 68, 68, 0.15)'
-                                }
-                            }, void 0, false, {
-                                fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 96,
-                                columnNumber: 15
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                className: "absolute top-1 right-1 w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-bold",
-                                style: {
-                                    backgroundColor: '#ef4444'
-                                },
-                                children: "✗"
-                            }, void 0, false, {
-                                fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 99,
-                                columnNumber: 15
-                            }, this)
-                        ]
-                    }, void 0, true)
+                    status === 'missed' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "absolute top-0.5 right-0.5 text-white text-xs leading-none",
+                        style: {
+                            fontSize: '10px'
+                        },
+                        children: "✕"
+                    }, void 0, false, {
+                        fileName: "[project]/components/habit-calendar.tsx",
+                        lineNumber: 95,
+                        columnNumber: 35
+                    }, this)
                 ]
             }, day, true, {
                 fileName: "[project]/components/habit-calendar.tsx",
@@ -598,13 +584,13 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                         children: "←"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 149,
+                        lineNumber: 144,
                         columnNumber: 30
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-8 h-8"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 151,
+                        lineNumber: 146,
                         columnNumber: 23
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -612,7 +598,7 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                         children: monthNames[viewingMonth]
                     }, void 0, false, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 153,
+                        lineNumber: 148,
                         columnNumber: 9
                     }, this),
                     canNavigateNext() ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -621,19 +607,19 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                         children: "→"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 157,
+                        lineNumber: 152,
                         columnNumber: 30
                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "w-8 h-8"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 159,
+                        lineNumber: 154,
                         columnNumber: 23
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/habit-calendar.tsx",
-                lineNumber: 148,
+                lineNumber: 143,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -652,14 +638,14 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                             children: day
                         }, day, false, {
                             fileName: "[project]/components/habit-calendar.tsx",
-                            lineNumber: 165,
+                            lineNumber: 160,
                             columnNumber: 66
                         }, this)),
                     generateMonthCalendar()
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/habit-calendar.tsx",
-                lineNumber: 163,
+                lineNumber: 158,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -675,20 +661,20 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                                 }
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 176,
+                                lineNumber: 171,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "Inactive"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 179,
+                                lineNumber: 174,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 175,
+                        lineNumber: 170,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -699,20 +685,20 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                                 children: "✓"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 182,
+                                lineNumber: 177,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "Done"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 183,
+                                lineNumber: 178,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 181,
+                        lineNumber: 176,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -723,32 +709,32 @@ function HabitCalendar({ dayRecords, habitStartDate }) {
                                 children: "✗"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 186,
+                                lineNumber: 181,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                 children: "Missed"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-calendar.tsx",
-                                lineNumber: 187,
+                                lineNumber: 182,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-calendar.tsx",
-                        lineNumber: 185,
+                        lineNumber: 180,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/habit-calendar.tsx",
-                lineNumber: 174,
+                lineNumber: 169,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/components/habit-calendar.tsx",
-        lineNumber: 146,
+        lineNumber: 141,
         columnNumber: 10
     }, this);
 }
@@ -760,528 +746,363 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
-"[project]/data/treeDots.ts [app-client] (ecmascript)", ((__turbopack_context__) => {
+"[project]/components/ManualDotsCanvas.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
-    "lockDotsData",
-    ()=>lockDotsData,
-    "treeDotsData",
-    ()=>treeDotsData,
-    "unicornDotsData",
-    ()=>unicornDotsData
+    "ManualDotsCanvas",
+    ()=>ManualDotsCanvas
 ]);
-const treeDotsData = [
-    {
-        "x": 227,
-        "y": 394
-    },
-    {
-        "x": 180,
-        "y": 419
-    },
-    {
-        "x": 118,
-        "y": 403
-    },
-    {
-        "x": 74,
-        "y": 362
-    },
-    {
-        "x": 55,
-        "y": 307
-    },
-    {
-        "x": 84,
-        "y": 246
-    },
-    {
-        "x": 87,
-        "y": 162
-    },
-    {
-        "x": 128,
-        "y": 90
-    },
-    {
-        "x": 202,
-        "y": 61
-    },
-    {
-        "x": 278,
-        "y": 46
-    },
-    {
-        "x": 317,
-        "y": 73
-    },
-    {
-        "x": 382,
-        "y": 56
-    },
-    {
-        "x": 452,
-        "y": 79
-    },
-    {
-        "x": 480,
-        "y": 127
-    },
-    {
-        "x": 476,
-        "y": 176
-    },
-    {
-        "x": 460,
-        "y": 209
-    },
-    {
-        "x": 526,
-        "y": 234
-    },
-    {
-        "x": 540,
-        "y": 276
-    },
-    {
-        "x": 542,
-        "y": 324
-    },
-    {
-        "x": 513,
-        "y": 375
-    },
-    {
-        "x": 458,
-        "y": 397
-    },
-    {
-        "x": 417,
-        "y": 403
-    },
-    {
-        "x": 335,
-        "y": 389
-    },
-    {
-        "x": 325,
-        "y": 306
-    },
-    {
-        "x": 286,
-        "y": 375
-    },
-    {
-        "x": 228,
-        "y": 306
-    },
-    {
-        "x": 230,
-        "y": 410
-    },
-    {
-        "x": 227,
-        "y": 515
-    },
-    {
-        "x": 192,
-        "y": 608
-    },
-    {
-        "x": 288,
-        "y": 614
-    },
-    {
-        "x": 386,
-        "y": 616
-    },
-    {
-        "x": 347,
-        "y": 548
-    },
-    {
-        "x": 332,
-        "y": 471
-    },
-    {
-        "x": 327,
-        "y": 392
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_219142e6b22e4776d4e777d24cb3cf13/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_219142e6b22e4776d4e777d24cb3cf13/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+function ManualDotsCanvas({ imagePath, dotsData, completedDays, imageWidth = 600, imageHeight = 600, imageOpacity = 0.35 }) {
+    _s();
+    const [imageLoaded, setImageLoaded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [imageError, setImageError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    if (!dotsData || dotsData.length === 0) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "w-full h-96 flex items-center justify-center border rounded-lg bg-gray-50",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                className: "text-gray-600",
+                children: "No dot data provided"
+            }, void 0, false, {
+                fileName: "[project]/components/ManualDotsCanvas.tsx",
+                lineNumber: 28,
+                columnNumber: 9
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/components/ManualDotsCanvas.tsx",
+            lineNumber: 27,
+            columnNumber: 12
+        }, this);
     }
-];
-const unicornDotsData = [
-    {
-        "x": 228,
-        "y": 118
-    },
-    {
-        "x": 229,
-        "y": 180
-    },
-    {
-        "x": 245,
-        "y": 158
-    },
-    {
-        "x": 262,
-        "y": 116
-    },
-    {
-        "x": 281,
-        "y": 74
-    },
-    {
-        "x": 306,
-        "y": 35
-    },
-    {
-        "x": 327,
-        "y": 90
-    },
-    {
-        "x": 340,
-        "y": 134
-    },
-    {
-        "x": 355,
-        "y": 172
-    },
-    {
-        "x": 446,
-        "y": 232
-    },
-    {
-        "x": 466,
-        "y": 317
-    },
-    {
-        "x": 446,
-        "y": 403
-    },
-    {
-        "x": 466,
-        "y": 457
-    },
-    {
-        "x": 525,
-        "y": 455
-    },
-    {
-        "x": 521,
-        "y": 475
-    },
-    {
-        "x": 562,
-        "y": 490
-    },
-    {
-        "x": 626,
-        "y": 423
-    },
-    {
-        "x": 711,
-        "y": 391
-    },
-    {
-        "x": 760,
-        "y": 429
-    },
-    {
-        "x": 762,
-        "y": 490
-    },
-    {
-        "x": 739,
-        "y": 556
-    },
-    {
-        "x": 676,
-        "y": 532
-    },
-    {
-        "x": 602,
-        "y": 541
-    },
-    {
-        "x": 601,
-        "y": 587
-    },
-    {
-        "x": 585,
-        "y": 640
-    },
-    {
-        "x": 643,
-        "y": 680
-    },
-    {
-        "x": 658,
-        "y": 720
-    },
-    {
-        "x": 605,
-        "y": 748
-    },
-    {
-        "x": 564,
-        "y": 693
-    },
-    {
-        "x": 586,
-        "y": 749
-    },
-    {
-        "x": 529,
-        "y": 771
-    },
-    {
-        "x": 496,
-        "y": 731
-    },
-    {
-        "x": 443,
-        "y": 707
-    },
-    {
-        "x": 358,
-        "y": 714
-    },
-    {
-        "x": 248,
-        "y": 662
-    },
-    {
-        "x": 183,
-        "y": 709
-    },
-    {
-        "x": 152,
-        "y": 739
-    },
-    {
-        "x": 91,
-        "y": 704
-    },
-    {
-        "x": 102,
-        "y": 686
-    },
-    {
-        "x": 52,
-        "y": 658
-    },
-    {
-        "x": 73,
-        "y": 615
-    },
-    {
-        "x": 166,
-        "y": 518
-    },
-    {
-        "x": 161,
-        "y": 485
-    },
-    {
-        "x": 100,
-        "y": 460
-    },
-    {
-        "x": 41,
-        "y": 401
-    },
-    {
-        "x": 29,
-        "y": 323
-    },
-    {
-        "x": 61,
-        "y": 267
-    },
-    {
-        "x": 123,
-        "y": 260
-    },
-    {
-        "x": 170,
-        "y": 248
-    },
-    {
-        "x": 232,
-        "y": 294
-    },
-    {
-        "x": 319,
-        "y": 292
-    },
-    {
-        "x": 369,
-        "y": 262
-    },
-    {
-        "x": 402,
-        "y": 307
-    },
-    {
-        "x": 373,
-        "y": 346
-    },
-    {
-        "x": 332,
-        "y": 358
-    },
-    {
-        "x": 314,
-        "y": 410
-    },
-    {
-        "x": 309,
-        "y": 467
-    },
-    {
-        "x": 339,
-        "y": 529
-    },
-    {
-        "x": 410,
-        "y": 562
-    },
-    {
-        "x": 470,
-        "y": 543
-    }
-];
-const lockDotsData = [
-    {
-        "x": 334,
-        "y": 458
-    },
-    {
-        "x": 242,
-        "y": 414
-    },
-    {
-        "x": 178,
-        "y": 320
-    },
-    {
-        "x": 180,
-        "y": 230
-    },
-    {
-        "x": 141,
-        "y": 203
-    },
-    {
-        "x": 156,
-        "y": 148
-    },
-    {
-        "x": 218,
-        "y": 150
-    },
-    {
-        "x": 284,
-        "y": 109
-    },
-    {
-        "x": 367,
-        "y": 84
-    },
-    {
-        "x": 457,
-        "y": 98
-    },
-    {
-        "x": 539,
-        "y": 137
-    },
-    {
-        "x": 587,
-        "y": 208
-    },
-    {
-        "x": 600,
-        "y": 304
-    },
-    {
-        "x": 552,
-        "y": 408
-    },
-    {
-        "x": 479,
-        "y": 450
-    },
-    {
-        "x": 486,
-        "y": 474
-    },
-    {
-        "x": 543,
-        "y": 494
-    },
-    {
-        "x": 576,
-        "y": 544
-    },
-    {
-        "x": 574,
-        "y": 623
-    },
-    {
-        "x": 539,
-        "y": 680
-    },
-    {
-        "x": 462,
-        "y": 711
-    },
-    {
-        "x": 369,
-        "y": 709
-    },
-    {
-        "x": 290,
-        "y": 674
-    },
-    {
-        "x": 253,
-        "y": 597
-    },
-    {
-        "x": 275,
-        "y": 518
-    },
-    {
-        "x": 330,
-        "y": 483
-    },
-    {
-        "x": 343,
-        "y": 540
-    },
-    {
-        "x": 482,
-        "y": 524
-    },
-    {
-        "x": 517,
-        "y": 577
-    },
-    {
-        "x": 495,
-        "y": 645
-    }
-];
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "w-full",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "relative w-full overflow-hidden aspect-square",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                width: "100%",
+                height: "100%",
+                viewBox: `0 0 ${imageWidth} ${imageHeight}`,
+                className: "w-full h-full",
+                style: {
+                    backgroundColor: 'white'
+                },
+                preserveAspectRatio: "xMidYMid meet",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("defs", {
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("pattern", {
+                            id: "backgroundImage",
+                            patternUnits: "userSpaceOnUse",
+                            width: imageWidth,
+                            height: imageHeight,
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("image", {
+                                href: imagePath,
+                                x: "0",
+                                y: "0",
+                                width: imageWidth,
+                                height: imageHeight,
+                                opacity: imageOpacity,
+                                onLoad: ()=>{
+                                    console.log('✅ Image loaded:', imagePath);
+                                    setImageLoaded(true);
+                                },
+                                onError: (e)=>{
+                                    console.error('❌ Ghoda image failed:', imagePath, e);
+                                    setImageError(true);
+                                }
+                            }, void 0, false, {
+                                fileName: "[project]/components/ManualDotsCanvas.tsx",
+                                lineNumber: 39,
+                                columnNumber: 15
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/components/ManualDotsCanvas.tsx",
+                            lineNumber: 38,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/components/ManualDotsCanvas.tsx",
+                        lineNumber: 37,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("rect", {
+                        width: "100%",
+                        height: "100%",
+                        fill: imageLoaded && !imageError ? "url(#backgroundImage)" : "white"
+                    }, void 0, false, {
+                        fileName: "[project]/components/ManualDotsCanvas.tsx",
+                        lineNumber: 50,
+                        columnNumber: 11
+                    }, this),
+                    dotsData.map((dot, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("g", {
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                                    cx: dot.x,
+                                    cy: dot.y,
+                                    r: "12",
+                                    fill: index < completedDays ? "#000000" : "#ffffff",
+                                    stroke: "#1f2937",
+                                    strokeWidth: "2"
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ManualDotsCanvas.tsx",
+                                    lineNumber: 54,
+                                    columnNumber: 15
+                                }, this),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("text", {
+                                    x: dot.x,
+                                    y: dot.y + 5,
+                                    textAnchor: "middle",
+                                    className: "text-sm font-bold",
+                                    fill: "#000000",
+                                    fontSize: "12",
+                                    children: index + 1
+                                }, void 0, false, {
+                                    fileName: "[project]/components/ManualDotsCanvas.tsx",
+                                    lineNumber: 55,
+                                    columnNumber: 15
+                                }, this)
+                            ]
+                        }, index, true, {
+                            fileName: "[project]/components/ManualDotsCanvas.tsx",
+                            lineNumber: 53,
+                            columnNumber: 41
+                        }, this)),
+                    completedDays > 0 && dotsData.slice(0, completedDays + 1).map((dot, index)=>{
+                        if (index === 0) return null;
+                        const prevDot = dotsData[index - 1];
+                        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
+                            x1: prevDot.x,
+                            y1: prevDot.y,
+                            x2: dot.x,
+                            y2: dot.y,
+                            stroke: "#000000",
+                            strokeWidth: "4",
+                            strokeLinecap: "round"
+                        }, `line-${index}`, false, {
+                            fileName: "[project]/components/ManualDotsCanvas.tsx",
+                            lineNumber: 64,
+                            columnNumber: 18
+                        }, this);
+                    })
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/ManualDotsCanvas.tsx",
+                lineNumber: 33,
+                columnNumber: 9
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/components/ManualDotsCanvas.tsx",
+            lineNumber: 32,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/components/ManualDotsCanvas.tsx",
+        lineNumber: 31,
+        columnNumber: 10
+    }, this);
+}
+_s(ManualDotsCanvas, "+xC0VhkjkKdKpElgCoBFbVEZSxs=");
+_c = ManualDotsCanvas;
+var _c;
+__turbopack_context__.k.register(_c, "ManualDotsCanvas");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
 }),
-"[project]/components/companion-view.tsx [app-client] (ecmascript)", ((__turbopack_context__, module, exports) => {
+"[project]/components/companion-view.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
 
-const e = new Error("Could not parse module '[project]/components/companion-view.tsx', file not found");
-e.code = 'MODULE_UNPARSABLE';
-throw e;
+__turbopack_context__.s([
+    "default",
+    ()=>CompanionView
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_219142e6b22e4776d4e777d24cb3cf13/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_219142e6b22e4776d4e777d24cb3cf13/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ManualDotsCanvas$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/ManualDotsCanvas.tsx [app-client] (ecmascript)");
+;
+var _s = __turbopack_context__.k.signature();
+"use client";
+;
+;
+function CompanionView({ habit, dayRecords, onPatternChange, currentPattern = 'drawing1', onComplete, onMiss, onCanvasStateChange }) {
+    _s();
+    const [selectedIllustration, setSelectedIllustration] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(currentPattern);
+    // Always start with pattern selection screen, don't auto-show canvas
+    const [showCanvas, setShowCanvas] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Notify parent when canvas state changes
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "CompanionView.useMemo": ()=>{
+            if (onCanvasStateChange) {
+                onCanvasStateChange(showCanvas);
+            }
+        }
+    }["CompanionView.useMemo"], [
+        showCanvas,
+        onCanvasStateChange
+    ]);
+    // Calculate completion progress - count days where y value increased 
+    const completedDays = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "CompanionView.useMemo[completedDays]": ()=>{
+            if (dayRecords.length === 0) return 0;
+            let completed = 0;
+            dayRecords.forEach({
+                "CompanionView.useMemo[completedDays]": (record, index)=>{
+                    const prevRecord = index > 0 ? dayRecords[index - 1] : null;
+                    const prevY = prevRecord ? prevRecord.y : 0;
+                    // A day is completed if y value increased from previous day
+                    if (record.y > prevY) {
+                        completed++;
+                    }
+                }
+            }["CompanionView.useMemo[completedDays]"]);
+            return completed;
+        }
+    }["CompanionView.useMemo[completedDays]"], [
+        dayRecords
+    ]);
+    // Update selectedIllustration when currentPattern prop changes
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
+        "CompanionView.useMemo": ()=>{
+            setSelectedIllustration(currentPattern);
+        }
+    }["CompanionView.useMemo"], [
+        currentPattern
+    ]);
+    const handlePatternChange = (pattern)=>{
+        setSelectedIllustration(pattern);
+        if (onPatternChange) {
+            onPatternChange(pattern);
+        }
+    };
+    const handleContinue = ()=>{
+        setShowCanvas(true);
+    };
+    // Show pattern selection screen
+    if (!showCanvas) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "flex flex-col space-y-4 p-4",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "bg-white rounded-lg p-4 border border-gray-200 mb-4",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                            className: "text-lg font-semibold text-center mb-4",
+                            children: "Choose Your Drawing"
+                        }, void 0, false, {
+                            fileName: "[project]/components/companion-view.tsx",
+                            lineNumber: 71,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex justify-center",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: ()=>handlePatternChange('lock'),
+                                className: `p-4 rounded-lg border-2 transition-all ${selectedIllustration === 'lock' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-gray-50'}`,
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "text-center",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "text-4xl mb-2",
+                                            children: "🔒"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/companion-view.tsx",
+                                            lineNumber: 75,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h4", {
+                                            className: "font-semibold",
+                                            children: "Lock"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/companion-view.tsx",
+                                            lineNumber: 76,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                            className: "text-xs text-gray-600",
+                                            children: "30 dots journey"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/companion-view.tsx",
+                                            lineNumber: 77,
+                                            columnNumber: 17
+                                        }, this)
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/components/companion-view.tsx",
+                                    lineNumber: 74,
+                                    columnNumber: 15
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/components/companion-view.tsx",
+                                lineNumber: 73,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/components/companion-view.tsx",
+                            lineNumber: 72,
+                            columnNumber: 11
+                        }, this)
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/components/companion-view.tsx",
+                    lineNumber: 70,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "mt-4",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: handleContinue,
+                        className: "w-full bg-blue-500 text-white py-4 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-colors",
+                        children: "Continue"
+                    }, void 0, false, {
+                        fileName: "[project]/components/companion-view.tsx",
+                        lineNumber: 85,
+                        columnNumber: 11
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/components/companion-view.tsx",
+                    lineNumber: 84,
+                    columnNumber: 9
+                }, this)
+            ]
+        }, void 0, true, {
+            fileName: "[project]/components/companion-view.tsx",
+            lineNumber: 68,
+            columnNumber: 12
+        }, this);
+    }
+    // Show dotted canvas screen (after Continue is clicked)
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "bg-white rounded-lg p-4 shadow-sm border border-gray-200 max-w-sm mx-auto",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$ManualDotsCanvas$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["ManualDotsCanvas"], {
+            imagePath: selectedIllustration === 'lock' ? "/illustrations/Lock.jpg" : "/illustrations/ghoda.png",
+            dotsData: selectedIllustration === 'lock' ? lockDotsData : unicornDotsData,
+            completedDays: completedDays,
+            imageWidth: 800,
+            imageHeight: 800,
+            imageOpacity: 0.35
+        }, void 0, false, {
+            fileName: "[project]/components/companion-view.tsx",
+            lineNumber: 94,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/components/companion-view.tsx",
+        lineNumber: 93,
+        columnNumber: 10
+    }, this);
+}
+_s(CompanionView, "N+twnfLpC/gK+Sl2ktpmBAXWt3I=");
+_c = CompanionView;
+var _c;
+__turbopack_context__.k.register(_c, "CompanionView");
+if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
+    __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
+}
 }),
 "[project]/components/habit-tracker.tsx [app-client] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
@@ -1304,7 +1125,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNewHabitMode, onUpdateHabit, onViewChange }) {
+function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNewHabitMode, onUpdateHabit, onViewChange, onShowLoggedMsg, onNextHabit, dailyInteractions = {}, setDailyInteractions, totalHabits = 1 }) {
     _s();
     const [dayRecords, setDayRecords] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [isSaved, setIsSaved] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -1312,24 +1133,15 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
     const [showViewDropdown, setShowViewDropdown] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [currentView, setCurrentView] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(habit?.preferredView || 'chart');
     const [hasUsedCalendar, setHasUsedCalendar] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
-    const [companionPattern, setCompanionPattern] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(habit?.companionPattern || 'unicorn');
+    const [companionPattern, setCompanionPattern] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(habit?.companionPattern || 'lock');
     const [showPatternSelection, setShowPatternSelection] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(!habit?.companionPattern);
+    const [isCompanionCanvasShowing, setIsCompanionCanvasShowing] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     // Auto-select pattern based on existing progress when switching to companion view
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "HabitTracker.useEffect": ()=>{
             if (currentView === 'companion' && !habit?.companionPattern && dayRecords.length > 0) {
-                // If user has existing progress, auto-select based on chart view (30 dots = lock pattern)
-                const currentProgress = dayRecords[dayRecords.length - 1]?.y || 0;
-                if (currentProgress <= 30) {
-                    setCompanionPattern('lock');
-                    if (onUpdateHabit && habit) {
-                        onUpdateHabit({
-                            ...habit,
-                            companionPattern: 'lock'
-                        });
-                    }
-                    setShowPatternSelection(false);
-                }
+                // Show pattern selection instead of auto-selecting
+                setShowPatternSelection(true);
             }
         }
     }["HabitTracker.useEffect"], [
@@ -1405,6 +1217,20 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
         isSaved
     ]);
     const handleLetGo = ()=>{
+        if (!habit) return;
+        const today = new Date().toDateString();
+        const habitId = habit.id;
+        const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
+        // If this is the second or more interaction today, just show message
+        if (todayInteractions >= 1) {
+            onShowLoggedMsg?.('logged');
+            return;
+        }
+        // First interaction - update state and increment counter
+        setDailyInteractions?.({
+            ...dailyInteractions,
+            [`${habitId}-${today}`]: todayInteractions + 1
+        });
         setDayRecords((prev)=>{
             const lastRecord = prev[prev.length - 1];
             if (!lastRecord) {
@@ -1421,7 +1247,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
             let maxDots, maxY;
             if (currentView === 'companion') {
                 // Companion view: dynamic limit based on pattern
-                maxDots = companionPattern === 'lock' ? 30 : 60;
+                maxDots = 30; // Always use lock pattern (30 dots)
                 maxY = maxDots;
             } else {
                 // Chart/Calendar view: always 30x30 grid
@@ -1453,8 +1279,8 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
             }
             const newX = lastRecord.x + 1;
             const newY = Math.max(0, lastRecord.y - 1);
-            // Dynamic limit based on companion pattern - lock: 30 dots, unicorn: 60 dots  
-            const maxDots = currentView === 'companion' && companionPattern === 'lock' ? 30 : 60;
+            // Always use lock pattern - 30 dots  
+            const maxDots = 30;
             if (newX <= maxDots) {
                 return [
                     ...prev,
@@ -1482,21 +1308,42 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
         setShowDeleteConfirmation(false);
     };
     const handleHabitMissed = ()=>{
-        // Only track missed habits if habit tracking has already started
+        if (!habit) return;
+        // If habit hasn't started yet (no records), show "not started" message
         if (dayRecords.length === 0) {
-            // Don't start habit tracking on missed click - only on Let's Go
+            onShowLoggedMsg?.('not-started');
             return;
         }
+        const today = new Date().toDateString();
+        const habitId = habit.id;
+        const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
+        // If this is the second or more interaction today, just show message
+        if (todayInteractions >= 1) {
+            onShowLoggedMsg?.('logged');
+            return;
+        }
+        // First interaction - update state and increment counter
+        setDailyInteractions?.({
+            ...dailyInteractions,
+            [`${habitId}-${today}`]: todayInteractions + 1
+        });
         setDayRecords((prev)=>{
             const lastRecord = prev[prev.length - 1];
-            // Missed habit: x increases (day advances) and y DECREASES (goes down)
-            // This creates the red dot below the previous position
+            // For Day 2 missed: create dot at X=2, Y=1 (next to Day 1 green circle)
+            // For subsequent days: follow previous miss logic
             const newX = lastRecord.x + 1;
-            const newY = Math.max(0, lastRecord.y - 1); // Decrease Y by 1, minimum 0
+            let newY;
+            if (newX === 2 && lastRecord.y > 0) {
+                // Day 2 miss: set Y to 1 to appear next to Day 1 green circle
+                newY = 1;
+            } else {
+                // Regular miss logic: decrease Y by 1, minimum 0
+                newY = Math.max(0, lastRecord.y - 1);
+            }
             // Set limits based on view type
             let maxDays;
             if (currentView === 'companion') {
-                maxDays = companionPattern === 'lock' ? 30 : 60;
+                maxDays = 30; // Always use lock pattern (30 dots)
             } else {
                 maxDays = 30; // Chart/Calendar view limit
             }
@@ -1522,7 +1369,54 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
             }
         }, void 0, false, {
             fileName: "[project]/components/habit-tracker.tsx",
-            lineNumber: 201,
+            lineNumber: 245,
+            columnNumber: 12
+        }, this);
+    }
+    // Handle null habit state - show message to create a habit
+    if (!habit) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "flex flex-col h-full px-4 py-8 items-center justify-center text-center",
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "bg-gray-50 rounded-lg p-6 max-w-sm",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                        className: "text-lg font-semibold text-gray-800 mb-3",
+                        children: "No Habits Yet"
+                    }, void 0, false, {
+                        fileName: "[project]/components/habit-tracker.tsx",
+                        lineNumber: 255,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-gray-600 mb-4",
+                        children: "You haven't created any habits yet. Start your journey by creating your first habit!"
+                    }, void 0, false, {
+                        fileName: "[project]/components/habit-tracker.tsx",
+                        lineNumber: 256,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                        onClick: ()=>{
+                            // This should trigger the habit selection flow
+                            window.location.reload();
+                        },
+                        className: "w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors",
+                        children: "Create Your First Habit"
+                    }, void 0, false, {
+                        fileName: "[project]/components/habit-tracker.tsx",
+                        lineNumber: 259,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/habit-tracker.tsx",
+                lineNumber: 254,
+                columnNumber: 9
+            }, this)
+        }, void 0, false, {
+            fileName: "[project]/components/habit-tracker.tsx",
+            lineNumber: 253,
             columnNumber: 12
         }, this);
     }
@@ -1550,7 +1444,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 215,
+                                        lineNumber: 277,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -1563,18 +1457,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             clipRule: "evenodd"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 217,
+                                            lineNumber: 279,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 216,
+                                        lineNumber: 278,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 211,
+                                lineNumber: 273,
                                 columnNumber: 15
                             }, this),
                             showViewDropdown && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1594,7 +1488,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Chart View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 223,
+                                            lineNumber: 285,
                                             columnNumber: 49
                                         }, this),
                                         currentView !== 'calendar' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1608,7 +1502,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Calendar View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 230,
+                                            lineNumber: 292,
                                             columnNumber: 52
                                         }, this),
                                         currentView !== 'companion' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1616,64 +1510,72 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                                 setCurrentView('companion');
                                                 onViewChange?.('companion');
                                                 setShowViewDropdown(false);
+                                                setShowPatternSelection(true); // Always show pattern selection when switching to companion
                                             },
                                             className: "text-gray-700 block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900",
                                             role: "menuitem",
                                             children: "Companion View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 237,
+                                            lineNumber: 299,
                                             columnNumber: 53
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/habit-tracker.tsx",
-                                    lineNumber: 222,
+                                    lineNumber: 284,
                                     columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 221,
+                                lineNumber: 283,
                                 columnNumber: 36
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 210,
+                        lineNumber: 272,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 209,
+                    lineNumber: 271,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "w-full py-4",
+                    className: "flex-1 pb-24",
                     children: [
                         currentView === 'chart' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "w-full h-full flex items-center justify-center",
+                            className: "w-full flex items-center justify-center",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$habit$2d$grid$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                 dayRecords: dayRecords
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 252,
+                                lineNumber: 315,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 251,
+                            lineNumber: 314,
                             columnNumber: 41
                         }, this),
-                        currentView === 'calendar' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$habit$2d$calendar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                            dayRecords: dayRecords,
-                            habitStartDate: habit.createdAt
+                        currentView === 'calendar' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "w-full flex items-center justify-center pt-2",
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$habit$2d$calendar$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                                dayRecords: dayRecords,
+                                habitStartDate: habit.createdAt
+                            }, void 0, false, {
+                                fileName: "[project]/components/habit-tracker.tsx",
+                                lineNumber: 318,
+                                columnNumber: 17
+                            }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 254,
+                            lineNumber: 317,
                             columnNumber: 44
                         }, this),
                         currentView === 'companion' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "w-full",
+                            className: "w-full flex items-center justify-center pt-2",
                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$companion$2d$view$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                                 habit: habit,
                                 dayRecords: dayRecords,
@@ -1686,83 +1588,130 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 },
                                 currentPattern: companionPattern,
                                 onComplete: handleLetGo,
-                                onMiss: handleHabitMissed
+                                onMiss: handleHabitMissed,
+                                onCanvasStateChange: setIsCompanionCanvasShowing
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 256,
+                                lineNumber: 321,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 255,
+                            lineNumber: 320,
                             columnNumber: 45
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 250,
+                    lineNumber: 313,
                     columnNumber: 11
                 }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex gap-2 flex-shrink-0 px-2",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: handleLetGo,
-                            className: "flex-1 px-3 py-2.5 bg-green-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all active:scale-95 shadow-lg text-center text-sm flex items-center justify-center h-14 rounded-2xl",
-                            style: {
-                                backgroundColor: '#10B981',
-                                boxShadow: '0 10px 25px -5px rgba(16, 185, 129, 0.3)'
-                            },
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "text-[15px] font-bold whitespace-nowrap",
-                                children: "Completed Habit!"
-                            }, void 0, false, {
+                (currentView === 'chart' || currentView === 'calendar' || currentView === 'companion' && isCompanionCanvasShowing) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "fixed bottom-8 left-0 right-0 bg-white p-4 z-10",
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "max-w-sm mx-auto",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex gap-2 mb-3",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: handleLetGo,
+                                        className: "flex-1 px-3 py-2.5 bg-green-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all active:scale-95 shadow-lg text-center text-sm flex items-center justify-center h-14 rounded-2xl",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "text-[15px] font-bold whitespace-nowrap",
+                                            children: "Completed Habit!"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/habit-tracker.tsx",
+                                            lineNumber: 336,
+                                            columnNumber: 21
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/habit-tracker.tsx",
+                                        lineNumber: 335,
+                                        columnNumber: 19
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: handleHabitMissed,
+                                        className: "flex-1 px-3 py-2.5 bg-amber-100 hover:bg-amber-200 text-amber-700 font-semibold rounded-lg border border-amber-200 transition-all active:scale-95 text-center text-sm flex items-center justify-center h-14 rounded-2xl",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                            className: "text-[15px] font-bold",
+                                            children: "Missed Today"
+                                        }, void 0, false, {
+                                            fileName: "[project]/components/habit-tracker.tsx",
+                                            lineNumber: 339,
+                                            columnNumber: 21
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/habit-tracker.tsx",
+                                        lineNumber: 338,
+                                        columnNumber: 19
+                                    }, this)
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 272,
-                                columnNumber: 15
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 268,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: handleHabitMissed,
-                            className: "flex-1 px-3 py-2.5 bg-amber-100 hover:bg-amber-200 text-amber-700 font-semibold rounded-lg border border-amber-200 transition-all active:scale-95 text-center text-sm flex items-center justify-center h-14 rounded-2xl",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "text-[15px] font-bold",
-                                children: "Missed Today"
-                            }, void 0, false, {
+                                lineNumber: 334,
+                                columnNumber: 17
+                            }, this),
+                            habit && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "w-full flex justify-between items-center text-sm font-semibold px-4",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: handleGiveUpClick,
+                                        className: "text-muted-foreground/60 hover:text-muted-foreground/80 transition-colors",
+                                        children: "Want to give up?"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/habit-tracker.tsx",
+                                        lineNumber: 345,
+                                        columnNumber: 21
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>totalHabits > 1 && onNextHabit?.(),
+                                        className: `flex items-center transition-colors ${totalHabits > 1 ? 'text-foreground/80 hover:text-foreground cursor-pointer' : 'text-muted-foreground/60 cursor-not-allowed'}`,
+                                        disabled: totalHabits <= 1,
+                                        children: [
+                                            "Next habit",
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                className: "w-4 h-4 ml-1",
+                                                fill: "none",
+                                                stroke: "currentColor",
+                                                viewBox: "0 0 24 24",
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                    strokeLinecap: "round",
+                                                    strokeLinejoin: "round",
+                                                    strokeWidth: "2",
+                                                    d: "M9 5l7 7-7 7"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/habit-tracker.tsx",
+                                                    lineNumber: 351,
+                                                    columnNumber: 25
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/habit-tracker.tsx",
+                                                lineNumber: 350,
+                                                columnNumber: 23
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/habit-tracker.tsx",
+                                        lineNumber: 348,
+                                        columnNumber: 21
+                                    }, this)
+                                ]
+                            }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 275,
-                                columnNumber: 15
+                                lineNumber: 344,
+                                columnNumber: 27
                             }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 274,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 267,
-                    columnNumber: 11
-                }, this),
-                dayRecords.length > 0 && dayRecords[dayRecords.length - 1]?.y > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "w-full text-center text-sm font-semibold py-3 flex-shrink-0",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                        onClick: handleGiveUpClick,
-                        className: "underline text-foreground hover:text-muted-foreground transition-colors",
-                        children: "Want to give up"
-                    }, void 0, false, {
+                        ]
+                    }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 281,
+                        lineNumber: 333,
                         columnNumber: 15
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 280,
-                    columnNumber: 81
+                    lineNumber: 332,
+                    columnNumber: 130
                 }, this),
                 showDeleteConfirmation && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "fixed inset-0 bg-black/50 flex items-center justify-center z-50",
@@ -1774,7 +1723,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 children: "Do you really don't want to continue?"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 289,
+                                lineNumber: 361,
                                 columnNumber: 17
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1786,7 +1735,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "Yes"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 293,
+                                        lineNumber: 365,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1795,35 +1744,35 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "No"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 296,
+                                        lineNumber: 368,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 292,
+                                lineNumber: 364,
                                 columnNumber: 17
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 288,
+                        lineNumber: 360,
                         columnNumber: 15
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 287,
+                    lineNumber: 359,
                     columnNumber: 38
                 }, this)
             ]
         }, void 0, true)
     }, void 0, false, {
         fileName: "[project]/components/habit-tracker.tsx",
-        lineNumber: 206,
+        lineNumber: 268,
         columnNumber: 10
     }, this);
 }
-_s(HabitTracker, "79ifLMao8jqmWEfv7NRPYWHk9q0=");
+_s(HabitTracker, "IPi1OB9BtvRRjMbiSfFalCMcMRY=");
 _c = HabitTracker;
 var _c;
 __turbopack_context__.k.register(_c, "HabitTracker");
@@ -2550,7 +2499,7 @@ const getHabitsForAge = (age, type)=>{
             {
                 key: "breathing",
                 label: "Deep breaths morning",
-                emoji: "🫑"
+                emoji: "�"
             },
             {
                 key: "journal",
@@ -2705,250 +2654,375 @@ function HabitSelection({ onSelect, onBack, userName, userAge = 25 // Default ag
         }
     };
     const isFormValid = selected || customHabit.trim();
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        className: "flex items-center justify-center min-h-screen p-4",
-        style: {
-            backgroundColor: '#f3f4f6'
-        },
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "w-full max-w-md rounded-xl shadow-lg p-3 mx-2",
-            style: {
-                backgroundColor: '#ffffff'
+    const getColorClasses = (index)=>{
+        const colors = [
+            {
+                bg: 'bg-orange-50',
+                border: 'border-orange-100',
+                text: 'text-orange-600',
+                hover: 'hover:border-orange-500 hover:text-orange-600'
             },
-            children: [
-                onBack && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex items-center mb-6",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            onClick: onBack,
-                            className: "p-2 hover:bg-gray-100 rounded-full transition-colors mr-4",
-                            style: {
-                                color: '#6b7280'
-                            },
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-                                className: "w-6 h-6",
-                                fill: "none",
-                                stroke: "currentColor",
-                                viewBox: "0 0 24 24",
-                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                                    strokeLinecap: "round",
-                                    strokeLinejoin: "round",
-                                    strokeWidth: "2",
-                                    d: "M15 19l-7-7 7-7"
+            {
+                bg: 'bg-blue-50',
+                border: 'border-blue-100',
+                text: 'text-blue-600',
+                hover: 'hover:border-blue-500 hover:text-blue-600'
+            },
+            {
+                bg: 'bg-purple-50',
+                border: 'border-purple-100',
+                text: 'text-purple-600',
+                hover: 'hover:border-purple-500 hover:text-purple-600'
+            },
+            {
+                bg: 'bg-green-50',
+                border: 'border-green-100',
+                text: 'text-green-600',
+                hover: 'hover:border-green-500 hover:text-green-600'
+            }
+        ];
+        return colors[index % colors.length];
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "min-h-screen bg-white relative font-sans text-gray-900 overflow-hidden",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "fixed top-[-10%] left-[-10%] w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-teal-400/20 rounded-full blur-[80px] opacity-60 pointer-events-none animate-pulse"
+            }, void 0, false, {
+                fileName: "[project]/components/habit-selection.tsx",
+                lineNumber: 280,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "fixed bottom-[-10%] right-[-10%] w-[300px] sm:w-[400px] h-[300px] sm:h-[400px] bg-indigo-500/20 rounded-full blur-[80px] opacity-60 pointer-events-none"
+            }, void 0, false, {
+                fileName: "[project]/components/habit-selection.tsx",
+                lineNumber: 281,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "w-full h-full flex flex-col relative z-10",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "pt-8 px-6 pb-2 flex items-center gap-4 z-20 relative",
+                        children: [
+                            onBack && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                onClick: onBack,
+                                className: "w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-sm border border-gray-100 text-gray-700 hover:scale-110 active:scale-95 transition-all duration-200 group",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                    className: "w-5 h-5 group-hover:-translate-x-0.5 transition-transform",
+                                    fill: "none",
+                                    stroke: "currentColor",
+                                    viewBox: "0 0 24 24",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                        strokeLinecap: "round",
+                                        strokeLinejoin: "round",
+                                        strokeWidth: "2",
+                                        d: "M15 19l-7-7 7-7"
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/habit-selection.tsx",
+                                        lineNumber: 288,
+                                        columnNumber: 17
+                                    }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/habit-selection.tsx",
-                                    lineNumber: 266,
-                                    columnNumber: 17
+                                    lineNumber: 287,
+                                    columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-selection.tsx",
-                                lineNumber: 265,
-                                columnNumber: 15
-                            }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/components/habit-selection.tsx",
-                            lineNumber: 262,
-                            columnNumber: 13
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                            className: "text-lg font-bold",
-                            style: {
-                                color: '#1f2937'
-                            },
-                            children: [
-                                "Welcome, ",
-                                userName || 'User',
-                                "!"
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/components/habit-selection.tsx",
-                            lineNumber: 269,
-                            columnNumber: 13
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/components/habit-selection.tsx",
-                    lineNumber: 261,
-                    columnNumber: 20
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "flex mb-6",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            className: `flex-1 px-4 py-3 font-semibold border-2 rounded-l-lg transition-colors ${tab === 'make' ? 'border-gray-800 bg-white text-gray-800' : 'border-gray-300 bg-gray-100 text-gray-600'}`,
-                            onClick: ()=>{
-                                setTab('make');
-                                setSelected('');
-                                setCustomHabit('');
-                            },
-                            children: "Make Habit"
-                        }, void 0, false, {
-                            fileName: "[project]/components/habit-selection.tsx",
-                            lineNumber: 278,
-                            columnNumber: 11
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                            className: `flex-1 px-4 py-3 font-semibold border-2 border-l-0 rounded-r-lg transition-colors ${tab === 'break' ? 'border-gray-800 bg-white text-gray-800' : 'border-gray-300 bg-gray-100 text-gray-600'}`,
-                            onClick: ()=>{
-                                setTab('break');
-                                setSelected('');
-                                setCustomHabit('');
-                            },
-                            children: "Break Habit"
-                        }, void 0, false, {
-                            fileName: "[project]/components/habit-selection.tsx",
-                            lineNumber: 285,
-                            columnNumber: 11
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/components/habit-selection.tsx",
-                    lineNumber: 277,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "mb-4",
-                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "grid grid-cols-2 gap-3",
-                        children: habits.map((habit)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                className: `p-3 rounded-xl text-center transition-all border-2 flex flex-col items-center gap-2 ${selected === habit.key ? 'border-gray-400 bg-gray-200' : 'border-gray-200 bg-gray-50 hover:border-gray-300'}`,
-                                onClick: ()=>{
-                                    setSelected(selected === habit.key ? '' : habit.key);
-                                    if (customHabit) setCustomHabit(''); // Clear custom habit when selecting predefined
-                                },
+                                lineNumber: 286,
+                                columnNumber: 22
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex flex-col",
                                 children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: "text-2xl",
-                                        children: habit.emoji
-                                    }, void 0, false, {
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                                        className: "text-2xl font-extrabold text-gray-900 tracking-tight",
+                                        children: [
+                                            "Welcome, ",
+                                            userName || 'User',
+                                            "!"
+                                        ]
+                                    }, void 0, true, {
                                         fileName: "[project]/components/habit-selection.tsx",
-                                        lineNumber: 301,
-                                        columnNumber: 17
+                                        lineNumber: 292,
+                                        columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: "text-sm font-medium text-gray-700 leading-tight",
-                                        children: habit.label
+                                        className: "text-xs font-semibold text-teal-600 mb-4",
+                                        children: "Ready to build new habits?"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-selection.tsx",
-                                        lineNumber: 302,
-                                        columnNumber: 17
+                                        lineNumber: 295,
+                                        columnNumber: 13
                                     }, this)
-                                ]
-                            }, habit.key, true, {
-                                fileName: "[project]/components/habit-selection.tsx",
-                                lineNumber: 297,
-                                columnNumber: 34
-                            }, this))
-                    }, void 0, false, {
-                        fileName: "[project]/components/habit-selection.tsx",
-                        lineNumber: 296,
-                        columnNumber: 11
-                    }, this)
-                }, void 0, false, {
-                    fileName: "[project]/components/habit-selection.tsx",
-                    lineNumber: 295,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "mb-3",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "flex gap-1 items-stretch",
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                    type: "text",
-                                    placeholder: "Create your own habit...",
-                                    value: customHabit,
-                                    maxLength: maxCustomLength,
-                                    onChange: (e)=>{
-                                        setCustomHabit(e.target.value);
-                                        if (selected) setSelected(''); // Clear selection when typing custom
-                                    },
-                                    className: "flex-1 px-2 py-3 text-base border-2 border-gray-300 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all",
-                                    style: {
-                                        color: '#374151',
-                                        minWidth: 0
-                                    }
-                                }, void 0, false, {
-                                    fileName: "[project]/components/habit-selection.tsx",
-                                    lineNumber: 312,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    onClick: ()=>customHabit && handleStartBuilding(),
-                                    disabled: !customHabit.trim(),
-                                    className: `px-2 py-3 rounded-lg font-semibold text-base transition-all w-12 flex items-center justify-center border-2 flex-shrink-0 ${customHabit.trim() ? 'bg-gray-800 text-white hover:bg-gray-700 shadow-lg border-gray-800' : 'bg-gray-300 text-gray-500 cursor-not-allowed border-gray-300'}`,
-                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                        className: "text-base font-bold",
-                                        children: "+"
-                                    }, void 0, false, {
-                                        fileName: "[project]/components/habit-selection.tsx",
-                                        lineNumber: 320,
-                                        columnNumber: 15
-                                    }, this)
-                                }, void 0, false, {
-                                    fileName: "[project]/components/habit-selection.tsx",
-                                    lineNumber: 319,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
-                            fileName: "[project]/components/habit-selection.tsx",
-                            lineNumber: 311,
-                            columnNumber: 11
-                        }, this),
-                        customHabit && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            className: "text-right mt-2",
-                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                className: "text-sm",
-                                style: {
-                                    color: customHabit.length >= maxCustomLength ? '#ef4444' : '#6b7280'
-                                },
-                                children: [
-                                    customHabit.length,
-                                    "/",
-                                    maxCustomLength
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-selection.tsx",
-                                lineNumber: 325,
-                                columnNumber: 15
+                                lineNumber: 291,
+                                columnNumber: 11
                             }, this)
-                        }, void 0, false, {
-                            fileName: "[project]/components/habit-selection.tsx",
-                            lineNumber: 324,
-                            columnNumber: 27
-                        }, this)
-                    ]
-                }, void 0, true, {
-                    fileName: "[project]/components/habit-selection.tsx",
-                    lineNumber: 310,
-                    columnNumber: 9
-                }, this),
-                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                    onClick: handleStartBuilding,
-                    className: "w-full px-4 py-3 font-semibold rounded-lg transition-all",
-                    style: {
-                        backgroundColor: isFormValid ? '#1f2937' : '#d1d5db',
-                        color: isFormValid ? '#ffffff' : '#6b7280',
-                        cursor: isFormValid ? 'pointer' : 'not-allowed'
-                    },
-                    disabled: !isFormValid,
-                    children: "Start Building"
-                }, void 0, false, {
-                    fileName: "[project]/components/habit-selection.tsx",
-                    lineNumber: 334,
-                    columnNumber: 9
-                }, this)
-            ]
-        }, void 0, true, {
-            fileName: "[project]/components/habit-selection.tsx",
-            lineNumber: 257,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/habit-selection.tsx",
+                        lineNumber: 285,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex-1 px-6 pb-4 pt-2",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "p-1.5 bg-gray-100 rounded-2xl flex relative mb-6 shadow-inner border border-gray-200 max-w-md mx-auto w-full",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>{
+                                            setTab('make');
+                                            setSelected("");
+                                            setCustomHabit("");
+                                        },
+                                        className: `flex-1 py-3 px-2 rounded-xl text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 ${tab === 'make' ? 'shadow-md bg-teal-500 text-white scale-100' : 'text-gray-500 hover:bg-white/50 hover:text-teal-500'}`,
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: "text-[18px]",
+                                                children: "✓"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/habit-selection.tsx",
+                                                lineNumber: 308,
+                                                columnNumber: 15
+                                            }, this),
+                                            "Make Habit"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/habit-selection.tsx",
+                                        lineNumber: 303,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                        onClick: ()=>{
+                                            setTab('break');
+                                            setSelected("");
+                                            setCustomHabit("");
+                                        },
+                                        className: `flex-1 py-3 px-2 rounded-xl text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 ${tab === 'break' ? 'shadow-md bg-rose-500 text-white scale-100' : 'text-gray-500 hover:bg-white/50 hover:text-rose-500'}`,
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: "text-[18px]",
+                                                children: "⊘"
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/habit-selection.tsx",
+                                                lineNumber: 316,
+                                                columnNumber: 15
+                                            }, this),
+                                            "Break Habit"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/habit-selection.tsx",
+                                        lineNumber: 311,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/habit-selection.tsx",
+                                lineNumber: 302,
+                                columnNumber: 11
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "max-w-md mx-auto w-full",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "grid grid-cols-2 gap-3 mb-6",
+                                        children: habits.map((habit, index)=>{
+                                            const colors = getColorClasses(index);
+                                            const isSelected = selected === habit.key;
+                                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                                onClick: ()=>{
+                                                    setSelected(habit.key);
+                                                    setCustomHabit("");
+                                                },
+                                                className: `group relative flex flex-col p-3 bg-white rounded-2xl border shadow-sm transition-all duration-300 text-left overflow-hidden h-[130px] ${isSelected ? 'border-teal-500 ring-4 ring-teal-500/15' : `${colors.border} ${colors.hover} hover:shadow-lg`}`,
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: `absolute -right-6 -top-6 w-20 h-20 ${colors.bg} rounded-full blur-2xl group-hover:opacity-80 transition-opacity`
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/habit-selection.tsx",
+                                                        lineNumber: 331,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: `w-10 h-10 rounded-xl ${colors.bg} ${colors.text} flex items-center justify-center mb-auto group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 text-xl border ${colors.border}`,
+                                                        children: habit.emoji
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/habit-selection.tsx",
+                                                        lineNumber: 332,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "relative z-10 mt-2",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            className: `block text-sm font-bold leading-tight transition-colors ${isSelected ? 'text-teal-600' : `text-gray-900 ${colors.hover.split(' ')[1]}`}`,
+                                                            children: habit.label
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/habit-selection.tsx",
+                                                            lineNumber: 336,
+                                                            columnNumber: 23
+                                                        }, this)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/habit-selection.tsx",
+                                                        lineNumber: 335,
+                                                        columnNumber: 21
+                                                    }, this),
+                                                    isSelected && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "absolute top-3 right-3",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "w-6 h-6 bg-teal-500 text-white rounded-full flex items-center justify-center",
+                                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                className: "text-xs",
+                                                                children: "✓"
+                                                            }, void 0, false, {
+                                                                fileName: "[project]/components/habit-selection.tsx",
+                                                                lineNumber: 342,
+                                                                columnNumber: 27
+                                                            }, this)
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/habit-selection.tsx",
+                                                            lineNumber: 341,
+                                                            columnNumber: 25
+                                                        }, this)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/habit-selection.tsx",
+                                                        lineNumber: 340,
+                                                        columnNumber: 36
+                                                    }, this),
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                        className: "absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0",
+                                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                            className: "text-teal-500 text-xl",
+                                                            children: "+"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/components/habit-selection.tsx",
+                                                            lineNumber: 346,
+                                                            columnNumber: 23
+                                                        }, this)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/components/habit-selection.tsx",
+                                                        lineNumber: 345,
+                                                        columnNumber: 21
+                                                    }, this)
+                                                ]
+                                            }, habit.key, true, {
+                                                fileName: "[project]/components/habit-selection.tsx",
+                                                lineNumber: 327,
+                                                columnNumber: 22
+                                            }, this);
+                                        })
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/habit-selection.tsx",
+                                        lineNumber: 323,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "mb-3 group",
+                                        children: [
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                                                className: "block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wide px-1 group-focus-within:text-teal-500 transition-colors",
+                                                children: "Create your own habit..."
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/habit-selection.tsx",
+                                                lineNumber: 354,
+                                                columnNumber: 15
+                                            }, this),
+                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                className: `bg-white p-2 rounded-2xl border shadow-sm transition-all ${customHabit ? 'border-teal-500 ring-4 ring-teal-500/15' : 'border-gray-200 focus-within:border-teal-500 focus-within:ring-4 focus-within:ring-teal-500/15'}`,
+                                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                    value: customHabit,
+                                                    onChange: (e)=>{
+                                                        setCustomHabit(e.target.value);
+                                                        setSelected("");
+                                                    },
+                                                    className: "w-full bg-transparent border-none p-3 text-sm font-medium text-gray-900 placeholder-gray-400 focus:ring-0 focus:outline-none",
+                                                    placeholder: "e.g. Wake up at 7:00 AM",
+                                                    type: "text",
+                                                    maxLength: maxCustomLength
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/habit-selection.tsx",
+                                                    lineNumber: 358,
+                                                    columnNumber: 17
+                                                }, this)
+                                            }, void 0, false, {
+                                                fileName: "[project]/components/habit-selection.tsx",
+                                                lineNumber: 357,
+                                                columnNumber: 15
+                                            }, this)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/components/habit-selection.tsx",
+                                        lineNumber: 353,
+                                        columnNumber: 13
+                                    }, this),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        className: "w-full mt-6 mb-4",
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                            onClick: handleStartBuilding,
+                                            disabled: !isFormValid,
+                                            className: "w-full h-12 bg-gradient-to-r from-teal-600 to-indigo-600 text-white font-bold text-base rounded-2xl shadow-xl shadow-teal-500/30 hover:shadow-teal-500/50 hover:translate-y-[-2px] active:translate-y-[1px] transition-all flex items-center justify-center gap-2 group relative overflow-hidden disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/habit-selection.tsx",
+                                                    lineNumber: 368,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "relative",
+                                                    children: "Start Building"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/habit-selection.tsx",
+                                                    lineNumber: 369,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                    className: "relative group-hover:translate-x-1 transition-transform",
+                                                    children: "→"
+                                                }, void 0, false, {
+                                                    fileName: "[project]/components/habit-selection.tsx",
+                                                    lineNumber: 370,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/components/habit-selection.tsx",
+                                            lineNumber: 367,
+                                            columnNumber: 15
+                                        }, this)
+                                    }, void 0, false, {
+                                        fileName: "[project]/components/habit-selection.tsx",
+                                        lineNumber: 366,
+                                        columnNumber: 13
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/components/habit-selection.tsx",
+                                lineNumber: 321,
+                                columnNumber: 11
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/components/habit-selection.tsx",
+                        lineNumber: 300,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/components/habit-selection.tsx",
+                lineNumber: 283,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
         fileName: "[project]/components/habit-selection.tsx",
-        lineNumber: 254,
+        lineNumber: 278,
         columnNumber: 10
     }, this);
 }
@@ -4532,6 +4606,9 @@ var _s = __turbopack_context__.k.signature();
 ;
 function Page() {
     _s();
+    const [showLoggedMsg, setShowLoggedMsg] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [messageType, setMessageType] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('logged');
+    const [dailyInteractions, setDailyInteractions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
     const [habits, setHabits] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [currentHabitIndex, setCurrentHabitIndex] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
     const [isLoaded, setIsLoaded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -4797,11 +4874,11 @@ function Page() {
             try {
                 const userHabits = JSON.parse(savedUserHabits);
                 setHabits(userHabits);
-                // If user has habits, don't show habit selection
+                // If user has habits, mark as existing user
                 if (userHabits.length > 0) {
                     setHabitSelection("existing"); // Mark that user has existing habits
                 } else {
-                    // User has no habits, show habit selection
+                    // User has no habits, should show habit selection
                     setHabitSelection(null);
                 }
             } catch  {
@@ -4810,7 +4887,7 @@ function Page() {
                 setHabitSelection(null);
             }
         } else {
-            // New user with no saved habits
+            // New user with no saved habits - should show habit selection
             setHabits([]);
             setHabitSelection(null);
         }
@@ -4828,7 +4905,7 @@ function Page() {
         isLoaded,
         user
     ]);
-    const addHabit = (name, person)=>{
+    const addHabit = async (name, person)=>{
         const currentMonthYear = new Date().toISOString().slice(0, 7);
         const newHabit = {
             id: Date.now().toString(),
@@ -4843,12 +4920,51 @@ function Page() {
             newHabit
         ]);
         setCurrentHabitIndex(habits.length);
+        // Track habit creation in Supabase
+        if (user) {
+            try {
+                await fetch('/api/track-habit-created', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: user.email,
+                        habitName: name,
+                        habitCreatedAt: new Date().toISOString()
+                    })
+                });
+            } catch (error) {
+                console.warn('Failed to track habit creation:', error);
+            }
+        }
     };
-    const updateHabitRecords = (habitId, dayRecords)=>{
+    const updateHabitRecords = async (habitId, dayRecords)=>{
+        const habit = habits.find((h)=>h.id === habitId);
+        const hadNoRecords = habit && habit.dayRecords.length === 0;
+        const hasRecordsNow = dayRecords.length > 0;
         setHabits(habits.map((habit)=>habit.id === habitId ? {
                 ...habit,
                 dayRecords
             } : habit));
+        // Track habit start (first time logging) in Supabase
+        if (hadNoRecords && hasRecordsNow && user && habit) {
+            try {
+                await fetch('/api/track-habit-started', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: user.email,
+                        habitName: habit.name,
+                        habitStartedAt: new Date().toISOString()
+                    })
+                });
+            } catch (error) {
+                console.warn('Failed to track habit start:', error);
+            }
+        }
     };
     const updateHabit = (habitId, updatedFields)=>{
         setHabits(habits.map((habit)=>habit.id === habitId ? {
@@ -4889,7 +5005,7 @@ function Page() {
                         className: "animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 319,
+                        lineNumber: 365,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -4897,18 +5013,18 @@ function Page() {
                         children: "Loading your habits..."
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 320,
+                        lineNumber: 366,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 318,
+                lineNumber: 364,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 317,
+            lineNumber: 363,
             columnNumber: 12
         }, this);
     }
@@ -4920,12 +5036,12 @@ function Page() {
                 onContinue: ()=>setShowSplashScreen(false)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 328,
+                lineNumber: 374,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 327,
+            lineNumber: 373,
             columnNumber: 12
         }, this);
     }
@@ -4938,20 +5054,21 @@ function Page() {
                 onBack: ()=>setShowSplashScreen(true)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 335,
+                lineNumber: 381,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 334,
+            lineNumber: 380,
             columnNumber: 12
         }, this);
     }
     // Show habit selection after onboarding (only if user doesn't have existing habits)
-    if (!habitSelection && !customHabitType && habits.length === 0) {
+    if (user && habitSelection !== "existing" && !customHabitType && habits.length === 0) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
             className: "flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-muted",
             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$habit$2d$selection$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
+                userName: user?.username?.split(' ')[0],
                 userAge: typeof user?.age === 'string' ? parseInt(user.age) || 25 : 25,
                 onSelect: (habit)=>{
                     if (habit === "custom_make") {
@@ -4976,12 +5093,12 @@ function Page() {
                 }
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 342,
+                lineNumber: 388,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 341,
+            lineNumber: 387,
             columnNumber: 12
         }, this);
     }
@@ -5001,17 +5118,17 @@ function Page() {
                     onBack: ()=>setCustomHabitType(null)
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 370,
+                    lineNumber: 416,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 369,
+                lineNumber: 415,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 368,
+            lineNumber: 414,
             columnNumber: 12
         }, this);
     }
@@ -5092,7 +5209,7 @@ function Page() {
                     }
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 380,
+                    lineNumber: 426,
                     columnNumber: 31
                 }, this) : habits.length === 0 || currentHabitIndex === habits.length ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$habit$2d$tracker$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                     habit: null,
@@ -5101,10 +5218,22 @@ function Page() {
                     onDeleteHabit: ()=>{},
                     onUpdateHabit: ()=>{},
                     onViewChange: setCurrentView,
-                    isNewHabitMode: true
+                    isNewHabitMode: true,
+                    onShowLoggedMsg: (type)=>{
+                        setMessageType(type);
+                        setShowLoggedMsg(true);
+                        setTimeout(()=>setShowLoggedMsg(false), 3000);
+                    },
+                    onNextHabit: ()=>{
+                        const nextIndex = currentHabitIndex < habits.length - 1 ? currentHabitIndex + 1 : 0;
+                        setCurrentHabitIndex(nextIndex);
+                    },
+                    dailyInteractions: dailyInteractions,
+                    setDailyInteractions: setDailyInteractions,
+                    totalHabits: habits.length
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 436,
+                    lineNumber: 482,
                     columnNumber: 76
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                     children: [
@@ -5137,17 +5266,17 @@ function Page() {
                                             d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 448,
+                                            lineNumber: 501,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 447,
+                                        lineNumber: 500,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 446,
+                                    lineNumber: 499,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5161,33 +5290,112 @@ function Page() {
                                             children: getHabitNameFromKey(habits[currentHabitIndex]?.name) || habits[currentHabitIndex]?.name
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 452,
+                                            lineNumber: 505,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                            className: "text-xs text-muted-foreground",
-                                            children: [
-                                                "Created: ",
-                                                new Date(habits[currentHabitIndex]?.createdAt || '').toLocaleDateString('en-US', {
-                                                    month: 'short',
-                                                    day: 'numeric',
-                                                    year: 'numeric'
-                                                })
-                                            ]
-                                        }, void 0, true, {
+                                            className: "text-xs text-muted-foreground h-6 flex items-center",
+                                            children: showLoggedMsg ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: `inline-flex items-center px-3 py-1 rounded-full border font-semibold text-xs animate-fade-in h-6 ${messageType === 'logged' ? 'border-green-600 bg-green-100 text-green-700' : messageType === 'not-started' ? 'border-amber-600 bg-amber-100 text-amber-700' : 'border-blue-600 bg-blue-100 text-blue-700'}`,
+                                                children: [
+                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                                        className: `w-4 h-4 mr-1 ${messageType === 'logged' ? 'text-green-600' : messageType === 'not-started' ? 'text-amber-600' : 'text-blue-600'}`,
+                                                        fill: "none",
+                                                        stroke: "currentColor",
+                                                        viewBox: "0 0 24 24",
+                                                        children: messageType === 'logged' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
+                                                                    cx: "12",
+                                                                    cy: "12",
+                                                                    r: "10",
+                                                                    stroke: "currentColor",
+                                                                    strokeWidth: "2",
+                                                                    fill: "white"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/page.tsx",
+                                                                    lineNumber: 514,
+                                                                    columnNumber: 29
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                                    strokeLinecap: "round",
+                                                                    strokeLinejoin: "round",
+                                                                    strokeWidth: "2",
+                                                                    d: "M9 12l2 2 4-4",
+                                                                    stroke: messageType === 'logged' ? 'green' : 'currentColor'
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/app/page.tsx",
+                                                                    lineNumber: 515,
+                                                                    columnNumber: 29
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true) : messageType === 'not-started' ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                            strokeLinecap: "round",
+                                                            strokeLinejoin: "round",
+                                                            strokeWidth: "2",
+                                                            d: "M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/page.tsx",
+                                                            lineNumber: 516,
+                                                            columnNumber: 65
+                                                        }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                                            strokeLinecap: "round",
+                                                            strokeLinejoin: "round",
+                                                            strokeWidth: "2",
+                                                            d: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/app/page.tsx",
+                                                            lineNumber: 516,
+                                                            columnNumber: 191
+                                                        }, this)
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/app/page.tsx",
+                                                        lineNumber: 512,
+                                                        columnNumber: 23
+                                                    }, this),
+                                                    messageType === 'logged' ? 'LOGGED FOR TODAY!' : messageType === 'not-started' ? 'HABIT NOT STARTED YET' : '3-HABIT LIMIT REACHED'
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/page.tsx",
+                                                lineNumber: 511,
+                                                columnNumber: 36
+                                            }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                className: "h-6 flex items-center",
+                                                children: [
+                                                    "Created: ",
+                                                    new Date(habits[currentHabitIndex]?.createdAt || '').toLocaleDateString('en-US', {
+                                                        month: 'short',
+                                                        day: 'numeric',
+                                                        year: 'numeric'
+                                                    })
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/page.tsx",
+                                                lineNumber: 519,
+                                                columnNumber: 31
+                                            }, this)
+                                        }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 457,
+                                            lineNumber: 510,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 451,
+                                    lineNumber: 504,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    onClick: ()=>setShowHabitSelection(true),
-                                    className: "bg-primary text-primary-foreground font-semibold rounded text-xs hover:opacity-90 transition-opacity px-3 py-2",
+                                    onClick: ()=>{
+                                        if (habits.length >= 3) {
+                                            setMessageType('limit-reached');
+                                            setShowLoggedMsg(true);
+                                            setTimeout(()=>setShowLoggedMsg(false), 3000);
+                                        } else {
+                                            setShowHabitSelection(true);
+                                        }
+                                    },
+                                    className: `bg-primary text-primary-foreground font-semibold rounded text-xs transition-opacity px-3 py-2 ${habits.length >= 3 ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}`,
                                     title: "Add new habit",
                                     style: {
                                         minWidth: '60px',
@@ -5196,13 +5404,13 @@ function Page() {
                                     children: "+ Add"
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 465,
+                                    lineNumber: 526,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 437,
+                            lineNumber: 490,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5218,7 +5426,7 @@ function Page() {
                                                 children: "Successful"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 477,
+                                                lineNumber: 546,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5249,20 +5457,20 @@ function Page() {
                                                         // Chart and Calendar views always show /30 constant
                                                         return `${completed}/30`;
                                                     } else {
-                                                        // Companion view shows pattern-based limit: lock=30, unicorn=60
-                                                        const maxDots = habit?.companionPattern === 'lock' ? 30 : 60;
+                                                        // Companion view always shows 30 dots (lock pattern only)
+                                                        const maxDots = 30;
                                                         return `${completed}/${maxDots}`;
                                                     }
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 478,
+                                                lineNumber: 547,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 476,
+                                        lineNumber: 545,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5273,7 +5481,7 @@ function Page() {
                                                 children: "Missed"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 515,
+                                                lineNumber: 584,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5297,13 +5505,13 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 516,
+                                                lineNumber: 585,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 514,
+                                        lineNumber: 583,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5314,7 +5522,7 @@ function Page() {
                                                 children: "Consistency"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 538,
+                                                lineNumber: 607,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -5349,24 +5557,24 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 539,
+                                                lineNumber: 608,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 537,
+                                        lineNumber: 606,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 475,
+                                lineNumber: 544,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 474,
+                            lineNumber: 543,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5378,15 +5586,27 @@ function Page() {
                                 onDeleteHabit: ()=>deleteHabit(habits[currentHabitIndex].id),
                                 onUpdateHabit: (updatedFields)=>updateHabit(habits[currentHabitIndex].id, updatedFields),
                                 onViewChange: setCurrentView,
-                                isNewHabitMode: false
+                                isNewHabitMode: false,
+                                onShowLoggedMsg: (type)=>{
+                                    setMessageType(type);
+                                    setShowLoggedMsg(true);
+                                    setTimeout(()=>setShowLoggedMsg(false), 3000);
+                                },
+                                onNextHabit: ()=>{
+                                    const nextIndex = currentHabitIndex < habits.length - 1 ? currentHabitIndex + 1 : 0;
+                                    setCurrentHabitIndex(nextIndex);
+                                },
+                                dailyInteractions: dailyInteractions,
+                                setDailyInteractions: setDailyInteractions,
+                                totalHabits: habits.length
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 577,
+                                lineNumber: 646,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 576,
+                            lineNumber: 645,
                             columnNumber: 13
                         }, this)
                     ]
@@ -5399,7 +5619,7 @@ function Page() {
                             onClick: ()=>setShowProfileDrawer(false)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 585,
+                            lineNumber: 661,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5415,7 +5635,7 @@ function Page() {
                                                 children: "Profile"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 591,
+                                                lineNumber: 667,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5433,23 +5653,23 @@ function Page() {
                                                         d: "M6 18L18 6M6 6l12 12"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 594,
+                                                        lineNumber: 670,
                                                         columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 593,
+                                                    lineNumber: 669,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 592,
+                                                lineNumber: 668,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 590,
+                                        lineNumber: 666,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5472,17 +5692,17 @@ function Page() {
                                                                 d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 604,
+                                                                lineNumber: 680,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/page.tsx",
-                                                            lineNumber: 603,
+                                                            lineNumber: 679,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 602,
+                                                        lineNumber: 678,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5492,7 +5712,7 @@ function Page() {
                                                                 children: user?.username || 'User'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 608,
+                                                                lineNumber: 684,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5500,19 +5720,19 @@ function Page() {
                                                                 children: user?.email || 'user@example.com'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 611,
+                                                                lineNumber: 687,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 607,
+                                                        lineNumber: 683,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 601,
+                                                lineNumber: 677,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5523,7 +5743,7 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 617,
+                                                lineNumber: 693,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5534,13 +5754,13 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 621,
+                                                lineNumber: 697,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 600,
+                                        lineNumber: 676,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5554,7 +5774,7 @@ function Page() {
                                                     children: "Log out"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 629,
+                                                    lineNumber: 705,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5562,35 +5782,35 @@ function Page() {
                                                     children: "Sign out of your account"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 630,
+                                                    lineNumber: 706,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 628,
+                                            lineNumber: 704,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 627,
+                                        lineNumber: 703,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 589,
+                                lineNumber: 665,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 588,
+                            lineNumber: 664,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 583,
+                    lineNumber: 659,
                     columnNumber: 31
                 }, this),
                 showLogoutConfirmation && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5603,7 +5823,7 @@ function Page() {
                                 children: "Do you want to log out?"
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 640,
+                                lineNumber: 716,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -5626,7 +5846,7 @@ function Page() {
                                         children: "Yes"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 644,
+                                        lineNumber: 720,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_219142e6b22e4776d4e777d24cb3cf13$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -5635,39 +5855,39 @@ function Page() {
                                         children: "No"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 658,
+                                        lineNumber: 734,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 643,
+                                lineNumber: 719,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 639,
+                        lineNumber: 715,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 638,
+                    lineNumber: 714,
                     columnNumber: 36
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 379,
+            lineNumber: 425,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/page.tsx",
-        lineNumber: 378,
+        lineNumber: 424,
         columnNumber: 10
     }, this);
 }
-_s(Page, "pf23AZZLxf65+7FUGta5DJZy5es=");
+_s(Page, "jOCBLhS3KN39fxZTDSLfss70b9c=");
 _c = Page;
 var _c;
 __turbopack_context__.k.register(_c, "Page");
@@ -5677,4 +5897,4 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 }),
 ]);
 
-//# sourceMappingURL=_7ad432e5._.js.map
+//# sourceMappingURL=_ce7771dc._.js.map

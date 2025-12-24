@@ -2256,7 +2256,7 @@ if ((typeof exports.default === 'function' || typeof exports.default === 'object
 
 module.exports = __turbopack_context__.r("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_219142e6b22e4776d4e777d24cb3cf13/node_modules/next/dist/client/components/navigation.js [app-ssr] (ecmascript)");
 }),
-"[project]/node_modules/.pnpm/@vercel+analytics@1.5.0_nex_7598d87351bd98f6b2fa95ef464a2381/node_modules/@vercel/analytics/dist/next/index.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"[project]/node_modules/.pnpm/@vercel+analytics@1.6.1_nex_9bedf949192c1e1f8e0e933e0db38815/node_modules/@vercel/analytics/dist/next/index.mjs [app-ssr] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
@@ -2272,7 +2272,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ne
 ;
 // package.json
 var name = "@vercel/analytics";
-var version = "1.5.0";
+var version = "1.6.1";
 // src/queue.ts
 var initQueue = ()=>{
     if (window.va) return;
@@ -2457,4 +2457,4 @@ function Analytics2(props) {
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__ff9c9ff7._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__96273c8d._.js.map

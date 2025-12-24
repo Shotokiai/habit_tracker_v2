@@ -1,7 +1,4 @@
 self.__BUILD_MANIFEST = {
-  "/_error": [
-    "static/chunks/pages/_error.js"
-  ],
   "__rewrites": {
     "afterFiles": [],
     "beforeFiles": [],
@@ -13,6 +10,8 @@ self.__BUILD_MANIFEST = {
     "/api/register-user",
     "/api/request-password-reset",
     "/api/reset-password",
-    "/api/track-custom-habit"
+    "/api/track-custom-habit",
+    "/api/track-habit-created",
+    "/api/track-habit-started"
   ]
 };self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()

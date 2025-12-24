@@ -11,16 +11,13 @@ const mod = __turbopack_context__.x("next/dist/compiled/next-server/pages-api-tu
 
 module.exports = mod;
 }),
-"[project]/pages/api/register-user.ts [api] (ecmascript)", ((__turbopack_context__) => {
+"[project]/pages/api/track-habit-created.ts [api] (ecmascript)", ((__turbopack_context__) => {
 "use strict";
 
 __turbopack_context__.s([
     "default",
     ()=>handler
 ]);
-// This route forwards user registration data to SheetDB (Google Sheets API)
-// Set the SheetDB endpoint in environment variable SHEETDB_URL or it will
-// fall back to the endpoint you provided.
 const SHEETDB_URL = process.env.SHEETDB_URL || 'https://sheetdb.io/api/v1/wy27jygmvuwkz';
 async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -28,51 +25,37 @@ async function handler(req, res) {
             error: 'Method not allowed'
         });
     }
-    const { username, email, age } = req.body;
-    if (!username || !email || !age) {
+    const { email, habitName, habitCreatedAt } = req.body;
+    if (!email || !habitName || !habitCreatedAt) {
         return res.status(400).json({
-            error: 'Missing username, email, or age'
-        });
-    }
-    // Validate age is between 15 and 80
-    const ageNum = parseInt(age, 10);
-    if (isNaN(ageNum) || ageNum < 15 || ageNum > 80) {
-        return res.status(400).json({
-            error: 'Age must be between 15 and 80'
+            error: 'Missing email, habitName, or habitCreatedAt'
         });
     }
     try {
-        const response = await fetch(SHEETDB_URL, {
-            method: 'POST',
+        // Update the user record with habit creation time
+        const response = await fetch(`${SHEETDB_URL}/email/${encodeURIComponent(email)}`, {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                data: [
-                    {
-                        username,
-                        email,
-                        age: ageNum,
-                        new_habit_creation: '',
-                        createdAt: new Date().toISOString(),
-                        habit_created_at: '',
-                        habit_started_at: ''
-                    }
-                ]
+                data: {
+                    habit_created_at: habitCreatedAt
+                }
             })
         });
         if (!response.ok) {
             const text = await response.text();
             console.error('SheetDB error:', response.status, text);
             return res.status(500).json({
-                error: 'Failed to save to SheetDB'
+                error: 'Failed to update SheetDB'
             });
         }
         return res.status(200).json({
             success: true
         });
     } catch (err) {
-        console.error('register-user error', err);
+        console.error('track-habit-created error', err);
         return res.status(500).json({
             error: 'Internal server error'
         });
@@ -81,4 +64,4 @@ async function handler(req, res) {
 }),
 ];
 
-//# sourceMappingURL=%5Broot-of-the-server%5D__2d730ac5._.js.map
+//# sourceMappingURL=%5Broot-of-the-server%5D__57b477e1._.js.map

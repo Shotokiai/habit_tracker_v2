@@ -7,6 +7,7 @@ import FirstUserForm from "@/components/first-user-form"
 import HabitSelection from "@/components/habit-selection"
 import CustomHabitScreen from "@/components/CustomHabitScreen"
 import SplashScreen from "@/components/splash-screen"
+import { supabase } from '@/lib/supabase'
 import type { Habit, DayRecord } from "@/lib/types"
 
 
@@ -28,6 +29,24 @@ export default function Page() {
   const [showLogoutConfirmation, setShowLogoutConfirmation] = useState(false);
   const [currentView, setCurrentView] = useState<'chart' | 'calendar' | 'companion'>('chart');
   const [showSplashScreen, setShowSplashScreen] = useState(true);
+
+  // Helper function to update user's last_seen_at timestamp
+  const updateLastSeenAt = async (userEmail: string) => {
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({ last_seen_at: new Date().toISOString() })
+        .eq('email', userEmail);
+        
+      if (error) {
+        console.error('Error updating last_seen_at:', error);
+      } else {
+        console.log('✅ Updated last_seen_at for user:', userEmail);
+      }
+    } catch (err) {
+      console.error('Network error updating last_seen_at:', err);
+    }
+  };
 
   // Helper function to get full habit name from key
   const getHabitNameFromKey = (key: string): string => {
@@ -101,6 +120,9 @@ export default function Page() {
         const userData = JSON.parse(savedUser);
         setUser(userData);
         
+        // Update last_seen_at when app loads with existing user
+        updateLastSeenAt(userData.email);
+        
         // Load habits specific to this user
         const userHabitsKey = `habits_${userData.email}`;
         const savedUserHabits = localStorage.getItem(userHabitsKey);
@@ -128,6 +150,9 @@ export default function Page() {
     setUser(userData);
     localStorage.setItem("currentUser", JSON.stringify(userData));
     setShowSplashScreen(false); // Ensure splash screen is hidden
+    
+    // Update last_seen_at when user logs in/registers
+    updateLastSeenAt(userData.email);
     
     // Load existing habits for this user
     const userHabitsKey = `habits_${userData.email}`;
@@ -163,18 +188,113 @@ export default function Page() {
     }
   }, [habits, isLoaded, user]);
 
+  // Helper function to create habits in Supabase and locally
+  const createHabitInSupabase = async (name: string, person: string, type: string = 'make', source: string = 'predefined') => {
+    if (!user?.email) {
+      console.error('❌ No user email found');
+      return null;
+    }
+
+    try {
+      // Map type to database values
+      const habitType: 'build' | 'break' = type === 'make' ? 'build' : 'break';
+      
+      // First, get the user's UUID from the users table using email
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', user.email)
+        .single();
+
+      if (userError || !userData) {
+        console.error('Error finding user:', userError);
+        return null;
+      }
+
+      // Generate proper UUID and insert habit
+      const habitUUID = crypto.randomUUID();
+      const { data, error } = await supabase
+        .from('habits')
+        .insert([
+          {
+            id: habitUUID,
+            user_id: userData.id,
+            title: name,
+            type: habitType,
+            source: source // Use the passed source parameter
+          }
+        ])
+        .select();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        return null;
+      }
+
+      console.log('✅ Habit created in Supabase:', data);
+
+      // Create local habit object
+      const currentMonthYear = new Date().toISOString().slice(0, 7);
+      const newHabit: Habit = {
+        id: habitUUID,
+        name: name,
+        person,
+        dayRecords: [],
+        createdAt: new Date().toISOString(),
+        monthYear: currentMonthYear,
+      };
+
+      setHabits(prevHabits => {
+        const updatedHabits = [...prevHabits, newHabit];
+        setCurrentHabitIndex(updatedHabits.length - 1); // Set to the newly created habit's index
+        return updatedHabits;
+      });
+      return newHabit;
+    } catch (err) {
+      console.error('Network error during habit creation:', err);
+      return null;
+    }
+  };
+
   const addHabit = async (name: string, person: string) => {
+    console.log('🔧 addHabit called with name:', name, 'person:', person);
+    
     const currentMonthYear = new Date().toISOString().slice(0, 7);
+    
+    // Get habit ID and name from stored window object (set by habit-selection)
+    let habitId: string;
+    let habitName = name;
+    
+    // Check if we have a stored UUID from habit selection
+    if (window.currentHabitUUID) {
+      habitId = window.currentHabitUUID;
+      habitName = window.currentHabitName || name;
+      console.log('✅ Using stored UUID:', habitId, 'Name:', habitName, 'Type:', window.currentHabitType);
+      
+      // Clear the stored data after using it
+      window.currentHabitUUID = null;
+      window.currentHabitName = null;
+      window.currentHabitType = null;
+    } else {
+      console.error('❌ No stored UUID found - habit creation must go through habit-selection!');
+      return; // Stop execution - no fallback IDs allowed
+    }
+    
+    console.log('📝 FINAL RESULT - ID:', habitId, 'Name:', habitName);
+    
     const newHabit: Habit = {
-      id: Date.now().toString(),
-      name,
+      id: habitId, // Use Supabase UUID or fallback to timestamp
+      name: habitName,
       person,
       dayRecords: [],
       createdAt: new Date().toISOString(),
       monthYear: currentMonthYear,
     };
-    setHabits([...habits, newHabit]);
-    setCurrentHabitIndex(habits.length);
+    setHabits(prevHabits => {
+      const updatedHabits = [...prevHabits, newHabit];
+      setCurrentHabitIndex(updatedHabits.length - 1); // Set to the newly created habit's index
+      return updatedHabits;
+    });
 
     // Track habit creation in Supabase
     if (user) {
@@ -286,25 +406,52 @@ export default function Page() {
         <HabitSelection
           userName={user?.username?.split(' ')[0]}
           userAge={typeof user?.age === 'string' ? parseInt(user.age) || 25 : 25}
-          onSelect={(habit) => {
+          userId={user?.email} // Use email as unique user identifier
+          onSelect={async (habit) => {
+            console.log('🔗 Habit selection onSelect called with:', habit);
+            
             if (habit === "custom_make") {
               setCustomHabitType("make");
             } else if (habit === "custom_break") {
               setCustomHabitType("break");
-            } else if (habit.startsWith("custom_make:")) {
-              // Extract custom habit name without prefix
-              const customHabitName = habit.replace("custom_make:", "");
-              addHabit(customHabitName, "__hide__");
-              setHabitSelection(customHabitName);
-            } else if (habit.startsWith("custom_break:")) {
-              // Extract custom habit name without prefix
-              const customHabitName = habit.replace("custom_break:", "");
-              addHabit(customHabitName, "__hide__");
-              setHabitSelection(customHabitName);
-            } else {
-              const fullHabitName = getHabitNameFromKey(habit);
-              setHabitSelection(habit);
-              addHabit(fullHabitName, "__hide__");
+            } else if (habit.includes("custom_make:")) {
+              // Handle custom_make:habit_name format
+              const habitName = habit.split("custom_make:")[1];
+              console.log('🔧 Processing custom_make habit:', habitName);
+              const createdHabit = await createHabitInSupabase(habitName, user?.username || "User", "make", "custom");
+              if (createdHabit) {
+                setCurrentHabitIndex(habits.length); // Switch to the new habit
+                setHabitSelection("existing");
+              }
+            } else if (habit.includes("custom_break:")) {
+              // Handle custom_break:habit_name format
+              const habitName = habit.split("custom_break:")[1];
+              console.log('🔧 Processing custom_break habit:', habitName);
+              const createdHabit = await createHabitInSupabase(habitName, user?.username || "User", "break", "custom");
+              if (createdHabit) {
+                setCurrentHabitIndex(habits.length); // Switch to the new habit
+                setHabitSelection("existing");
+              }
+            } else if (habit.includes("predefined_make:")) {
+              // Handle predefined_make:habit_name format
+              const habitKey = habit.split("predefined_make:")[1];
+              const habitName = getHabitNameFromKey(habitKey);
+              console.log('🔧 Processing predefined_make habit:', habitName);
+              const createdHabit = await createHabitInSupabase(habitName, user?.username || "User", "make", "predefined");
+              if (createdHabit) {
+                setCurrentHabitIndex(habits.length); // Switch to the new habit
+                setHabitSelection("existing");
+              }
+            } else if (habit.includes("predefined_break:")) {
+              // Handle predefined_break:habit_name format
+              const habitKey = habit.split("predefined_break:")[1];
+              const habitName = getHabitNameFromKey(habitKey);
+              console.log('🔧 Processing predefined_break habit:', habitName);
+              const createdHabit = await createHabitInSupabase(habitName, user?.username || "User", "break", "predefined");
+              if (createdHabit) {
+                setCurrentHabitIndex(habits.length); // Switch to the new habit
+                setHabitSelection("existing");
+              }
             }
           }}
         />
@@ -340,66 +487,52 @@ export default function Page() {
           <HabitSelection
             userName={user?.username}
             userAge={typeof user?.age === 'string' ? (user.age === 'under_18' ? 16 : user.age === '18_24' ? 21 : user.age === '25_34' ? 30 : user.age === '35_44' ? 40 : 50) : 25}
+            userId={user?.email} // Use email as unique user identifier
             onBack={() => setShowHabitSelection(false)}
-            onSelect={(habit) => {
+            onSelect={async (habit) => {
               if (habit === "custom_make") {
                 setCustomHabitType("make");
                 setShowHabitSelection(false);
-                setCurrentHabitIndex(habits.length);
               } else if (habit === "custom_break") {
                 setCustomHabitType("break");
                 setShowHabitSelection(false);
-                setCurrentHabitIndex(habits.length);
               } else if (habit.startsWith("custom_make:")) {
                 // Extract custom habit name without prefix
                 const customHabitName = habit.replace("custom_make:", "");
-                const currentMonthYear = new Date().toISOString().slice(0, 7);
-                const newHabit: Habit = {
-                  id: Date.now().toString(),
-                  name: customHabitName,
-                  person: user?.username || "User",
-                  dayRecords: [],
-                  createdAt: new Date().toISOString(),
-                  monthYear: currentMonthYear,
-                };
-                setHabits([...habits, newHabit]);
-                setCurrentHabitIndex(habits.length);
+                // Create habit in Supabase and locally
+                await createHabitInSupabase(customHabitName, user?.username || "User", "make", "custom");
                 setShowHabitSelection(false);
               } else if (habit.startsWith("custom_break:")) {
                 // Extract custom habit name without prefix
                 const customHabitName = habit.replace("custom_break:", "");
-                const currentMonthYear = new Date().toISOString().slice(0, 7);
-                const newHabit: Habit = {
-                  id: Date.now().toString(),
-                  name: customHabitName,
-                  person: user?.username || "User",
-                  dayRecords: [],
-                  createdAt: new Date().toISOString(),
-                  monthYear: currentMonthYear,
-                };
-                setHabits([...habits, newHabit]);
-                setCurrentHabitIndex(habits.length);
+                // Create habit in Supabase and locally
+                await createHabitInSupabase(customHabitName, user?.username || "User", "break", "custom");
+                setShowHabitSelection(false);
+              } else if (habit.startsWith("predefined_make:")) {
+                // Predefined habit from make tab
+                const habitKey = habit.replace("predefined_make:", "");
+                const fullHabitName = getHabitNameFromKey(habitKey);
+                setHabitSelection(habitKey);
+                await createHabitInSupabase(fullHabitName, user?.username || "User", "make", "predefined");
+                setShowHabitSelection(false);
+              } else if (habit.startsWith("predefined_break:")) {
+                // Predefined habit from break tab
+                const habitKey = habit.replace("predefined_break:", "");
+                const fullHabitName = getHabitNameFromKey(habitKey);
+                setHabitSelection(habitKey);
+                await createHabitInSupabase(fullHabitName, user?.username || "User", "break", "predefined");
                 setShowHabitSelection(false);
               } else {
+                // Fallback for any other format
                 const fullHabitName = getHabitNameFromKey(habit);
                 setHabitSelection(habit);
+                const habitType = habit.includes('break') ? 'break' : 'make';
+                await createHabitInSupabase(fullHabitName, user?.username || "User", habitType, "predefined");
                 setShowHabitSelection(false);
-                // Directly create the habit with the full name
-                const currentMonthYear = new Date().toISOString().slice(0, 7);
-                const newHabit: Habit = {
-                  id: Date.now().toString(),
-                  name: fullHabitName,
-                  person: user?.username || "User",
-                  dayRecords: [],
-                  createdAt: new Date().toISOString(),
-                  monthYear: currentMonthYear,
-                };
-                setHabits([...habits, newHabit]);
-                setCurrentHabitIndex(habits.length);
               }
             }}
           />
-        ) : (habits.length === 0 || currentHabitIndex === habits.length) ? (
+        ) : habits.length === 0 ? (
           <HabitTracker
             habit={null}
             onAddHabit={addHabit}
@@ -425,16 +558,6 @@ export default function Page() {
           <>
             <div 
               className="bg-card border-b border-foreground/10 p-3 flex items-center justify-between gap-2"
-              onTouchStart={(e) => {
-                setTouchStart(e.targetTouches[0].clientX);
-                setSwipeStartFromNav(true);
-              }}
-              onTouchEnd={(e) => {
-                if (swipeStartFromNav) {
-                  setTouchEnd(e.changedTouches[0].clientX);
-                  handleSwipe();
-                }
-              }}
             >
               <button
                 onClick={() => setShowProfileDrawer(true)}
@@ -483,6 +606,7 @@ export default function Page() {
                   )}
                 </div>
               </div>
+              
               <button
                 onClick={() => {
                   if (habits.length >= 3) {
@@ -624,8 +748,7 @@ export default function Page() {
                   setTimeout(() => setShowLoggedMsg(false), 3000);
                 }}
                 onNextHabit={() => {
-                  const nextIndex = currentHabitIndex < habits.length - 1 ? currentHabitIndex + 1 : 0;
-                  setCurrentHabitIndex(nextIndex);
+                  setCurrentHabitIndex((prev) => (prev + 1) % habits.length);
                 }}
                 dailyInteractions={dailyInteractions}
                 setDailyInteractions={setDailyInteractions}

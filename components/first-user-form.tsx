@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { supabase } from '../lib/supabase'
 
 interface FirstUserFormProps {
   onSubmit: (user: { username: string; email: string; age: string }) => void
@@ -38,7 +39,7 @@ export default function FirstUserForm({ onSubmit, onBack }: FirstUserFormProps) 
     }
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!username.trim() || age === "" || !email.trim()) {
       setError("Please fill in all fields.")
@@ -50,32 +51,40 @@ export default function FirstUserForm({ onSubmit, onBack }: FirstUserFormProps) 
     }
     setError("")
     
-    // Handle registration asynchronously
-    ;(async () => {
-      const newUser = { username, age, email }
-      
-      // Try to POST to our API, but continue even if it fails
-      try {
-        const res = await fetch('/api/register-user', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, age, email }),
-        })
-        
-        if (!res.ok) {
-          console.warn('API registration failed, but continuing locally')
-        }
-      } catch (err) {
-        console.warn('Network error during registration, but continuing locally:', err)
+    const newUser = { username, age, email }
+    
+    // Save to Supabase users table
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .insert([
+          {
+            name: username,
+            email: email,
+            age: parseInt(age),
+          }
+        ])
+        .select(); // Add .select() to return the inserted data
+
+      if (error) {
+        console.error('Supabase error:', error);
+        setError(error.message);
+        return;
       }
+
+      console.log('User inserted to Supabase:', data);
       
-      // Save user to localStorage for future logins regardless of API status
+      // Save user to localStorage for future logins
       const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
       localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
       
-      // Always continue to next step
+      // Continue to next step
       onSubmit(newUser)
-    })()
+      
+    } catch (err) {
+      console.error('Network error during Supabase registration:', err)
+      setError('Failed to register. Please try again.')
+    }
   }
 
   const handleUserLogin = (user: SavedUser) => {

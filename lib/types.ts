@@ -13,3 +13,12 @@ export interface DayRecord {
   x: number;
   y: number;
 }
+
+// Extend Window interface for habit UUID storage
+declare global {
+  interface Window {
+    currentHabitUUID: string | null;
+    currentHabitName: string | null;
+    currentHabitType: string | null;
+  }
+}

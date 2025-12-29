@@ -12,13 +12,13 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
     "@supabase/supabase-js": "^2.89.0",
-    "@tailwindcss/postcss": "^4.1.17",
     "@vercel/analytics": "^1.6.1",
     "autoprefixer": "^10.4.22",
     "expo": "~52.0.0",
     "expo-build-properties": "~0.13.0",
     "expo-constants": "~17.0.0",
     "expo-status-bar": "~2.0.0",
+    "geist": "^1.5.1",
     "nativewind": "^2.0.11",
     "next": "^16.0.8",
     "postcss": "^8.5.6",
@@ -28,7 +28,7 @@
     "react-native-svg": "15.8.0",
     "react-native-web": "~0.19.10",
     "svg-path-properties": "^2.0.0",
-    "tailwindcss": "^3.4.0"
+    "tailwindcss": "3.4.19"
   },
   "devDependencies": {
     "@babel/core": "^7.23.0",

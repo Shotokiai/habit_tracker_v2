@@ -598,7 +598,7 @@ export default function HabitTracker({
                 <div className="flex gap-2 mb-3">
                   <button
                     onClick={handleLetGo}
-                    className="flex-1 px-3 py-2.5 bg-green-500 hover:bg-emerald-600 text-white font-semibold rounded-lg transition-all active:scale-95 shadow-lg text-center text-sm flex items-center justify-center h-14 rounded-2xl"
+                    className="flex-1 px-3 py-2.5 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-lg transition-colors shadow-lg text-center text-sm flex items-center justify-center h-14 rounded-2xl"
                   >
                     <span className="text-[15px] font-bold whitespace-nowrap">Completed Habit!</span>
                   </button>

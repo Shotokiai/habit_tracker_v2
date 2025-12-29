@@ -103,7 +103,7 @@ export function ManualDotsCanvas({
           style={{ backgroundColor: 'white' }}
           preserveAspectRatio="xMidYMid meet"
         >
-          {/* Load ghoda image with better debugging */}
+          {/* Define shadow filter */}
           <defs>
             <pattern id="backgroundImage" patternUnits="userSpaceOnUse" width={imageWidth} height={imageHeight}>
               <image 
@@ -125,6 +125,9 @@ export function ManualDotsCanvas({
                 }}
               />
             </pattern>
+            <filter id="drop-shadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="2" dy="2" stdDeviation="3" floodOpacity="0.3"/>
+            </filter>
           </defs>
           
           {/* Show background image if loaded, otherwise white */}
@@ -140,6 +143,7 @@ export function ManualDotsCanvas({
                 fill={visibleIndex < completedDays ? "#000000" : "#ffffff"}
                 stroke="#1f2937"
                 strokeWidth="3"
+                filter="url(#drop-shadow)"
               />
               <text
                 x={dot.x}

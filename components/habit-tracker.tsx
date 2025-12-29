@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { supabase } from '../lib/supabase'
 import FirstUserForm from "@/components/first-user-form"
 import type { Habit, DayRecord } from "@/lib/types"
 import HabitGrid from "@/components/habit-grid"
@@ -41,6 +42,10 @@ export default function HabitTracker({
 }: HabitTrackerProps) {
   const [dayRecords, setDayRecords] = useState<DayRecord[]>([])
   const [isSaved, setIsSaved] = useState(false)
+  
+  // Habit Cycle State Management
+  const [currentCycle, setCurrentCycle] = useState<any>(null)
+  const [habitStarted, setHabitStarted] = useState<boolean>(false)
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false)
   const [showViewDropdown, setShowViewDropdown] = useState(false)
   const [currentView, setCurrentView] = useState<'chart' | 'calendar' | 'companion'>(habit?.preferredView || 'chart')
@@ -95,11 +100,59 @@ export default function HabitTracker({
         setDayRecords(habit.dayRecords)
         setIsSaved(true)
       }
+      
+      // Load existing habit cycle data
+      loadHabitCycle();
     } else {
       setDayRecords([])
       setIsSaved(false)
+      setCurrentCycle(null);
+      setHabitStarted(false);
     }
   }, [habit])
+
+  // Load existing habit cycle for this habit
+  const loadHabitCycle = async () => {
+    if (!habit) return;
+    
+    // Strict UUID validation for loadHabitCycle
+    const habitId = habit.id;
+    const isUUID = typeof habitId === 'string' && 
+      habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+    
+    if (!isUUID) {
+      console.error('❌ loadHabitCycle: Invalid habit UUID:', habitId, 'TYPE:', typeof habitId);
+      console.error('❌ STOPPING cycle lookup - habit must have valid UUID');
+      return;
+    }
+    
+    console.log('🆔 Using valid habit UUID for cycle lookup:', habitId);
+    
+    try {
+      const { data: cycles, error } = await supabase
+        .from('habit_cycles')
+        .select('*')
+        .eq('habit_id', habitId) // Use validated UUID
+        .gte('end_date', new Date().toISOString().split('T')[0]) // only active cycles
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      if (error) {
+        console.error('Error loading habit cycle:', error);
+        return;
+      }
+
+      if (cycles && cycles.length > 0) {
+        setCurrentCycle(cycles[0]);
+        setHabitStarted(true);
+      } else {
+        setCurrentCycle(null);
+        setHabitStarted(false);
+      }
+    } catch (err) {
+      console.error('Network error loading habit cycle:', err);
+    }
+  };
 
   useEffect(() => {
     if (isSaved && habit) {
@@ -109,11 +162,33 @@ export default function HabitTracker({
 
 
 
-  const handleLetGo = () => {
+  const handleLetGo = async () => {
     if (!habit) return;
     
-    const today = new Date().toDateString();
+    // Strict UUID validation - NO fallbacks allowed
     const habitId = habit.id;
+    const isUUID = typeof habitId === 'string' && 
+      habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+    
+    if (!isUUID) {
+      console.error('❌ Invalid habit UUID received:', habitId, 'TYPE:', typeof habitId);
+      console.error('❌ STOPPING EXECUTION - habit must have valid UUID');
+      // Still create visual feedback but skip all database operations
+      setDayRecords((prev) => {
+        const lastRecord = prev[prev.length - 1]
+        if (!lastRecord) {
+          return [{ x: 1, y: 1 }]
+        }
+        const newX = lastRecord.x + 1
+        const newY = lastRecord.y + 1
+        return [...prev, { x: newX, y: newY }]
+      })
+      return;
+    }
+    
+    console.log('🆔 Using valid habit UUID:', habitId);
+    
+    const today = new Date().toDateString();
     const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
     
     // If this is the second or more interaction today, just show message
@@ -127,7 +202,8 @@ export default function HabitTracker({
       ...dailyInteractions,
       [`${habitId}-${today}`]: todayInteractions + 1
     });
-    
+
+    // ALWAYS create the dot first (visual feedback) - don't let database errors block this
     setDayRecords((prev) => {
       const lastRecord = prev[prev.length - 1]
       if (!lastRecord) {
@@ -151,6 +227,120 @@ export default function HabitTracker({
       }
       return prev
     })
+
+    // Then handle Supabase operations (don't let errors block visual feedback)
+    try {
+      console.log('🔍 Starting Supabase operations for habit:', habitId);
+      console.log('🔍 Habit ID type:', typeof habitId, 'length:', habitId.length, 'contains dash:', habitId.includes('-'));
+      
+      // Check if there's an active cycle for this habit
+      const { data: cycles, error: cyclesError } = await supabase
+        .from('habit_cycles')
+        .select('*')
+        .eq('habit_id', habitId) // habitId must be UUID
+        .gte('end_date', new Date().toISOString().split('T')[0]) // only active cycles
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      console.log('📊 Query result - cycles:', cycles, 'error:', cyclesError);
+
+      if (cyclesError) {
+        console.error('❌ Error checking cycles:', cyclesError);
+        
+        // If the error is about table not existing or column issues, log it specifically
+        if (cyclesError.code === '42P01') {
+          console.error('🚨 Table habit_cycles does not exist!');
+        } else if (cyclesError.code === '42703') {
+          console.error('🚨 Column habit_id does not exist in habit_cycles table!');
+        }
+        
+        return; // Visual feedback already created above
+      }
+
+      const todayDate = new Date().toISOString().split('T')[0];
+      console.log('📅 Today date:', todayDate);
+
+      if (cycles.length === 0) {
+        // No active cycle exists → create a new cycle (this starts the habit)
+        console.log('➕ Creating new habit cycle...');
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() + 29); // Add 29 days for 30-day cycle including today
+        
+        const newCycleData = {
+          habit_id: habitId,
+          start_date: todayDate,
+          end_date: endDate.toISOString().split('T')[0],
+          completed_days: 1, // first day completed
+          missed_days: 0,
+          consistency: (1 / 30.0) * 100,
+        };
+        
+        console.log('📝 Inserting cycle data:', newCycleData);
+        console.log('📝 Habit ID for insert:', habitId, 'type:', typeof habitId, 'length:', habitId.length);
+        
+        const { data, error } = await supabase
+          .from('habit_cycles')
+          .insert([newCycleData])
+          .select();
+
+        console.log('💾 Insert result - data:', data, 'error:', error);
+        
+        if (error) {
+          console.error('❌ Detailed error creating habit cycle:', {
+            message: error.message,
+            code: error.code,
+            details: error.details,
+            hint: error.hint
+          });
+          
+          // Try a fallback approach - check if habit exists in habits table
+          console.log('🔄 Checking if habit exists in habits table...');
+          const { data: habitCheck, error: habitCheckError } = await supabase
+            .from('habits')
+            .select('id, title')
+            .eq('id', habitId);
+          
+          console.log('🔍 Habit check result:', habitCheck, 'error:', habitCheckError);
+          return; // Visual feedback already created above
+        }
+
+        console.log('✅ New habit cycle created:', data);
+        setCurrentCycle(data[0]);
+        setHabitStarted(true);
+        
+      } else {
+        // Active cycle exists → update it
+        console.log('🔄 Updating existing habit cycle...');
+        const currentCycleData = cycles[0];
+        const newCompletedDays = currentCycleData.completed_days + 1;
+        const newConsistency = (newCompletedDays / 30.0) * 100;
+
+        console.log('📈 Update data - completed days:', newCompletedDays, 'consistency:', newConsistency);
+
+        const { error } = await supabase
+          .from('habit_cycles')
+          .update({
+            completed_days: newCompletedDays,
+            consistency: newConsistency,
+          })
+          .eq('id', currentCycleData.id);
+
+        console.log('💾 Update result - error:', error);
+
+        if (error) {
+          console.error('❌ Error updating habit cycle:', error);
+          return; // Visual feedback already created above
+        }
+
+        console.log('✅ Habit cycle updated - completed day');
+        setCurrentCycle({...currentCycleData, completed_days: newCompletedDays, consistency: newConsistency});
+        setHabitStarted(true);
+      }
+
+    } catch (err) {
+      console.error('🚨 Network error during habit cycle management:', err);
+      // Visual feedback already created above, so don't block the UI
+    }
   }
 
   const handleStick = () => {
@@ -189,11 +379,11 @@ export default function HabitTracker({
     setShowDeleteConfirmation(false)
   }
 
-  const handleHabitMissed = () => {
+  const handleHabitMissed = async () => {
     if (!habit) return;
     
-    // If habit hasn't started yet (no records), show "not started" message
-    if (dayRecords.length === 0) {
+    // Check if habit has started yet (has active cycle)
+    if (!habitStarted && dayRecords.length === 0) {
       onShowLoggedMsg?.('not-started');
       return;
     }
@@ -213,7 +403,34 @@ export default function HabitTracker({
       ...dailyInteractions,
       [`${habitId}-${today}`]: todayInteractions + 1
     });
-    
+
+    try {
+      // Only update if habit has started (has active cycle)
+      if (habitStarted && currentCycle) {
+        const newMissedDays = currentCycle.missed_days + 1;
+        
+        const { error } = await supabase
+          .from('habit_cycles')
+          .update({
+            missed_days: newMissedDays,
+            // consistency stays the same - only increases when completed
+          })
+          .eq('id', currentCycle.id);
+
+        if (error) {
+          console.error('Error updating missed days:', error);
+          return;
+        }
+
+        console.log('Habit cycle updated - missed day');
+        setCurrentCycle({...currentCycle, missed_days: newMissedDays});
+      }
+
+    } catch (err) {
+      console.error('Network error during missed day tracking:', err);
+    }
+
+    // Continue with original dot grid logic
     setDayRecords((prev) => {
       const lastRecord = prev[prev.length - 1]
       

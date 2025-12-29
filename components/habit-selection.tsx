@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from '../lib/supabase';
 
 const getHabitsForAge = (age: number, type: 'make' | 'break') => {
   if (age >= 15 && age <= 20) {
@@ -80,43 +81,45 @@ export default function HabitSelection({
   onSelect, 
   onBack, 
   userName,
-  userAge = 25 // Default age if not provided
+  userAge = 25, // Default age if not provided
+  userId // Add userId prop for linking habits to users
 }: { 
   onSelect: (habit: string) => void
   onBack?: () => void
   userName?: string
   userAge?: number
+  userId?: string // User ID from authentication or registration
 }) {
-  const [tab, setTab] = useState<'make' | 'break'>('make');
+  const [activeTab, setActiveTab] = useState<'make' | 'break'>('make'); // Track active tab
   const [selected, setSelected] = useState<string>("");
   const [customHabit, setCustomHabit] = useState<string>("");
   const maxCustomLength = 25;
 
-  const habits = getHabitsForAge(userAge, tab);
+  const habits = getHabitsForAge(userAge, activeTab);
 
   const handleStartBuilding = async () => {
+    let habitTitle = '';
+    let isCustom = false;
+
     if (customHabit.trim()) {
-      // Track custom habit creation in Google Sheets
-      try {
-        await fetch('/api/track-custom-habit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            habitName: customHabit.trim(),
-            habitType: tab,
-            userAge,
-            userName
-          })
-        });
-      } catch (error) {
-        console.error('Failed to track custom habit:', error);
-      }
-      
-      // Handle custom habit
-      onSelect(tab === 'make' ? `custom_make:${customHabit.trim()}` : `custom_break:${customHabit.trim()}`);
+      habitTitle = customHabit.trim();
+      isCustom = true;
     } else if (selected) {
-      // Handle predefined habit
-      onSelect(selected);
+      const selectedHabit = habits.find(h => h.key === selected);
+      habitTitle = selectedHabit ? selectedHabit.label : selected;
+      isCustom = false;
+    } else {
+      alert('Please select a habit or create your own.');
+      return;
+    }
+
+    // Don't create habit here - let page.tsx handle ALL database operations
+    // Just pass the information to page.tsx with proper format
+    if (isCustom) {
+      onSelect(`custom_${activeTab}:${habitTitle}`);
+    } else {
+      // For predefined habits, include tab information in the format
+      onSelect(`predefined_${activeTab}:${selected}`);
     }
   };
 
@@ -165,12 +168,12 @@ export default function HabitSelection({
           <div className="p-1.5 bg-gray-100 rounded-2xl flex relative mb-6 shadow-inner border border-gray-200 max-w-md mx-auto w-full">
             <button 
               onClick={() => {
-                setTab('make');
+                setActiveTab('make');
                 setSelected("");
                 setCustomHabit("");
               }}
               className={`flex-1 py-3 px-2 rounded-xl text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 ${
-                tab === 'make' 
+                activeTab === 'make' 
                   ? 'shadow-md bg-teal-500 text-white scale-100' 
                   : 'text-gray-500 hover:bg-white/50 hover:text-teal-500'
               }`}
@@ -180,12 +183,12 @@ export default function HabitSelection({
             </button>
             <button 
               onClick={() => {
-                setTab('break');
+                setActiveTab('break');
                 setSelected("");
                 setCustomHabit("");
               }}
               className={`flex-1 py-3 px-2 rounded-xl text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 ${
-                tab === 'break' 
+                activeTab === 'break' 
                   ? 'shadow-md bg-rose-500 text-white scale-100' 
                   : 'text-gray-500 hover:bg-white/50 hover:text-rose-500'
               }`}

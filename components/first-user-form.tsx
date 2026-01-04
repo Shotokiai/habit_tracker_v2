@@ -55,6 +55,16 @@ export default function FirstUserForm({ onSubmit, onBack }: FirstUserFormProps) 
     
     // Save to Supabase users table
     try {
+      // Check if Supabase is properly configured
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+        console.warn('⚠️ Supabase not configured in production, using local storage only');
+        // For production without Supabase, continue with localStorage only
+        const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
+        localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
+        onSubmit(newUser)
+        return;
+      }
+      
       const { data, error } = await supabase
         .from('users')
         .insert([
@@ -68,6 +78,14 @@ export default function FirstUserForm({ onSubmit, onBack }: FirstUserFormProps) 
 
       if (error) {
         console.error('Supabase error:', error);
+        // If it's a network/connection error, still allow local storage registration
+        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+          console.warn('🔄 Network issue, falling back to local storage only');
+          const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
+          localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
+          onSubmit(newUser)
+          return;
+        }
         setError(error.message);
         return;
       }
@@ -83,7 +101,11 @@ export default function FirstUserForm({ onSubmit, onBack }: FirstUserFormProps) 
       
     } catch (err) {
       console.error('Network error during Supabase registration:', err)
-      setError('Failed to register. Please try again.')
+      // Network errors in production - use localStorage as fallback
+      console.warn('🔄 Network error, falling back to local storage only');
+      const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
+      localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
+      onSubmit(newUser)
     }
   }
 

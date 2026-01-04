@@ -3,6 +3,8 @@
 "use strict";
 
 __turbopack_context__.s([
+    "isSupabaseConfigured",
+    ()=>isSupabaseConfigured,
     "supabase",
     ()=>supabase
 ]);
@@ -11,7 +13,19 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$
 ;
 const supabaseUrl = ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || 'https://placeholder.supabase.co';
 const supabaseAnonKey = ("TURBOPACK compile-time value", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2c2F6cmFhZHZoanBqdGpqd2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5OTI5MjMsImV4cCI6MjA4MjU2ODkyM30.zP6Tu-x6lAni6wRLsYhalBhH7NQPBHXI2tFrA7YBBfU") || 'placeholder-key';
+// Log configuration status for debugging
+if ("TURBOPACK compile-time truthy", 1) {
+    if (supabaseUrl.includes('placeholder') || supabaseAnonKey.includes('placeholder')) {
+        console.warn('⚠️ Supabase not configured - using fallback values');
+        console.warn('📱 App will work with local storage only');
+    } else {
+        console.log('✅ Supabase configured properly');
+    }
+}
 const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$supabase$2b$supabase$2d$js$40$2$2e$89$2e$0$2f$node_modules$2f40$supabase$2f$supabase$2d$js$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createClient"])(supabaseUrl, supabaseAnonKey);
+const isSupabaseConfigured = ()=>{
+    return !supabaseUrl.includes('placeholder') && !supabaseAnonKey.includes('placeholder');
+};
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
@@ -2529,14 +2543,10 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
         "HabitTracker.useEffect": ()=>{
             if (habit) {
                 const currentMonthYear = new Date().toISOString().slice(0, 7);
-                if (habit.monthYear !== currentMonthYear) {
-                    // Different month - reset
-                    setDayRecords([]);
-                    setIsSaved(true);
-                } else {
-                    setDayRecords(habit.dayRecords);
-                    setIsSaved(true);
-                }
+                // REMOVED: Month-based reset that was causing data loss for existing users
+                // Always load existing habit data to preserve user progress
+                setDayRecords(habit.dayRecords);
+                setIsSaved(true);
                 // Load existing habit cycle data
                 loadHabitCycle();
             } else {
@@ -2883,7 +2893,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
             }
         }, void 0, false, {
             fileName: "[project]/components/habit-tracker.tsx",
-            lineNumber: 446,
+            lineNumber: 442,
             columnNumber: 12
         }, this);
     }
@@ -2899,7 +2909,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "No Habits Yet"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 456,
+                        lineNumber: 452,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2907,7 +2917,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "You haven't created any habits yet. Start your journey by creating your first habit!"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 457,
+                        lineNumber: 453,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2919,18 +2929,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "Create Your First Habit"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 460,
+                        lineNumber: 456,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/habit-tracker.tsx",
-                lineNumber: 455,
+                lineNumber: 451,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/habit-tracker.tsx",
-            lineNumber: 454,
+            lineNumber: 450,
             columnNumber: 12
         }, this);
     }
@@ -2958,7 +2968,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 478,
+                                        lineNumber: 474,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -2971,18 +2981,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             clipRule: "evenodd"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 480,
+                                            lineNumber: 476,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 479,
+                                        lineNumber: 475,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 474,
+                                lineNumber: 470,
                                 columnNumber: 15
                             }, this),
                             showViewDropdown && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3002,7 +3012,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Chart View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 486,
+                                            lineNumber: 482,
                                             columnNumber: 49
                                         }, this),
                                         currentView !== 'calendar' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3016,7 +3026,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Calendar View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 493,
+                                            lineNumber: 489,
                                             columnNumber: 52
                                         }, this),
                                         currentView !== 'companion' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3031,29 +3041,29 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Companion View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 500,
+                                            lineNumber: 496,
                                             columnNumber: 53
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/habit-tracker.tsx",
-                                    lineNumber: 485,
+                                    lineNumber: 481,
                                     columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 484,
+                                lineNumber: 480,
                                 columnNumber: 36
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 473,
+                        lineNumber: 469,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 472,
+                    lineNumber: 468,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3065,12 +3075,12 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 dayRecords: dayRecords
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 516,
+                                lineNumber: 512,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 515,
+                            lineNumber: 511,
                             columnNumber: 41
                         }, this),
                         currentView === 'calendar' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3080,12 +3090,12 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 habitStartDate: habit.createdAt
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 519,
+                                lineNumber: 515,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 518,
+                            lineNumber: 514,
                             columnNumber: 44
                         }, this),
                         currentView === 'companion' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3108,18 +3118,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 totalHabits: totalHabits
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 522,
+                                lineNumber: 518,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 521,
+                            lineNumber: 517,
                             columnNumber: 45
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 514,
+                    lineNumber: 510,
                     columnNumber: 11
                 }, this),
                 (currentView === 'chart' || currentView === 'calendar' || currentView === 'companion' && isCompanionCanvasShowing) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3138,12 +3148,12 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Completed Habit!"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 537,
+                                            lineNumber: 533,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 536,
+                                        lineNumber: 532,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3154,18 +3164,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Missed Today"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 540,
+                                            lineNumber: 536,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 539,
+                                        lineNumber: 535,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 535,
+                                lineNumber: 531,
                                 columnNumber: 17
                             }, this),
                             habit && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3177,7 +3187,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "Want to give up?"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 546,
+                                        lineNumber: 542,
                                         columnNumber: 21
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3198,35 +3208,35 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                                     d: "M9 5l7 7-7 7"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/habit-tracker.tsx",
-                                                    lineNumber: 552,
+                                                    lineNumber: 548,
                                                     columnNumber: 25
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/habit-tracker.tsx",
-                                                lineNumber: 551,
+                                                lineNumber: 547,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 549,
+                                        lineNumber: 545,
                                         columnNumber: 21
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 545,
+                                lineNumber: 541,
                                 columnNumber: 27
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 534,
+                        lineNumber: 530,
                         columnNumber: 15
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 533,
+                    lineNumber: 529,
                     columnNumber: 130
                 }, this),
                 showDeleteConfirmation && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3239,7 +3249,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 children: "Do you really don't want to continue?"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 562,
+                                lineNumber: 558,
                                 columnNumber: 17
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3251,7 +3261,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "Yes"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 566,
+                                        lineNumber: 562,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3260,31 +3270,31 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "No"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 569,
+                                        lineNumber: 565,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 565,
+                                lineNumber: 561,
                                 columnNumber: 17
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 561,
+                        lineNumber: 557,
                         columnNumber: 15
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 560,
+                    lineNumber: 556,
                     columnNumber: 38
                 }, this)
             ]
         }, void 0, true)
     }, void 0, false, {
         fileName: "[project]/components/habit-tracker.tsx",
-        lineNumber: 469,
+        lineNumber: 465,
         columnNumber: 10
     }, this);
 }
@@ -3303,6 +3313,7 @@ __turbopack_context__.s([
     "default",
     ()=>FirstUserForm
 ]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_e6c684eabbe936b8628166c2f117655b/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_e6c684eabbe936b8628166c2f117655b/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_e6c684eabbe936b8628166c2f117655b/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/lib/supabase.js [app-client] (ecmascript)");
@@ -3355,6 +3366,18 @@ function FirstUserForm({ onSubmit, onBack }) {
         };
         // Save to Supabase users table
         try {
+            // Check if Supabase is properly configured
+            if (!("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co").includes('placeholder')) {
+                console.warn('⚠️ Supabase not configured in production, using local storage only');
+                // For production without Supabase, continue with localStorage only
+                const updatedUsers = [
+                    ...savedUsers.filter((u)=>u.email !== email),
+                    newUser
+                ];
+                localStorage.setItem('savedUsers', JSON.stringify(updatedUsers));
+                onSubmit(newUser);
+                return;
+            }
             const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('users').insert([
                 {
                     name: username,
@@ -3364,6 +3387,17 @@ function FirstUserForm({ onSubmit, onBack }) {
             ]).select(); // Add .select() to return the inserted data
             if (error) {
                 console.error('Supabase error:', error);
+                // If it's a network/connection error, still allow local storage registration
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    console.warn('🔄 Network issue, falling back to local storage only');
+                    const updatedUsers = [
+                        ...savedUsers.filter((u)=>u.email !== email),
+                        newUser
+                    ];
+                    localStorage.setItem('savedUsers', JSON.stringify(updatedUsers));
+                    onSubmit(newUser);
+                    return;
+                }
                 setError(error.message);
                 return;
             }
@@ -3378,7 +3412,14 @@ function FirstUserForm({ onSubmit, onBack }) {
             onSubmit(newUser);
         } catch (err) {
             console.error('Network error during Supabase registration:', err);
-            setError('Failed to register. Please try again.');
+            // Network errors in production - use localStorage as fallback
+            console.warn('🔄 Network error, falling back to local storage only');
+            const updatedUsers = [
+                ...savedUsers.filter((u)=>u.email !== email),
+                newUser
+            ];
+            localStorage.setItem('savedUsers', JSON.stringify(updatedUsers));
+            onSubmit(newUser);
         }
     };
     const handleUserLogin = (user)=>{
@@ -3409,22 +3450,22 @@ function FirstUserForm({ onSubmit, onBack }) {
                                         d: "M15 19l-7-7 7-7"
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 102,
+                                        lineNumber: 123,
                                         columnNumber: 21
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 101,
+                                    lineNumber: 122,
                                     columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/first-user-form.tsx",
-                                lineNumber: 100,
+                                lineNumber: 121,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 99,
+                            lineNumber: 120,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3435,7 +3476,7 @@ function FirstUserForm({ onSubmit, onBack }) {
                                     children: "Join Our Community"
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 109,
+                                    lineNumber: 130,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3443,13 +3484,13 @@ function FirstUserForm({ onSubmit, onBack }) {
                                     children: "Become part of something great"
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 112,
+                                    lineNumber: 133,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 108,
+                            lineNumber: 129,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -3467,12 +3508,12 @@ function FirstUserForm({ onSubmit, onBack }) {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 120,
+                                        lineNumber: 141,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 119,
+                                    lineNumber: 140,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3496,7 +3537,7 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                     children: "How old are you?"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/first-user-form.tsx",
-                                                    lineNumber: 127,
+                                                    lineNumber: 148,
                                                     columnNumber: 21
                                                 }, this),
                                                 Array.from({
@@ -3506,13 +3547,13 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                         children: num
                                                     }, num, false, {
                                                         fileName: "[project]/components/first-user-form.tsx",
-                                                        lineNumber: 132,
+                                                        lineNumber: 153,
                                                         columnNumber: 49
                                                     }, this))
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 124,
+                                            lineNumber: 145,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3525,23 +3566,23 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                     d: "M7 10l5 5 5-5z"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/first-user-form.tsx",
-                                                    lineNumber: 136,
+                                                    lineNumber: 157,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/first-user-form.tsx",
-                                                lineNumber: 135,
+                                                lineNumber: 156,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 134,
+                                            lineNumber: 155,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 123,
+                                    lineNumber: 144,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3555,12 +3596,12 @@ function FirstUserForm({ onSubmit, onBack }) {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 142,
+                                        lineNumber: 163,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 141,
+                                    lineNumber: 162,
                                     columnNumber: 17
                                 }, this),
                                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3568,7 +3609,7 @@ function FirstUserForm({ onSubmit, onBack }) {
                                     children: error
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 145,
+                                    lineNumber: 166,
                                     columnNumber: 27
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3577,13 +3618,13 @@ function FirstUserForm({ onSubmit, onBack }) {
                                     children: "Let's Go!"
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 147,
+                                    lineNumber: 168,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 118,
+                            lineNumber: 139,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3599,18 +3640,18 @@ function FirstUserForm({ onSubmit, onBack }) {
                                         children: "Log In"
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 156,
+                                        lineNumber: 177,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/first-user-form.tsx",
-                                lineNumber: 154,
+                                lineNumber: 175,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 153,
+                            lineNumber: 174,
                             columnNumber: 15
                         }, this)
                     ]
@@ -3634,17 +3675,17 @@ function FirstUserForm({ onSubmit, onBack }) {
                                             d: "M15 19l-7-7 7-7"
                                         }, void 0, false, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 166,
+                                            lineNumber: 187,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 165,
+                                        lineNumber: 186,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 164,
+                                    lineNumber: 185,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -3652,20 +3693,20 @@ function FirstUserForm({ onSubmit, onBack }) {
                                     children: "Select your account"
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 169,
+                                    lineNumber: 190,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 163,
+                            lineNumber: 184,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "mt-4 mb-4"
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 175,
+                            lineNumber: 196,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3689,7 +3730,7 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                             children: user.username
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/first-user-form.tsx",
-                                                            lineNumber: 185,
+                                                            lineNumber: 206,
                                                             columnNumber: 29
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3697,13 +3738,13 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                             children: user.email
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/first-user-form.tsx",
-                                                            lineNumber: 186,
+                                                            lineNumber: 207,
                                                             columnNumber: 29
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/first-user-form.tsx",
-                                                    lineNumber: 184,
+                                                    lineNumber: 205,
                                                     columnNumber: 27
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -3714,23 +3755,23 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                         d: "M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/first-user-form.tsx",
-                                                        lineNumber: 189,
+                                                        lineNumber: 210,
                                                         columnNumber: 29
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/first-user-form.tsx",
-                                                    lineNumber: 188,
+                                                    lineNumber: 209,
                                                     columnNumber: 27
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 183,
+                                            lineNumber: 204,
                                             columnNumber: 25
                                         }, this)
                                     }, index, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 182,
+                                        lineNumber: 203,
                                         columnNumber: 116
                                     }, this))
                             }, void 0, false) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3738,12 +3779,12 @@ function FirstUserForm({ onSubmit, onBack }) {
                                 children: "No saved accounts found"
                             }, void 0, false, {
                                 fileName: "[project]/components/first-user-form.tsx",
-                                lineNumber: 193,
+                                lineNumber: 214,
                                 columnNumber: 25
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 178,
+                            lineNumber: 199,
                             columnNumber: 15
                         }, this),
                         !showAllUsers && savedUsers.length > 5 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3763,7 +3804,7 @@ function FirstUserForm({ onSubmit, onBack }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 200,
+                                            lineNumber: 221,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -3778,28 +3819,28 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                 d: "M19 9l-7 7-7-7"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/first-user-form.tsx",
-                                                lineNumber: 204,
+                                                lineNumber: 225,
                                                 columnNumber: 25
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 203,
+                                            lineNumber: 224,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 199,
+                                    lineNumber: 220,
                                     columnNumber: 21
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/first-user-form.tsx",
-                                lineNumber: 198,
+                                lineNumber: 219,
                                 columnNumber: 19
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 197,
+                            lineNumber: 218,
                             columnNumber: 58
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3815,35 +3856,35 @@ function FirstUserForm({ onSubmit, onBack }) {
                                         children: "Create Account"
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 213,
+                                        lineNumber: 234,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/first-user-form.tsx",
-                                lineNumber: 211,
+                                lineNumber: 232,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 210,
+                            lineNumber: 231,
                             columnNumber: 15
                         }, this)
                     ]
                 }, void 0, true)
             }, void 0, false, {
                 fileName: "[project]/components/first-user-form.tsx",
-                lineNumber: 95,
+                lineNumber: 116,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/first-user-form.tsx",
-            lineNumber: 94,
+            lineNumber: 115,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/first-user-form.tsx",
-        lineNumber: 93,
+        lineNumber: 114,
         columnNumber: 10
     }, this);
 }
@@ -6102,6 +6143,7 @@ __turbopack_context__.s([
     "default",
     ()=>Page
 ]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_e6c684eabbe936b8628166c2f117655b/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_e6c684eabbe936b8628166c2f117655b/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_e6c684eabbe936b8628166c2f117655b/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$habit$2d$tracker$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/habit-tracker.tsx [app-client] (ecmascript)");
@@ -6447,13 +6489,62 @@ function Page() {
             return null;
         }
         try {
+            // Check if Supabase is properly configured
+            if (!("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co").includes('placeholder')) {
+                console.warn('⚠️ Supabase not configured in production, using local creation only');
+                // For production without Supabase, create habit locally
+                const fallbackUUID = crypto.randomUUID();
+                window.currentHabitUUID = fallbackUUID;
+                window.currentHabitName = name;
+                window.currentHabitType = type;
+                const currentMonthYear = new Date().toISOString().slice(0, 7);
+                const newHabit = {
+                    id: fallbackUUID,
+                    name: name,
+                    person,
+                    dayRecords: [],
+                    createdAt: new Date().toISOString(),
+                    monthYear: currentMonthYear
+                };
+                setHabits((prevHabits)=>{
+                    const updatedHabits = [
+                        ...prevHabits,
+                        newHabit
+                    ];
+                    setCurrentHabitIndex(updatedHabits.length - 1);
+                    return updatedHabits;
+                });
+                return newHabit;
+            }
             // Map type to database values
             const habitType = type === 'make' ? 'build' : 'break';
             // First, get the user's UUID from the users table using email
             const { data: userData, error: userError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('users').select('id').eq('email', user.email).single();
             if (userError || !userData) {
                 console.error('Error finding user:', userError);
-                return null;
+                // Fallback to local creation if user lookup fails
+                const fallbackUUID = crypto.randomUUID();
+                window.currentHabitUUID = fallbackUUID;
+                window.currentHabitName = name;
+                window.currentHabitType = type;
+                const currentMonthYear = new Date().toISOString().slice(0, 7);
+                const newHabit = {
+                    id: fallbackUUID,
+                    name: name,
+                    person,
+                    dayRecords: [],
+                    createdAt: new Date().toISOString(),
+                    monthYear: currentMonthYear
+                };
+                setHabits((prevHabits)=>{
+                    const updatedHabits = [
+                        ...prevHabits,
+                        newHabit
+                    ];
+                    setCurrentHabitIndex(updatedHabits.length - 1);
+                    return updatedHabits;
+                });
+                return newHabit;
             }
             // Generate proper UUID and insert habit
             const habitUUID = crypto.randomUUID();
@@ -6468,9 +6559,35 @@ function Page() {
             ]).select();
             if (error) {
                 console.error('Supabase error:', error);
-                return null;
+                // Fallback to local creation if database insert fails
+                const fallbackUUID = crypto.randomUUID();
+                window.currentHabitUUID = fallbackUUID;
+                window.currentHabitName = name;
+                window.currentHabitType = type;
+                const currentMonthYear = new Date().toISOString().slice(0, 7);
+                const newHabit = {
+                    id: fallbackUUID,
+                    name: name,
+                    person,
+                    dayRecords: [],
+                    createdAt: new Date().toISOString(),
+                    monthYear: currentMonthYear
+                };
+                setHabits((prevHabits)=>{
+                    const updatedHabits = [
+                        ...prevHabits,
+                        newHabit
+                    ];
+                    setCurrentHabitIndex(updatedHabits.length - 1);
+                    return updatedHabits;
+                });
+                return newHabit;
             }
             console.log('✅ Habit created in Supabase:', data);
+            // Store the UUID in window for compatibility with existing flow
+            window.currentHabitUUID = habitUUID;
+            window.currentHabitName = name;
+            window.currentHabitType = type;
             // Create local habit object
             const currentMonthYear = new Date().toISOString().slice(0, 7);
             const newHabit = {
@@ -6492,7 +6609,29 @@ function Page() {
             return newHabit;
         } catch (err) {
             console.error('Network error during habit creation:', err);
-            return null;
+            // For production/network issues, create habit locally with fallback UUID
+            const fallbackUUID = crypto.randomUUID();
+            window.currentHabitUUID = fallbackUUID;
+            window.currentHabitName = name;
+            window.currentHabitType = type;
+            const currentMonthYear = new Date().toISOString().slice(0, 7);
+            const newHabit = {
+                id: fallbackUUID,
+                name: name,
+                person,
+                dayRecords: [],
+                createdAt: new Date().toISOString(),
+                monthYear: currentMonthYear
+            };
+            setHabits((prevHabits)=>{
+                const updatedHabits = [
+                    ...prevHabits,
+                    newHabit
+                ];
+                setCurrentHabitIndex(updatedHabits.length - 1);
+                return updatedHabits;
+            });
+            return newHabit;
         }
     };
     const addHabit = async (name, person)=>{
@@ -6511,8 +6650,10 @@ function Page() {
             window.currentHabitName = null;
             window.currentHabitType = null;
         } else {
-            console.error('❌ No stored UUID found - habit creation must go through habit-selection!');
-            return; // Stop execution - no fallback IDs allowed
+            console.warn('⚠️ No stored UUID found - this should have been set by createHabitInSupabase');
+            console.warn('🔧 Creating fallback UUID to prevent flow breaking');
+            // Create a fallback UUID to prevent the flow from breaking
+            habitId = crypto.randomUUID();
         }
         console.log('📝 FINAL RESULT - ID:', habitId, 'Name:', habitName);
         const newHabit = {
@@ -6617,7 +6758,7 @@ function Page() {
                         className: "animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 475,
+                        lineNumber: 565,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -6625,18 +6766,18 @@ function Page() {
                         children: "Loading your habits..."
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 476,
+                        lineNumber: 566,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 474,
+                lineNumber: 564,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 473,
+            lineNumber: 563,
             columnNumber: 12
         }, this);
     }
@@ -6648,12 +6789,12 @@ function Page() {
                 onContinue: ()=>setShowSplashScreen(false)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 484,
+                lineNumber: 574,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 483,
+            lineNumber: 573,
             columnNumber: 12
         }, this);
     }
@@ -6666,12 +6807,12 @@ function Page() {
                 onBack: ()=>setShowSplashScreen(true)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 491,
+                lineNumber: 581,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 490,
+            lineNumber: 580,
             columnNumber: 12
         }, this);
     }
@@ -6731,12 +6872,12 @@ function Page() {
                 }
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 498,
+                lineNumber: 588,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 497,
+            lineNumber: 587,
             columnNumber: 12
         }, this);
     }
@@ -6756,17 +6897,17 @@ function Page() {
                     onBack: ()=>setCustomHabitType(null)
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 552,
+                    lineNumber: 642,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 551,
+                lineNumber: 641,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 550,
+            lineNumber: 640,
             columnNumber: 12
         }, this);
     }
@@ -6824,7 +6965,7 @@ function Page() {
                     }
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 562,
+                    lineNumber: 652,
                     columnNumber: 31
                 }, this) : habits.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$habit$2d$tracker$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                     habit: null,
@@ -6848,7 +6989,7 @@ function Page() {
                     totalHabits: habits.length
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 604,
+                    lineNumber: 694,
                     columnNumber: 37
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                     children: [
@@ -6871,17 +7012,17 @@ function Page() {
                                             d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 615,
+                                            lineNumber: 705,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 614,
+                                        lineNumber: 704,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 613,
+                                    lineNumber: 703,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6895,7 +7036,7 @@ function Page() {
                                             children: getHabitNameFromKey(habits[currentHabitIndex]?.name) || habits[currentHabitIndex]?.name
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 619,
+                                            lineNumber: 709,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6919,7 +7060,7 @@ function Page() {
                                                                     fill: "white"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/page.tsx",
-                                                                    lineNumber: 628,
+                                                                    lineNumber: 718,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -6930,7 +7071,7 @@ function Page() {
                                                                     stroke: messageType === 'logged' ? 'green' : 'currentColor'
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/page.tsx",
-                                                                    lineNumber: 629,
+                                                                    lineNumber: 719,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             ]
@@ -6941,7 +7082,7 @@ function Page() {
                                                             d: "M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/page.tsx",
-                                                            lineNumber: 630,
+                                                            lineNumber: 720,
                                                             columnNumber: 65
                                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
                                                             strokeLinecap: "round",
@@ -6950,19 +7091,19 @@ function Page() {
                                                             d: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/page.tsx",
-                                                            lineNumber: 630,
+                                                            lineNumber: 720,
                                                             columnNumber: 191
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 626,
+                                                        lineNumber: 716,
                                                         columnNumber: 23
                                                     }, this),
                                                     messageType === 'logged' ? 'LOGGED FOR TODAY!' : messageType === 'not-started' ? 'HABIT NOT STARTED YET' : '3-HABIT LIMIT REACHED'
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 625,
+                                                lineNumber: 715,
                                                 columnNumber: 36
                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 className: "h-6 flex items-center",
@@ -6976,18 +7117,18 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 633,
+                                                lineNumber: 723,
                                                 columnNumber: 31
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 624,
+                                            lineNumber: 714,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 618,
+                                    lineNumber: 708,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7009,13 +7150,13 @@ function Page() {
                                     children: "+ Add"
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 641,
+                                    lineNumber: 731,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 612,
+                            lineNumber: 702,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7031,7 +7172,7 @@ function Page() {
                                                 children: "Successful"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 661,
+                                                lineNumber: 751,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -7069,13 +7210,13 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 662,
+                                                lineNumber: 752,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 660,
+                                        lineNumber: 750,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7086,7 +7227,7 @@ function Page() {
                                                 children: "Missed"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 699,
+                                                lineNumber: 789,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -7110,13 +7251,13 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 700,
+                                                lineNumber: 790,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 698,
+                                        lineNumber: 788,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7127,7 +7268,7 @@ function Page() {
                                                 children: "Consistency"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 722,
+                                                lineNumber: 812,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -7162,24 +7303,24 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 723,
+                                                lineNumber: 813,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 721,
+                                        lineNumber: 811,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 659,
+                                lineNumber: 749,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 658,
+                            lineNumber: 748,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7205,12 +7346,12 @@ function Page() {
                                 totalHabits: habits.length
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 761,
+                                lineNumber: 851,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 760,
+                            lineNumber: 850,
                             columnNumber: 13
                         }, this)
                     ]
@@ -7223,7 +7364,7 @@ function Page() {
                             onClick: ()=>setShowProfileDrawer(false)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 775,
+                            lineNumber: 865,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7239,7 +7380,7 @@ function Page() {
                                                 children: "Profile"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 781,
+                                                lineNumber: 871,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7257,23 +7398,23 @@ function Page() {
                                                         d: "M6 18L18 6M6 6l12 12"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 784,
+                                                        lineNumber: 874,
                                                         columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 783,
+                                                    lineNumber: 873,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 782,
+                                                lineNumber: 872,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 780,
+                                        lineNumber: 870,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7296,17 +7437,17 @@ function Page() {
                                                                 d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 794,
+                                                                lineNumber: 884,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/page.tsx",
-                                                            lineNumber: 793,
+                                                            lineNumber: 883,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 792,
+                                                        lineNumber: 882,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7316,7 +7457,7 @@ function Page() {
                                                                 children: user?.username || 'User'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 798,
+                                                                lineNumber: 888,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7324,19 +7465,19 @@ function Page() {
                                                                 children: user?.email || 'user@example.com'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 801,
+                                                                lineNumber: 891,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 797,
+                                                        lineNumber: 887,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 791,
+                                                lineNumber: 881,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7347,7 +7488,7 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 807,
+                                                lineNumber: 897,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7358,13 +7499,13 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 811,
+                                                lineNumber: 901,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 790,
+                                        lineNumber: 880,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7378,7 +7519,7 @@ function Page() {
                                                     children: "Log out"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 819,
+                                                    lineNumber: 909,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7386,35 +7527,35 @@ function Page() {
                                                     children: "Sign out of your account"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 820,
+                                                    lineNumber: 910,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 818,
+                                            lineNumber: 908,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 817,
+                                        lineNumber: 907,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 779,
+                                lineNumber: 869,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 778,
+                            lineNumber: 868,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 773,
+                    lineNumber: 863,
                     columnNumber: 31
                 }, this),
                 showLogoutConfirmation && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7427,7 +7568,7 @@ function Page() {
                                 children: "Do you want to log out?"
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 830,
+                                lineNumber: 920,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7450,7 +7591,7 @@ function Page() {
                                         children: "Yes"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 834,
+                                        lineNumber: 924,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7459,35 +7600,35 @@ function Page() {
                                         children: "No"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 848,
+                                        lineNumber: 938,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 833,
+                                lineNumber: 923,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 829,
+                        lineNumber: 919,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 828,
+                    lineNumber: 918,
                     columnNumber: 36
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 561,
+            lineNumber: 651,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/page.tsx",
-        lineNumber: 560,
+        lineNumber: 650,
         columnNumber: 10
     }, this);
 }

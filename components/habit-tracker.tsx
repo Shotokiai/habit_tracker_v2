@@ -92,14 +92,10 @@ export default function HabitTracker({
   useEffect(() => {
     if (habit) {
       const currentMonthYear = new Date().toISOString().slice(0, 7)
-      if (habit.monthYear !== currentMonthYear) {
-        // Different month - reset
-        setDayRecords([])
-        setIsSaved(true)
-      } else {
-        setDayRecords(habit.dayRecords)
-        setIsSaved(true)
-      }
+      // REMOVED: Month-based reset that was causing data loss for existing users
+      // Always load existing habit data to preserve user progress
+      setDayRecords(habit.dayRecords)
+      setIsSaved(true)
       
       // Load existing habit cycle data
       loadHabitCycle();

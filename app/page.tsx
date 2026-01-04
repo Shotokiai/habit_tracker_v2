@@ -161,18 +161,37 @@ export default function Page() {
       }
 
       const today = new Date().toDateString();
+      
+      // First, let's see what columns actually exist in habit_cycles table
       const { data, error } = await supabase
         .from('habit_cycles')
-        .select('last_completed_date')
+        .select('*') // Select all columns to see what's available
         .eq('habit_id', habitId)
-        .single();
+        .limit(1);
 
-      if (error || !data) {
+      console.log('🔍 habit_cycles table data:', data);
+      console.log('🔍 habit_cycles table error:', error);
+
+      if (error) {
+        console.warn('Error checking habit completion:', error);
+        return false; // Allow if error
+      }
+
+      if (!data || data.length === 0) {
+        console.log('No habit cycle found, allowing completion');
         return false; // Allow if no cycle found
       }
 
-      const lastCompletedDate = data.last_completed_date ? new Date(data.last_completed_date).toDateString() : null;
-      return lastCompletedDate === today;
+      // Check if we have last_completed_date field and if it matches today
+      const cycle = data[0];
+      console.log('🔍 Cycle structure:', Object.keys(cycle));
+      
+      if (cycle.last_completed_date) {
+        const lastCompletedDate = new Date(cycle.last_completed_date).toDateString();
+        return lastCompletedDate === today;
+      }
+
+      return false; // Allow if no last_completed_date
     } catch (error) {
       console.warn('Error checking habit completion:', error);
       return false; // Allow if error
@@ -245,48 +264,96 @@ export default function Page() {
         return { success: false, message: 'Habit already completed for today!' };
       }
 
-      // Update missed days first
-      await updateMissedDays(habitId);
-
-      // Get current cycle data with start/end dates for total cycle length
+      // Get ALL current cycle data to see what fields exist
       const { data, error } = await supabase
         .from('habit_cycles')
-        .select('completed, missed, start_date, end_date')
+        .select('*') // Get all columns
         .eq('habit_id', habitId)
-        .single();
+        .limit(1);
+
+      console.log('🔍 Complete habit - cycle data:', data);
+      console.log('🔍 Complete habit - error:', error);
 
       if (error) {
         console.error('Error fetching habit cycle:', error);
-        return { success: false, message: 'Error updating habit' };
+        return { success: false, message: 'Error updating habit: ' + error.message };
       }
 
-      const newCompleted = data.completed + 1;
-      
-      // Calculate consistency based on total cycle length (like 30 days)
-      const startDate = new Date(data.start_date);
-      const endDate = new Date(data.end_date);
-      const totalCycleDays = Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-      const newConsistency = Math.round((newCompleted / totalCycleDays) * 100 * 100) / 100; // 2 decimal places
+      if (!data || data.length === 0) {
+        // No cycle exists, create a completion record with proper initial values
+        console.log('🔍 No existing cycle, creating new record...');
+        const { error: insertError } = await supabase
+          .from('habit_cycles')
+          .insert({
+            habit_id: habitId,
+            last_completed_date: new Date().toISOString(),
+            start_date: new Date().toISOString().split('T')[0],
+            end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days from now
+            completed_days: 1, // This is the first completion
+            missed_days: 0,
+            consistency: (1 / 30) * 100 // 3.33% for first day
+          });
 
-      // Update habit cycle with new completion
+        if (insertError) {
+          console.error('Error creating habit cycle:', insertError);
+          return { success: false, message: 'Error creating habit cycle: ' + insertError.message };
+        }
+
+        console.log('✅ Created new cycle with first completion');
+
+        // Force reload habits to reflect the new cycle data
+        if (user) {
+          console.log('🔄 Force reloading habits after first completion...');
+          await loadUserHabitsFromSupabase(user.email);
+        }
+
+        return { success: true, message: 'Habit completed successfully!' };
+      }
+
+      const cycle = data[0];
+      console.log('🔍 Existing cycle structure:', Object.keys(cycle));
+
+      // Update with available fields
+      const updateData: any = {
+        last_completed_date: new Date().toISOString()
+      };
+
+      // Only add fields that exist in the table
+      if ('completed_days' in cycle) {
+        const newCompletedDays = (cycle.completed_days || 0) + 1;
+        updateData.completed_days = newCompletedDays;
+        
+        // Also update consistency
+        if ('consistency' in cycle) {
+          updateData.consistency = (newCompletedDays / 30) * 100;
+        }
+        
+        console.log(`📊 Updating completion: ${cycle.completed_days || 0} → ${newCompletedDays}`);
+      }
+
       const { error: updateError } = await supabase
         .from('habit_cycles')
-        .update({
-          completed: newCompleted,
-          last_completed_date: new Date().toISOString(),
-          consistency: newConsistency
-        })
+        .update(updateData)
         .eq('habit_id', habitId);
 
       if (updateError) {
         console.error('Error updating habit completion:', updateError);
-        return { success: false, message: 'Error updating habit' };
+        return { success: false, message: 'Error updating habit: ' + updateError.message };
+      }
+
+      console.log('✅ Database updated successfully');
+
+      // CRITICAL: Force reload habits to reflect the updated progress immediately
+      console.log('🔄 Force reloading habits to update UI...');
+      if (user) {
+        await loadUserHabitsFromSupabase(user.email);
+        console.log('🔄 Habit reload completed');
       }
 
       return { success: true, message: 'Habit completed successfully!' };
     } catch (error) {
       console.error('Error completing habit:', error);
-      return { success: false, message: 'Error completing habit' };
+      return { success: false, message: 'Error completing habit: ' + (error as Error).message };
     }
   };
 
@@ -306,37 +373,61 @@ export default function Page() {
       // Get current cycle data
       const { data, error } = await supabase
         .from('habit_cycles')
-        .select('completed, missed')
+        .select('*')
         .eq('habit_id', habitId)
-        .single();
+        .limit(1);
+
+      console.log('🔍 Mark missed - cycle data:', data);
 
       if (error) {
         console.error('Error fetching habit cycle for miss:', error);
-        return { success: false, message: 'Error updating habit' };
+        return { success: false, message: 'Error updating habit: ' + error.message };
       }
 
-      const newMissed = data.missed + 1;
+      let updateData: any = {};
 
-      // Update habit cycle with missed day (NO consistency change, NO last_completed_date update)
-      const { error: updateError } = await supabase
-        .from('habit_cycles')
-        .update({
-          missed: newMissed
-          // ✅ ONLY increment missed count
-          // ❌ NO consistency recalculation
-          // ❌ NO last_completed_date update (critical for gap detection)
-        })
-        .eq('habit_id', habitId);
+      if (!data || data.length === 0) {
+        // No cycle exists, create one with missed day
+        const { error: insertError } = await supabase
+          .from('habit_cycles')
+          .insert({
+            habit_id: habitId,
+            start_date: new Date().toISOString().split('T')[0],
+            end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days from now
+            missed_days: 1
+          });
 
-      if (updateError) {
-        console.error('Error updating habit miss:', updateError);
-        return { success: false, message: 'Error updating habit' };
+        if (insertError) {
+          console.error('Error creating habit cycle with miss:', insertError);
+          return { success: false, message: 'Error creating habit cycle: ' + insertError.message };
+        }
+
+        return { success: true, message: 'Habit marked as missed' };
+      }
+
+      const cycle = data[0];
+      
+      // Only increment missed if that field exists
+      if ('missed_days' in cycle) {
+        updateData.missed_days = (cycle.missed_days || 0) + 1;
+      }
+
+      if (Object.keys(updateData).length > 0) {
+        const { error: updateError } = await supabase
+          .from('habit_cycles')
+          .update(updateData)
+          .eq('habit_id', habitId);
+
+        if (updateError) {
+          console.error('Error updating habit miss:', updateError);
+          return { success: false, message: 'Error updating habit: ' + updateError.message };
+        }
       }
 
       return { success: true, message: 'Habit marked as missed' };
     } catch (error) {
       console.error('Error marking habit as missed:', error);
-      return { success: false, message: 'Error marking habit as missed' };
+      return { success: false, message: 'Error marking habit as missed: ' + (error as Error).message };
     }
   };
 
@@ -468,16 +559,87 @@ export default function Page() {
       if (supabaseHabits && supabaseHabits.length > 0) {
         console.log('✅ Loaded', supabaseHabits.length, 'habits from Supabase');
         
-        // Convert Supabase habits to local format
-        const localHabits: Habit[] = supabaseHabits.map(habit => ({
-          id: habit.id,
-          name: habit.title,
-          person: userEmail, // Use email as person identifier
-          dayRecords: habit.day_records || [],
-          createdAt: habit.created_at,
-          monthYear: new Date(habit.created_at).toISOString().slice(0, 7),
-          preferredView: habit.preferred_view || 'chart',
-          companionPattern: habit.companion_pattern || 'drawing1'
+        // Load habit cycle data for each habit to get progress info
+        const localHabits: Habit[] = await Promise.all(supabaseHabits.map(async (habit) => {
+          // Get cycle data for this habit
+          const { data: cycleData, error: cycleError } = await supabase
+            .from('habit_cycles')
+            .select('*')
+            .eq('habit_id', habit.id)
+            .limit(1);
+
+          console.log(`🔍 Cycle data for habit ${habit.title}:`, cycleData);
+
+          let habitWithProgress = {
+            id: habit.id,
+            name: habit.title,
+            person: userEmail,
+            dayRecords: habit.day_records || [],
+            createdAt: habit.created_at,
+            monthYear: new Date(habit.created_at).toISOString().slice(0, 7),
+            preferredView: habit.preferred_view || 'chart',
+            companionPattern: habit.companion_pattern || 'drawing1'
+          };
+
+          // If cycle data exists, add progress information
+          if (cycleData && cycleData.length > 0) {
+            const cycle = cycleData[0];
+            console.log(`📊 Adding progress to ${habit.title}:`, {
+              completed: cycle.completed_days || 0,
+              missed: cycle.missed_days || 0,
+              consistency: cycle.consistency || 0
+            });
+            
+            // Create dayRecords based on Supabase cycle data to show visual progress
+            const updatedDayRecords = [...(habit.day_records || [])];
+            
+            // If we have completed days, ensure the visual representation matches
+            if ((cycle.completed_days || 0) > 0) {
+              // Update dayRecords to show the completion
+              // For each completed day, ensure there's a record showing progress
+              for (let day = 1; day <= (cycle.completed_days || 0); day++) {
+                const existingRecord = updatedDayRecords.find(record => record.x === day);
+                if (existingRecord) {
+                  // Ensure this day shows as completed (y value increases)
+                  if (day === 1) {
+                    existingRecord.y = Math.max(1, existingRecord.y);
+                  } else {
+                    const prevRecord = updatedDayRecords.find(r => r.x === day - 1);
+                    if (prevRecord) {
+                      existingRecord.y = Math.max(prevRecord.y + 1, existingRecord.y);
+                    }
+                  }
+                } else {
+                  // Create a record for this completed day
+                  const prevRecord = updatedDayRecords.find(r => r.x === day - 1);
+                  const newY = prevRecord ? prevRecord.y + 1 : 1;
+                  updatedDayRecords.push({ x: day, y: newY });
+                }
+              }
+              
+              // Sort dayRecords by x (day)
+              updatedDayRecords.sort((a, b) => a.x - b.x);
+            }
+            
+            // Add cycle info to habit object
+            habitWithProgress = {
+              ...habitWithProgress,
+              dayRecords: updatedDayRecords, // Use updated dayRecords that reflect Supabase data
+              // Store cycle data for display
+              cycleData: {
+                completed: cycle.completed_days || 0,
+                missed: cycle.missed_days || 0,
+                consistency: cycle.consistency || 0,
+                last_completed_date: cycle.last_completed_date,
+                start_date: cycle.start_date,
+                end_date: cycle.end_date
+              }
+            };
+          } else {
+            console.log(`📊 No cycle data found for ${habit.title}`);
+          }
+
+          return habitWithProgress;
         }));
 
         setHabits(localHabits);
@@ -803,29 +965,10 @@ export default function Page() {
         return;
       }
 
-      // Validate habitId is UUID
-      const isUUID = typeof habitId === 'string' && 
-        habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+      // Skip syncing dayRecords to habits table since day_records column doesn't exist
+      // Instead, we'll rely on habit_cycles table for progress tracking
+      console.log('📊 Skipping dayRecords sync - using habit_cycles table for progress');
       
-      if (!isUUID) {
-        console.warn('⚠️ Invalid habit UUID, skipping Supabase sync:', habitId);
-        return;
-      }
-
-      // Update habit progress in Supabase
-      const { error } = await supabase
-        .from('habits')
-        .update({ 
-          day_records: dayRecords,
-          last_updated: new Date().toISOString()
-        })
-        .eq('id', habitId);
-
-      if (error) {
-        console.warn('Failed to sync habit progress to Supabase:', error);
-      } else {
-        console.log('✅ Habit progress synced to Supabase for cross-device access');
-      }
     } catch (error) {
       console.warn('Network error syncing to Supabase:', error);
     }
@@ -1177,12 +1320,20 @@ export default function Page() {
                   <span className="font-semibold text-foreground">Successful</span>
                   <span className="text-lg font-bold text-green-600">
                     {(() => {
-                      const records = habits[currentHabitIndex]?.dayRecords || [];
                       const habit = habits[currentHabitIndex];
+                      if (!habit) return "0/30";
+                      
+                      // Use loaded cycle data if available (from Supabase)
+                      if (habit.cycleData?.completed !== undefined) {
+                        const completed = habit.cycleData.completed;
+                        return `${completed}/30`;
+                      }
+                      
+                      // Fallback to dayRecords calculation
+                      const records = habit.dayRecords || [];
                       
                       // Count actual successful days - when Y increased from previous day
                       const completed = (() => {
-                        const records = habits[currentHabitIndex]?.dayRecords || [];
                         let successfulDays = 0;
                         records.forEach((record, index) => {
                           if (index === 0) {
@@ -1215,7 +1366,16 @@ export default function Page() {
                   <span className="font-semibold text-foreground">Missed</span>
                   <span className="text-lg font-bold text-red-500">
                     {(() => {
-                      const records = habits[currentHabitIndex]?.dayRecords || [];
+                      const habit = habits[currentHabitIndex];
+                      if (!habit) return "0";
+                      
+                      // Use loaded cycle data if available (from Supabase)
+                      if (habit.cycleData?.missed !== undefined) {
+                        return habit.cycleData.missed;
+                      }
+                      
+                      // Fallback to dayRecords calculation
+                      const records = habit.dayRecords || [];
                       let missedCount = 0;
                       
                       records.forEach((record, index) => {
@@ -1241,6 +1401,13 @@ export default function Page() {
                     {(() => {
                       const habit = habits[currentHabitIndex];
                       if (!habit) return "0%";
+                      
+                      // Use loaded cycle data if available (from Supabase)
+                      if (habit.cycleData?.consistency !== undefined) {
+                        return `${habit.cycleData.consistency.toFixed(2)}%`;
+                      }
+                      
+                      // Fallback to dayRecords calculation
                       const records = habit.dayRecords || [];
                       
                       if (records.length === 0) return "0%";

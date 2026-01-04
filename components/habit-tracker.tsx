@@ -91,6 +91,10 @@ export default function HabitTracker({
 
   useEffect(() => {
     if (habit) {
+      console.log('🔄 Habit updated, refreshing component state:', habit.name);
+      console.log('📊 New habit dayRecords length:', habit.dayRecords?.length || 0);
+      console.log('📊 New habit cycleData:', habit.cycleData);
+      
       const currentMonthYear = new Date().toISOString().slice(0, 7)
       // REMOVED: Month-based reset that was causing data loss for existing users
       // Always load existing habit data to preserve user progress
@@ -111,6 +115,19 @@ export default function HabitTracker({
   const loadHabitCycle = async () => {
     if (!habit) return;
     
+    // First check if cycle data was already loaded with the habit
+    if (habit.cycleData) {
+      console.log('✅ Using pre-loaded cycle data for habit:', habit.name);
+      console.log('📊 Cycle data:', habit.cycleData);
+      
+      setCurrentCycle(habit.cycleData);
+      setHabitStarted(true);
+      return;
+    }
+    
+    // Fallback: Load from Supabase if not pre-loaded
+    console.log('🔄 Loading cycle data from Supabase for habit:', habit.name);
+    
     // Strict UUID validation for loadHabitCycle
     const habitId = habit.id;
     const isUUID = typeof habitId === 'string' && 
@@ -129,9 +146,9 @@ export default function HabitTracker({
         .from('habit_cycles')
         .select('*')
         .eq('habit_id', habitId) // Use validated UUID
-        .gte('end_date', new Date().toISOString().split('T')[0]) // only active cycles
-        .order('created_at', { ascending: false })
         .limit(1);
+
+      console.log('🔍 Loaded cycle data from Supabase:', cycles);
 
       if (error) {
         console.error('Error loading habit cycle:', error);
@@ -186,18 +203,26 @@ export default function HabitTracker({
     
     // Use Supabase-based completion logic instead of localStorage
     if (onCompleteHabit) {
+      console.log('🎯 Calling parent completion function...');
       const result = await onCompleteHabit(habitId);
       
       if (!result.success) {
+        console.warn('❌ Completion failed:', result.message);
         // Show "already logged" message
         onShowLoggedMsg?.('logged');
         return;
       }
+      
+      console.log('✅ Completion successful:', result.message);
+      
+      // SUCCESS: Don't manually create dayRecords here!
+      // The parent component will reload habits and the useEffect will update dayRecords
+      // This prevents the blinking issue and ensures UI matches database
+      return;
     }
-    
-    // If successful or no onCompleteHabit function, continue with visual feedback
 
-    // ALWAYS create the dot first (visual feedback) - don't let database errors block this
+    // Fallback: If no onCompleteHabit function, create visual feedback locally
+    console.log('📝 Creating local visual feedback (fallback mode)');
     setDayRecords((prev) => {
       const lastRecord = prev[prev.length - 1]
       if (!lastRecord) {

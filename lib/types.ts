@@ -7,6 +7,14 @@ export interface Habit {
   monthYear: string;
   preferredView?: 'chart' | 'calendar' | 'companion';
   companionPattern?: 'drawing1' | 'drawing2';
+  cycleData?: {
+    completed: number;
+    missed: number;
+    consistency: number;
+    last_completed_date?: string;
+    start_date?: string;
+    end_date?: string;
+  };
 }
 
 export interface DayRecord {

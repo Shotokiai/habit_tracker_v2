@@ -178,7 +178,12 @@ export default function HabitTracker({
   const handleLetGo = async () => {
     if (!habit) return;
     
-    // Strict UUID validation - NO fallbacks allowed
+    console.log('🎯 Production Habit Completion Debug:');
+    console.log('- Habit ID:', habit.id);
+    console.log('- Current dayRecords length:', dayRecords.length);
+    console.log('- Cycle data:', habit.cycleData);
+    
+    // Strict UUID validation - NO fallbacks allowed for database operations
     const habitId = habit.id;
     const isUUID = typeof habitId === 'string' && 
       habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
@@ -199,7 +204,7 @@ export default function HabitTracker({
       return;
     }
     
-    console.log('🆔 Using valid habit UUID:', habitId);
+    console.log('✅ Using valid habit UUID:', habitId);
     
     // Use Supabase-based completion logic instead of localStorage
     if (onCompleteHabit) {
@@ -208,12 +213,15 @@ export default function HabitTracker({
       
       if (!result.success) {
         console.warn('❌ Completion failed:', result.message);
-        // Show "already logged" message
-        onShowLoggedMsg?.('logged');
+        // Show "already logged" message for actual failures
+        if (result.message.includes('already completed')) {
+          onShowLoggedMsg?.('logged');
+        }
         return;
       }
       
       console.log('✅ Completion successful:', result.message);
+      console.log('🔄 Parent should have updated habits - component will re-render');
       
       // SUCCESS: Don't manually create dayRecords here!
       // The parent component will reload habits and the useEffect will update dayRecords
@@ -222,7 +230,7 @@ export default function HabitTracker({
     }
 
     // Fallback: If no onCompleteHabit function, create visual feedback locally
-    console.log('📝 Creating local visual feedback (fallback mode)');
+    console.warn('⚠️ No onCompleteHabit function - creating local visual feedback only');
     setDayRecords((prev) => {
       const lastRecord = prev[prev.length - 1]
       if (!lastRecord) {
@@ -246,8 +254,7 @@ export default function HabitTracker({
       }
       return prev
     })
-
-    // Then handle Supabase operations (don't let errors block visual feedback)
+  }
     try {
       console.log('🔍 Starting Supabase operations for habit:', habitId);
       console.log('🔍 Habit ID type:', typeof habitId, 'length:', habitId.length, 'contains dash:', habitId.includes('-'));

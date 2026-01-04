@@ -21,8 +21,8 @@ interface HabitTrackerProps {
   onViewChange?: (view: 'chart' | 'calendar' | 'companion') => void
   onShowLoggedMsg?: (type: 'logged' | 'not-started' | 'limit-reached') => void
   onNextHabit?: () => void
-  dailyInteractions?: {[habitId: string]: number}
-  setDailyInteractions?: (interactions: {[habitId: string]: number}) => void
+  onCompleteHabit?: (habitId: string) => Promise<{success: boolean, message: string}>
+  onMarkMissed?: (habitId: string) => Promise<{success: boolean, message: string}>
   totalHabits?: number
 }
 
@@ -36,8 +36,8 @@ export default function HabitTracker({
   onViewChange,
   onShowLoggedMsg,
   onNextHabit,
-  dailyInteractions = {},
-  setDailyInteractions,
+  onCompleteHabit,
+  onMarkMissed,
   totalHabits = 1,
 }: HabitTrackerProps) {
   const [dayRecords, setDayRecords] = useState<DayRecord[]>([])
@@ -184,20 +184,18 @@ export default function HabitTracker({
     
     console.log('🆔 Using valid habit UUID:', habitId);
     
-    const today = new Date().toDateString();
-    const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
-    
-    // If this is the second or more interaction today, just show message
-    if (todayInteractions >= 1) {
-      onShowLoggedMsg?.('logged');
-      return;
+    // Use Supabase-based completion logic instead of localStorage
+    if (onCompleteHabit) {
+      const result = await onCompleteHabit(habitId);
+      
+      if (!result.success) {
+        // Show "already logged" message
+        onShowLoggedMsg?.('logged');
+        return;
+      }
     }
     
-    // First interaction - update state and increment counter
-    setDailyInteractions?.({
-      ...dailyInteractions,
-      [`${habitId}-${today}`]: todayInteractions + 1
-    });
+    // If successful or no onCompleteHabit function, continue with visual feedback
 
     // ALWAYS create the dot first (visual feedback) - don't let database errors block this
     setDayRecords((prev) => {
@@ -384,49 +382,20 @@ export default function HabitTracker({
       return;
     }
     
-    const today = new Date().toDateString();
     const habitId = habit.id;
-    const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
     
-    // If this is the second or more interaction today, just show message
-    if (todayInteractions >= 1) {
-      onShowLoggedMsg?.('logged');
-      return;
-    }
-    
-    // First interaction - update state and increment counter
-    setDailyInteractions?.({
-      ...dailyInteractions,
-      [`${habitId}-${today}`]: todayInteractions + 1
-    });
-
-    try {
-      // Only update if habit has started (has active cycle)
-      if (habitStarted && currentCycle) {
-        const newMissedDays = currentCycle.missed_days + 1;
-        
-        const { error } = await supabase
-          .from('habit_cycles')
-          .update({
-            missed_days: newMissedDays,
-            // consistency stays the same - only increases when completed
-          })
-          .eq('id', currentCycle.id);
-
-        if (error) {
-          console.error('Error updating missed days:', error);
-          return;
-        }
-
-        console.log('Habit cycle updated - missed day');
-        setCurrentCycle({...currentCycle, missed_days: newMissedDays});
+    // Use Supabase-based miss logic instead of localStorage
+    if (onMarkMissed) {
+      const result = await onMarkMissed(habitId);
+      
+      if (!result.success) {
+        // Show "already logged" message
+        onShowLoggedMsg?.('logged');
+        return;
       }
-
-    } catch (err) {
-      console.error('Network error during missed day tracking:', err);
     }
-
-    // Continue with original dot grid logic
+    
+    // Continue with visual feedback for the dot grid
     setDayRecords((prev) => {
       const lastRecord = prev[prev.length - 1]
       

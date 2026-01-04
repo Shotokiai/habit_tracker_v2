@@ -273,12 +273,17 @@ export default function SplashScreen({ onContinue }: SplashScreenProps) {
                   </div>
                   <div className="relative w-full h-full max-w-[240px] max-h-[240px] flex items-center justify-center">
                     <img 
-                      alt="Teddy Bear Dot-to-Dot" 
+                      alt="Companion Habit Tracking Preview" 
                       className="w-full h-full object-contain" 
-                      src="/images/teddy-bear-dots.png"
+                      src="/images/companion-preview.png"
                       onError={(e) => {
-                        console.log('Image failed to load');
+                        console.log('Companion preview image failed to load');
+                        // Show a fallback placeholder if image fails to load
                         e.currentTarget.style.display = 'none';
+                        const placeholder = document.createElement('div');
+                        placeholder.className = 'w-full h-full bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-sm';
+                        placeholder.innerHTML = '<span>Companion View</span>';
+                        e.currentTarget.parentNode?.appendChild(placeholder);
                       }}
                     />
                   </div>

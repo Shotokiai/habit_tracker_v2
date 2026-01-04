@@ -14,7 +14,8 @@ import type { Habit, DayRecord } from "@/lib/types"
 export default function Page() {
   const [showLoggedMsg, setShowLoggedMsg] = useState(false);
   const [messageType, setMessageType] = useState<'logged' | 'not-started' | 'limit-reached'>('logged');
-  const [dailyInteractions, setDailyInteractions] = useState<{[habitId: string]: number}>({});
+  // Remove localStorage-based daily interactions - will use Supabase habit_cycles instead
+  // const [dailyInteractions, setDailyInteractions] = useState<{[habitId: string]: number}>({});
   const [habits, setHabits] = useState<Habit[]>([]);
   const [currentHabitIndex, setCurrentHabitIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -45,6 +46,297 @@ export default function Page() {
       }
     } catch (err) {
       console.error('Network error updating last_seen_at:', err);
+    }
+  };
+
+  // Function to process missed days at midnight (automatic background processing)
+  const processMidnightMissedDays = async (userEmail: string) => {
+    try {
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+        console.log('⚠️ Supabase not configured, skipping midnight processing');
+        return;
+      }
+
+      console.log('🌙 Processing missed days for midnight...');
+
+      // Get user ID
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', userEmail)
+        .single();
+
+      if (userError || !userData) {
+        console.warn('User not found for midnight processing:', userError);
+        return;
+      }
+
+      // Get all active habit cycles for this user
+      const { data: habitCycles, error: cyclesError } = await supabase
+        .from('habit_cycles')
+        .select(`
+          id, 
+          habit_id, 
+          start_date, 
+          end_date, 
+          completed, 
+          missed, 
+          last_completed_date,
+          habits(user_id)
+        `)
+        .gte('end_date', new Date().toISOString().split('T')[0]) // Active cycles only
+        .eq('habits.user_id', userData.id);
+
+      if (cyclesError || !habitCycles) {
+        console.warn('Error fetching habit cycles for midnight processing:', cyclesError);
+        return;
+      }
+
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayDateString = yesterday.toDateString();
+
+      let processedCount = 0;
+
+      // Check each habit cycle
+      for (const cycle of habitCycles) {
+        const lastCompletedDate = cycle.last_completed_date 
+          ? new Date(cycle.last_completed_date).toDateString() 
+          : null;
+
+        // If habit wasn't completed yesterday, mark as missed
+        if (lastCompletedDate !== yesterdayDateString) {
+          const newMissed = cycle.missed + 1;
+          const totalAttempts = cycle.completed + newMissed;
+          const newConsistency = Math.round((cycle.completed / totalAttempts) * 100) || 0;
+
+          // Update habit cycle with missed day
+          const { error: updateError } = await supabase
+            .from('habit_cycles')
+            .update({
+              missed: newMissed,
+              consistency: newConsistency,
+              // Don't update last_completed_date - keep it as the actual last completion
+            })
+            .eq('id', cycle.id);
+
+          if (updateError) {
+            console.error('Error updating missed day at midnight:', updateError);
+          } else {
+            processedCount++;
+            console.log(`✅ Marked habit ${cycle.habit_id} as missed for yesterday`);
+          }
+        }
+      }
+
+      console.log(`🌙 Midnight processing complete: ${processedCount} habits marked as missed`);
+    } catch (error) {
+      console.error('Error in midnight processing:', error);
+    }
+  };
+
+  // Function to check if we need to run midnight processing
+  const checkAndRunMidnightProcessing = async (userEmail: string) => {
+    try {
+      const today = new Date().toDateString();
+      const lastProcessedKey = `lastMidnightProcessing_${userEmail}`;
+      const lastProcessed = localStorage.getItem(lastProcessedKey);
+
+      // If we haven't processed today yet, run midnight processing
+      if (lastProcessed !== today) {
+        await processMidnightMissedDays(userEmail);
+        localStorage.setItem(lastProcessedKey, today);
+        console.log('🌙 Midnight processing completed for today');
+      }
+    } catch (error) {
+      console.warn('Error checking midnight processing:', error);
+    }
+  };
+
+  // Function to check if habit was already completed today
+  const checkHabitCompletedToday = async (habitId: string): Promise<boolean> => {
+    try {
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+        return false; // Allow if Supabase not configured
+      }
+
+      const today = new Date().toDateString();
+      const { data, error } = await supabase
+        .from('habit_cycles')
+        .select('last_completed_date')
+        .eq('habit_id', habitId)
+        .single();
+
+      if (error || !data) {
+        return false; // Allow if no cycle found
+      }
+
+      const lastCompletedDate = data.last_completed_date ? new Date(data.last_completed_date).toDateString() : null;
+      return lastCompletedDate === today;
+    } catch (error) {
+      console.warn('Error checking habit completion:', error);
+      return false; // Allow if error
+    }
+  };
+
+  // Function to calculate and update missed days
+  const updateMissedDays = async (habitId: string) => {
+    try {
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('habit_cycles')
+        .select('start_date, last_completed_date, completed, missed')
+        .eq('habit_id', habitId)
+        .single();
+
+      if (error || !data) {
+        console.warn('No habit cycle found for missed day calculation');
+        return;
+      }
+
+      const today = new Date();
+      const startDate = new Date(data.start_date);
+      const lastCompletedDate = data.last_completed_date ? new Date(data.last_completed_date) : startDate;
+      
+      // Calculate total days since start
+      const totalDaysSinceStart = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+      
+      // Calculate days since last completion
+      const daysSinceLastCompleted = Math.floor((today.getTime() - lastCompletedDate.getTime()) / (1000 * 60 * 60 * 24));
+      
+      // If more than 1 day since last completion, count missed days
+      if (daysSinceLastCompleted > 1) {
+        const newMissedDays = daysSinceLastCompleted - 1; // Don't count today as missed yet
+        const totalMissed = data.missed + newMissedDays;
+        
+        // Update missed count in Supabase
+        const { error: updateError } = await supabase
+          .from('habit_cycles')
+          .update({ 
+            missed: totalMissed,
+            consistency: Math.round((data.completed / (data.completed + totalMissed)) * 100) || 0
+          })
+          .eq('habit_id', habitId);
+
+        if (updateError) {
+          console.error('Error updating missed days:', updateError);
+        } else {
+          console.log(`✅ Updated ${newMissedDays} missed days for habit`);
+        }
+      }
+    } catch (error) {
+      console.warn('Error calculating missed days:', error);
+    }
+  };
+
+  // Function to complete a habit (increment completed count)
+  const completeHabit = async (habitId: string): Promise<{success: boolean, message: string}> => {
+    try {
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+        return { success: true, message: 'Habit completed locally' };
+      }
+
+      // Check if already completed today
+      const completedToday = await checkHabitCompletedToday(habitId);
+      if (completedToday) {
+        return { success: false, message: 'Habit already completed for today!' };
+      }
+
+      // Update missed days first
+      await updateMissedDays(habitId);
+
+      // Get current cycle data with start/end dates for total cycle length
+      const { data, error } = await supabase
+        .from('habit_cycles')
+        .select('completed, missed, start_date, end_date')
+        .eq('habit_id', habitId)
+        .single();
+
+      if (error) {
+        console.error('Error fetching habit cycle:', error);
+        return { success: false, message: 'Error updating habit' };
+      }
+
+      const newCompleted = data.completed + 1;
+      
+      // Calculate consistency based on total cycle length (like 30 days)
+      const startDate = new Date(data.start_date);
+      const endDate = new Date(data.end_date);
+      const totalCycleDays = Math.floor((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+      const newConsistency = Math.round((newCompleted / totalCycleDays) * 100 * 100) / 100; // 2 decimal places
+
+      // Update habit cycle with new completion
+      const { error: updateError } = await supabase
+        .from('habit_cycles')
+        .update({
+          completed: newCompleted,
+          last_completed_date: new Date().toISOString(),
+          consistency: newConsistency
+        })
+        .eq('habit_id', habitId);
+
+      if (updateError) {
+        console.error('Error updating habit completion:', updateError);
+        return { success: false, message: 'Error updating habit' };
+      }
+
+      return { success: true, message: 'Habit completed successfully!' };
+    } catch (error) {
+      console.error('Error completing habit:', error);
+      return { success: false, message: 'Error completing habit' };
+    }
+  };
+
+  // Function to manually mark habit as missed for today
+  const markHabitMissed = async (habitId: string): Promise<{success: boolean, message: string}> => {
+    try {
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+        return { success: true, message: 'Habit marked as missed locally' };
+      }
+
+      // Check if already interacted today (completed or missed)
+      const completedToday = await checkHabitCompletedToday(habitId);
+      if (completedToday) {
+        return { success: false, message: 'Habit already logged for today!' };
+      }
+
+      // Get current cycle data
+      const { data, error } = await supabase
+        .from('habit_cycles')
+        .select('completed, missed')
+        .eq('habit_id', habitId)
+        .single();
+
+      if (error) {
+        console.error('Error fetching habit cycle for miss:', error);
+        return { success: false, message: 'Error updating habit' };
+      }
+
+      const newMissed = data.missed + 1;
+
+      // Update habit cycle with missed day (NO consistency change, NO last_completed_date update)
+      const { error: updateError } = await supabase
+        .from('habit_cycles')
+        .update({
+          missed: newMissed
+          // ✅ ONLY increment missed count
+          // ❌ NO consistency recalculation
+          // ❌ NO last_completed_date update (critical for gap detection)
+        })
+        .eq('habit_id', habitId);
+
+      if (updateError) {
+        console.error('Error updating habit miss:', updateError);
+        return { success: false, message: 'Error updating habit' };
+      }
+
+      return { success: true, message: 'Habit marked as missed' };
+    } catch (error) {
+      console.error('Error marking habit as missed:', error);
+      return { success: false, message: 'Error marking habit as missed' };
     }
   };
 
@@ -123,20 +415,12 @@ export default function Page() {
         // Update last_seen_at when app loads with existing user
         updateLastSeenAt(userData.email);
         
-        // Load habits specific to this user
-        const userHabitsKey = `habits_${userData.email}`;
-        const savedUserHabits = localStorage.getItem(userHabitsKey);
-        if (savedUserHabits) {
-          try {
-            const userHabits = JSON.parse(savedUserHabits);
-            setHabits(userHabits);
-            if (userHabits.length > 0) {
-              setHabitSelection("existing");
-            }
-          } catch {
-            setHabits([]);
-          }
-        }
+        // Load habits from Supabase first (for cross-device sync), then fallback to localStorage
+        loadUserHabitsFromSupabase(userData.email);
+        
+        // MIDNIGHT PROCESSING - Check and run automatic missed day calculation
+        checkAndRunMidnightProcessing(userData.email);
+        
       } catch {
         localStorage.removeItem("currentUser");
       }
@@ -144,6 +428,96 @@ export default function Page() {
     
     setIsLoaded(true);
   }, []);
+
+  // Function to load user habits from Supabase for cross-device sync
+  const loadUserHabitsFromSupabase = async (userEmail: string) => {
+    try {
+      // Check if Supabase is configured
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+        console.warn('⚠️ Supabase not configured, using localStorage only');
+        loadHabitsFromLocalStorage(userEmail);
+        return;
+      }
+
+      // Get user ID from email
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', userEmail)
+        .single();
+
+      if (userError || !userData) {
+        console.warn('User not found in Supabase, using localStorage:', userError);
+        loadHabitsFromLocalStorage(userEmail);
+        return;
+      }
+
+      // Get user's habits from Supabase
+      const { data: supabaseHabits, error: habitsError } = await supabase
+        .from('habits')
+        .select('*')
+        .eq('user_id', userData.id)
+        .order('created_at', { ascending: true });
+
+      if (habitsError) {
+        console.warn('Error loading habits from Supabase, using localStorage:', habitsError);
+        loadHabitsFromLocalStorage(userEmail);
+        return;
+      }
+
+      if (supabaseHabits && supabaseHabits.length > 0) {
+        console.log('✅ Loaded', supabaseHabits.length, 'habits from Supabase');
+        
+        // Convert Supabase habits to local format
+        const localHabits: Habit[] = supabaseHabits.map(habit => ({
+          id: habit.id,
+          name: habit.title,
+          person: userEmail, // Use email as person identifier
+          dayRecords: habit.day_records || [],
+          createdAt: habit.created_at,
+          monthYear: new Date(habit.created_at).toISOString().slice(0, 7),
+          preferredView: habit.preferred_view || 'chart',
+          companionPattern: habit.companion_pattern || 'drawing1'
+        }));
+
+        setHabits(localHabits);
+        if (localHabits.length > 0) {
+          setHabitSelection("existing");
+        }
+
+        // Update localStorage with synced data
+        const userHabitsKey = `habits_${userEmail}`;
+        localStorage.setItem(userHabitsKey, JSON.stringify(localHabits));
+        
+      } else {
+        console.log('No habits found in Supabase, checking localStorage');
+        loadHabitsFromLocalStorage(userEmail);
+      }
+      
+    } catch (error) {
+      console.warn('Network error loading from Supabase, using localStorage:', error);
+      loadHabitsFromLocalStorage(userEmail);
+    }
+  };
+
+  // Fallback function to load habits from localStorage
+  const loadHabitsFromLocalStorage = (userEmail: string) => {
+    const userHabitsKey = `habits_${userEmail}`;
+    const savedUserHabits = localStorage.getItem(userHabitsKey);
+    if (savedUserHabits) {
+      try {
+        const userHabits = JSON.parse(savedUserHabits);
+        setHabits(userHabits);
+        if (userHabits.length > 0) {
+          setHabitSelection("existing");
+        }
+      } catch {
+        setHabits([]);
+      }
+    } else {
+      setHabits([]);
+    }
+  };
 
   // Handle user login/registration
   const handleUserSubmit = (userData: { username: string; age: string; email: string }) => {
@@ -154,30 +528,11 @@ export default function Page() {
     // Update last_seen_at when user logs in/registers
     updateLastSeenAt(userData.email);
     
-    // Load existing habits for this user
-    const userHabitsKey = `habits_${userData.email}`;
-    const savedUserHabits = localStorage.getItem(userHabitsKey);
-    if (savedUserHabits) {
-      try {
-        const userHabits = JSON.parse(savedUserHabits);
-        setHabits(userHabits);
-        // If user has habits, mark as existing user
-        if (userHabits.length > 0) {
-          setHabitSelection("existing"); // Mark that user has existing habits
-        } else {
-          // User has no habits, should show habit selection
-          setHabitSelection(null);
-        }
-      } catch {
-        // If there's an error loading habits, start fresh
-        setHabits([]);
-        setHabitSelection(null);
-      }
-    } else {
-      // New user with no saved habits - should show habit selection
-      setHabits([]);
-      setHabitSelection(null);
-    }
+    // Load habits from Supabase for cross-device sync
+    loadUserHabitsFromSupabase(userData.email);
+    
+    // MIDNIGHT PROCESSING - Check and run automatic missed day calculation for new login
+    checkAndRunMidnightProcessing(userData.email);
   };
 
   useEffect(() => {
@@ -418,6 +773,9 @@ export default function Page() {
     
     setHabits(habits.map((habit) => (habit.id === habitId ? { ...habit, dayRecords } : habit)));
 
+    // Sync progress to Supabase for cross-device consistency
+    await syncHabitProgressToSupabase(habitId, dayRecords);
+
     // Track habit start (first time logging) in Supabase
     if (hadNoRecords && hasRecordsNow && user && habit) {
       try {
@@ -435,9 +793,94 @@ export default function Page() {
       }
     }
   };
+
+  // Function to sync habit progress to Supabase
+  const syncHabitProgressToSupabase = async (habitId: string, dayRecords: DayRecord[]) => {
+    try {
+      // Check if Supabase is configured
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+        console.log('⚠️ Supabase not configured, skipping sync');
+        return;
+      }
+
+      // Validate habitId is UUID
+      const isUUID = typeof habitId === 'string' && 
+        habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+      
+      if (!isUUID) {
+        console.warn('⚠️ Invalid habit UUID, skipping Supabase sync:', habitId);
+        return;
+      }
+
+      // Update habit progress in Supabase
+      const { error } = await supabase
+        .from('habits')
+        .update({ 
+          day_records: dayRecords,
+          last_updated: new Date().toISOString()
+        })
+        .eq('id', habitId);
+
+      if (error) {
+        console.warn('Failed to sync habit progress to Supabase:', error);
+      } else {
+        console.log('✅ Habit progress synced to Supabase for cross-device access');
+      }
+    } catch (error) {
+      console.warn('Network error syncing to Supabase:', error);
+    }
+  };
   
-  const updateHabit = (habitId: string, updatedFields: Partial<Habit>) => {
+  const updateHabit = async (habitId: string, updatedFields: Partial<Habit>) => {
     setHabits(habits.map((habit) => (habit.id === habitId ? { ...habit, ...updatedFields } : habit)));
+    
+    // Sync habit preferences to Supabase for cross-device consistency
+    await syncHabitPreferencesToSupabase(habitId, updatedFields);
+  };
+
+  // Function to sync habit preferences to Supabase
+  const syncHabitPreferencesToSupabase = async (habitId: string, updatedFields: Partial<Habit>) => {
+    try {
+      // Check if Supabase is configured
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+        return;
+      }
+
+      // Validate habitId is UUID
+      const isUUID = typeof habitId === 'string' && 
+        habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+      
+      if (!isUUID) {
+        return;
+      }
+
+      // Prepare update object with relevant fields
+      const updateData: any = { last_updated: new Date().toISOString() };
+      
+      if (updatedFields.preferredView) {
+        updateData.preferred_view = updatedFields.preferredView;
+      }
+      if (updatedFields.companionPattern) {
+        updateData.companion_pattern = updatedFields.companionPattern;
+      }
+      if (updatedFields.dayRecords) {
+        updateData.day_records = updatedFields.dayRecords;
+      }
+
+      // Update habit preferences in Supabase
+      const { error } = await supabase
+        .from('habits')
+        .update(updateData)
+        .eq('id', habitId);
+
+      if (error) {
+        console.warn('Failed to sync habit preferences to Supabase:', error);
+      } else {
+        console.log('✅ Habit preferences synced to Supabase');
+      }
+    } catch (error) {
+      console.warn('Network error syncing preferences to Supabase:', error);
+    }
   };
   const deleteHabit = (habitId: string) => {
     const newHabits = habits.filter((h) => h.id !== habitId);
@@ -648,6 +1091,8 @@ export default function Page() {
               const nextIndex = currentHabitIndex < habits.length - 1 ? currentHabitIndex + 1 : 0;
               setCurrentHabitIndex(nextIndex);
             }}
+            onCompleteHabit={completeHabit}
+            onMarkMissed={markHabitMissed}
             dailyInteractions={dailyInteractions}
             setDailyInteractions={setDailyInteractions}
             totalHabits={habits.length}
@@ -848,8 +1293,8 @@ export default function Page() {
                 onNextHabit={() => {
                   setCurrentHabitIndex((prev) => (prev + 1) % habits.length);
                 }}
-                dailyInteractions={dailyInteractions}
-                setDailyInteractions={setDailyInteractions}
+                onCompleteHabit={completeHabit}
+                onMarkMissed={markHabitMissed}
                 totalHabits={habits.length}
               />
             </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { supabase } from '../lib/supabase'
+import { supabase, isSupabaseConfigured, getEnvironmentInfo, debugSupabaseConnection } from '../lib/supabase'
 
 interface FirstUserFormProps {
   onSubmit: (user: { username: string; email: string; age: string }) => void
@@ -55,15 +55,24 @@ export default function FirstUserForm({ onSubmit, onBack }: FirstUserFormProps) 
     
     // Save to Supabase users table
     try {
-      // Check if Supabase is properly configured
-      if (!process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL.includes('placeholder')) {
+      // Check if Supabase is properly configured with detailed logging
+      const envInfo = getEnvironmentInfo();
+      
+      console.log('🔍 Production Registration Debug:');
+      console.table(envInfo);
+      console.log('- User data:', { username, email, age });
+      
+      if (!isSupabaseConfigured()) {
         console.warn('⚠️ Supabase not configured in production, using local storage only');
+        console.log('📱 Continuing with localStorage fallback');
         // For production without Supabase, continue with localStorage only
         const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
         localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
         onSubmit(newUser)
         return;
       }
+      
+      console.log('📤 Attempting Supabase user registration...');
       
       const { data, error } = await supabase
         .from('users')
@@ -72,25 +81,56 @@ export default function FirstUserForm({ onSubmit, onBack }: FirstUserFormProps) 
             name: username,
             email: email,
             age: parseInt(age),
+            created_at: new Date().toISOString()
           }
         ])
         .select(); // Add .select() to return the inserted data
 
       if (error) {
-        console.error('Supabase error:', error);
-        // If it's a network/connection error, still allow local storage registration
-        if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-          console.warn('🔄 Network issue, falling back to local storage only');
+        console.error('❌ Supabase error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
+        
+        // Handle different types of errors
+        if (
+          error.message.includes('Failed to fetch') || 
+          error.message.includes('NetworkError') ||
+          error.message.includes('TypeError') ||
+          error.code === 'ENOTFOUND' ||
+          error.code === 'NETWORK_ERROR'
+        ) {
+          console.warn('🔄 Network/Connection issue, falling back to local storage only');
           const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
           localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
           onSubmit(newUser)
           return;
         }
-        setError(error.message);
+        
+        // Handle duplicate user errors gracefully
+        if (error.message.includes('duplicate key') || error.message.includes('already exists')) {
+          console.warn('⚠️ User already exists, continuing with registration flow');
+          const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
+          localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
+          onSubmit(newUser)
+          return;
+        }
+        
+        // For other errors, show to user but still allow continuation
+        console.error('🚨 Other Supabase error:', error.message);
+        setError(`Registration issue: ${error.message}. Continuing with local storage.`);
+        setTimeout(() => {
+          const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
+          localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
+          onSubmit(newUser)
+        }, 2000); // Show error for 2 seconds then continue
         return;
       }
 
-      console.log('User inserted to Supabase:', data);
+      console.log('✅ User successfully inserted to Supabase:', data);
+      console.log('🎉 Registration successful! User data saved to both Supabase and localStorage');
       
       // Save user to localStorage for future logins
       const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
@@ -99,13 +139,26 @@ export default function FirstUserForm({ onSubmit, onBack }: FirstUserFormProps) 
       // Continue to next step
       onSubmit(newUser)
       
-    } catch (err) {
-      console.error('Network error during Supabase registration:', err)
+    } catch (err: any) {
+      console.error('🚨 Catch block - Network/Unknown error during Supabase registration:', {
+        message: err?.message || 'Unknown error',
+        name: err?.name || 'Unknown',
+        stack: err?.stack || 'No stack trace',
+        toString: err?.toString?.() || 'Cannot convert to string'
+      });
+      
       // Network errors in production - use localStorage as fallback
-      console.warn('🔄 Network error, falling back to local storage only');
-      const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
-      localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
-      onSubmit(newUser)
+      console.warn('🔄 Network error caught, falling back to local storage only');
+      
+      // Show user-friendly message
+      setError('Connection issue - continuing with offline mode...');
+      
+      // Still allow registration with fallback
+      setTimeout(() => {
+        const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
+        localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
+        onSubmit(newUser)
+      }, 1500);
     }
   }
 

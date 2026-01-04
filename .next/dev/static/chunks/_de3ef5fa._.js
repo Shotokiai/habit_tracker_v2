@@ -2475,7 +2475,7 @@ var _s = __turbopack_context__.k.signature();
 ;
 ;
 ;
-function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNewHabitMode, onUpdateHabit, onViewChange, onShowLoggedMsg, onNextHabit, dailyInteractions = {}, setDailyInteractions, totalHabits = 1 }) {
+function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNewHabitMode, onUpdateHabit, onViewChange, onShowLoggedMsg, onNextHabit, onCompleteHabit, onMarkMissed, totalHabits = 1 }) {
     _s();
     const [dayRecords, setDayRecords] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [isSaved, setIsSaved] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -2542,6 +2542,9 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "HabitTracker.useEffect": ()=>{
             if (habit) {
+                console.log('🔄 Habit updated, refreshing component state:', habit.name);
+                console.log('📊 New habit dayRecords length:', habit.dayRecords?.length || 0);
+                console.log('📊 New habit cycleData:', habit.cycleData);
                 const currentMonthYear = new Date().toISOString().slice(0, 7);
                 // REMOVED: Month-based reset that was causing data loss for existing users
                 // Always load existing habit data to preserve user progress
@@ -2562,6 +2565,16 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
     // Load existing habit cycle for this habit
     const loadHabitCycle = async ()=>{
         if (!habit) return;
+        // First check if cycle data was already loaded with the habit
+        if (habit.cycleData) {
+            console.log('✅ Using pre-loaded cycle data for habit:', habit.name);
+            console.log('📊 Cycle data:', habit.cycleData);
+            setCurrentCycle(habit.cycleData);
+            setHabitStarted(true);
+            return;
+        }
+        // Fallback: Load from Supabase if not pre-loaded
+        console.log('🔄 Loading cycle data from Supabase for habit:', habit.name);
         // Strict UUID validation for loadHabitCycle
         const habitId = habit.id;
         const isUUID = typeof habitId === 'string' && habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
@@ -2573,10 +2586,8 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
         console.log('🆔 Using valid habit UUID for cycle lookup:', habitId);
         try {
             const { data: cycles, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').select('*').eq('habit_id', habitId) // Use validated UUID
-            .gte('end_date', new Date().toISOString().split('T')[0]) // only active cycles
-            .order('created_at', {
-                ascending: false
-            }).limit(1);
+            .limit(1);
+            console.log('🔍 Loaded cycle data from Supabase:', cycles);
             if (error) {
                 console.error('Error loading habit cycle:', error);
                 return;
@@ -2634,19 +2645,24 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
             return;
         }
         console.log('🆔 Using valid habit UUID:', habitId);
-        const today = new Date().toDateString();
-        const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
-        // If this is the second or more interaction today, just show message
-        if (todayInteractions >= 1) {
-            onShowLoggedMsg?.('logged');
+        // Use Supabase-based completion logic instead of localStorage
+        if (onCompleteHabit) {
+            console.log('🎯 Calling parent completion function...');
+            const result = await onCompleteHabit(habitId);
+            if (!result.success) {
+                console.warn('❌ Completion failed:', result.message);
+                // Show "already logged" message
+                onShowLoggedMsg?.('logged');
+                return;
+            }
+            console.log('✅ Completion successful:', result.message);
+            // SUCCESS: Don't manually create dayRecords here!
+            // The parent component will reload habits and the useEffect will update dayRecords
+            // This prevents the blinking issue and ensures UI matches database
             return;
         }
-        // First interaction - update state and increment counter
-        setDailyInteractions?.({
-            ...dailyInteractions,
-            [`${habitId}-${today}`]: todayInteractions + 1
-        });
-        // ALWAYS create the dot first (visual feedback) - don't let database errors block this
+        // Fallback: If no onCompleteHabit function, create visual feedback locally
+        console.log('📝 Creating local visual feedback (fallback mode)');
         setDayRecords((prev)=>{
             const lastRecord = prev[prev.length - 1];
             if (!lastRecord) {
@@ -2817,40 +2833,17 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
             onShowLoggedMsg?.('not-started');
             return;
         }
-        const today = new Date().toDateString();
         const habitId = habit.id;
-        const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
-        // If this is the second or more interaction today, just show message
-        if (todayInteractions >= 1) {
-            onShowLoggedMsg?.('logged');
-            return;
-        }
-        // First interaction - update state and increment counter
-        setDailyInteractions?.({
-            ...dailyInteractions,
-            [`${habitId}-${today}`]: todayInteractions + 1
-        });
-        try {
-            // Only update if habit has started (has active cycle)
-            if (habitStarted && currentCycle) {
-                const newMissedDays = currentCycle.missed_days + 1;
-                const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').update({
-                    missed_days: newMissedDays
-                }).eq('id', currentCycle.id);
-                if (error) {
-                    console.error('Error updating missed days:', error);
-                    return;
-                }
-                console.log('Habit cycle updated - missed day');
-                setCurrentCycle({
-                    ...currentCycle,
-                    missed_days: newMissedDays
-                });
+        // Use Supabase-based miss logic instead of localStorage
+        if (onMarkMissed) {
+            const result = await onMarkMissed(habitId);
+            if (!result.success) {
+                // Show "already logged" message
+                onShowLoggedMsg?.('logged');
+                return;
             }
-        } catch (err) {
-            console.error('Network error during missed day tracking:', err);
         }
-        // Continue with original dot grid logic
+        // Continue with visual feedback for the dot grid
         setDayRecords((prev)=>{
             const lastRecord = prev[prev.length - 1];
             // For Day 2 missed: create dot at X=2, Y=1 (next to Day 1 green circle)
@@ -2893,7 +2886,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
             }
         }, void 0, false, {
             fileName: "[project]/components/habit-tracker.tsx",
-            lineNumber: 442,
+            lineNumber: 435,
             columnNumber: 12
         }, this);
     }
@@ -2909,7 +2902,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "No Habits Yet"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 452,
+                        lineNumber: 445,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2917,7 +2910,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "You haven't created any habits yet. Start your journey by creating your first habit!"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 453,
+                        lineNumber: 446,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2929,18 +2922,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "Create Your First Habit"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 456,
+                        lineNumber: 449,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/habit-tracker.tsx",
-                lineNumber: 451,
+                lineNumber: 444,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/habit-tracker.tsx",
-            lineNumber: 450,
+            lineNumber: 443,
             columnNumber: 12
         }, this);
     }
@@ -2968,7 +2961,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 474,
+                                        lineNumber: 467,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -2981,18 +2974,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             clipRule: "evenodd"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 476,
+                                            lineNumber: 469,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 475,
+                                        lineNumber: 468,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 470,
+                                lineNumber: 463,
                                 columnNumber: 15
                             }, this),
                             showViewDropdown && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3012,7 +3005,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Chart View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 482,
+                                            lineNumber: 475,
                                             columnNumber: 49
                                         }, this),
                                         currentView !== 'calendar' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3026,7 +3019,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Calendar View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 489,
+                                            lineNumber: 482,
                                             columnNumber: 52
                                         }, this),
                                         currentView !== 'companion' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3041,29 +3034,29 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Companion View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 496,
+                                            lineNumber: 489,
                                             columnNumber: 53
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/habit-tracker.tsx",
-                                    lineNumber: 481,
+                                    lineNumber: 474,
                                     columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 480,
+                                lineNumber: 473,
                                 columnNumber: 36
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 469,
+                        lineNumber: 462,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 468,
+                    lineNumber: 461,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3075,12 +3068,12 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 dayRecords: dayRecords
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 512,
+                                lineNumber: 505,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 511,
+                            lineNumber: 504,
                             columnNumber: 41
                         }, this),
                         currentView === 'calendar' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3090,12 +3083,12 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 habitStartDate: habit.createdAt
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 515,
+                                lineNumber: 508,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 514,
+                            lineNumber: 507,
                             columnNumber: 44
                         }, this),
                         currentView === 'companion' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3118,18 +3111,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 totalHabits: totalHabits
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 518,
+                                lineNumber: 511,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 517,
+                            lineNumber: 510,
                             columnNumber: 45
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 510,
+                    lineNumber: 503,
                     columnNumber: 11
                 }, this),
                 (currentView === 'chart' || currentView === 'calendar' || currentView === 'companion' && isCompanionCanvasShowing) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3148,12 +3141,12 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Completed Habit!"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 533,
+                                            lineNumber: 526,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 532,
+                                        lineNumber: 525,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3164,18 +3157,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Missed Today"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 536,
+                                            lineNumber: 529,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 535,
+                                        lineNumber: 528,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 531,
+                                lineNumber: 524,
                                 columnNumber: 17
                             }, this),
                             habit && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3187,7 +3180,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "Want to give up?"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 542,
+                                        lineNumber: 535,
                                         columnNumber: 21
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3208,35 +3201,35 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                                     d: "M9 5l7 7-7 7"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/habit-tracker.tsx",
-                                                    lineNumber: 548,
+                                                    lineNumber: 541,
                                                     columnNumber: 25
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/habit-tracker.tsx",
-                                                lineNumber: 547,
+                                                lineNumber: 540,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 545,
+                                        lineNumber: 538,
                                         columnNumber: 21
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 541,
+                                lineNumber: 534,
                                 columnNumber: 27
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 530,
+                        lineNumber: 523,
                         columnNumber: 15
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 529,
+                    lineNumber: 522,
                     columnNumber: 130
                 }, this),
                 showDeleteConfirmation && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3249,7 +3242,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 children: "Do you really don't want to continue?"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 558,
+                                lineNumber: 551,
                                 columnNumber: 17
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3261,7 +3254,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "Yes"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 562,
+                                        lineNumber: 555,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3270,31 +3263,31 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "No"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 565,
+                                        lineNumber: 558,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 561,
+                                lineNumber: 554,
                                 columnNumber: 17
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 557,
+                        lineNumber: 550,
                         columnNumber: 15
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 556,
+                    lineNumber: 549,
                     columnNumber: 38
                 }, this)
             ]
         }, void 0, true)
     }, void 0, false, {
         fileName: "[project]/components/habit-tracker.tsx",
-        lineNumber: 465,
+        lineNumber: 458,
         columnNumber: 10
     }, this);
 }
@@ -5918,11 +5911,16 @@ function SplashScreen({ onContinue }) {
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                     className: "jsx-cca062bef7d99bd" + " " + "relative w-full h-full max-w-[240px] max-h-[240px] flex items-center justify-center",
                                                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                                                        alt: "Teddy Bear Dot-to-Dot",
-                                                                        src: "/images/teddy-bear-dots.png",
+                                                                        alt: "Companion Habit Tracking Preview",
+                                                                        src: "/images/companion-preview.png",
                                                                         onError: (e)=>{
-                                                                            console.log('Image failed to load');
+                                                                            console.log('Companion preview image failed to load');
+                                                                            // Show a fallback placeholder if image fails to load
                                                                             e.currentTarget.style.display = 'none';
+                                                                            const placeholder = document.createElement('div');
+                                                                            placeholder.className = 'w-full h-full bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 text-sm';
+                                                                            placeholder.innerHTML = '<span>Companion View</span>';
+                                                                            e.currentTarget.parentNode?.appendChild(placeholder);
                                                                         },
                                                                         className: "jsx-cca062bef7d99bd" + " " + "w-full h-full object-contain"
                                                                     }, void 0, false, {
@@ -5968,12 +5966,12 @@ function SplashScreen({ onContinue }) {
                                                 className: "jsx-cca062bef7d99bd" + " " + `h-2 rounded-full transition-all duration-300 ${currentSlide === index ? 'w-6 bg-indigo-500' : 'w-2 bg-gray-300'}`
                                             }, index, false, {
                                                 fileName: "[project]/components/splash-screen.tsx",
-                                                lineNumber: 397,
+                                                lineNumber: 402,
                                                 columnNumber: 37
                                             }, this))
                                     }, void 0, false, {
                                         fileName: "[project]/components/splash-screen.tsx",
-                                        lineNumber: 396,
+                                        lineNumber: 401,
                                         columnNumber: 11
                                     }, this)
                                 ]
@@ -5992,7 +5990,7 @@ function SplashScreen({ onContinue }) {
                                             className: "jsx-cca062bef7d99bd"
                                         }, void 0, false, {
                                             fileName: "[project]/components/splash-screen.tsx",
-                                            lineNumber: 404,
+                                            lineNumber: 409,
                                             columnNumber: 31
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -6000,18 +5998,18 @@ function SplashScreen({ onContinue }) {
                                             children: "Shape Better You"
                                         }, void 0, false, {
                                             fileName: "[project]/components/splash-screen.tsx",
-                                            lineNumber: 405,
+                                            lineNumber: 410,
                                             columnNumber: 13
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/splash-screen.tsx",
-                                    lineNumber: 403,
+                                    lineNumber: 408,
                                     columnNumber: 11
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/splash-screen.tsx",
-                                lineNumber: 402,
+                                lineNumber: 407,
                                 columnNumber: 9
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6046,17 +6044,17 @@ function SplashScreen({ onContinue }) {
                                                         className: "jsx-cca062bef7d99bd"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/splash-screen.tsx",
-                                                        lineNumber: 419,
+                                                        lineNumber: 424,
                                                         columnNumber: 19
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/splash-screen.tsx",
-                                                    lineNumber: 418,
+                                                    lineNumber: 423,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/splash-screen.tsx",
-                                                lineNumber: 415,
+                                                lineNumber: 420,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6070,12 +6068,12 @@ function SplashScreen({ onContinue }) {
                                                     children: "Swipe to continue"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/splash-screen.tsx",
-                                                    lineNumber: 423,
+                                                    lineNumber: 428,
                                                     columnNumber: 17
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/splash-screen.tsx",
-                                                lineNumber: 422,
+                                                lineNumber: 427,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -6086,23 +6084,23 @@ function SplashScreen({ onContinue }) {
                                                 className: "jsx-cca062bef7d99bd" + " " + "absolute top-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent transform skew-x-12"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/splash-screen.tsx",
-                                                lineNumber: 430,
+                                                lineNumber: 435,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/splash-screen.tsx",
-                                        lineNumber: 414,
+                                        lineNumber: 419,
                                         columnNumber: 13
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/splash-screen.tsx",
-                                    lineNumber: 413,
+                                    lineNumber: 418,
                                     columnNumber: 11
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/splash-screen.tsx",
-                                lineNumber: 412,
+                                lineNumber: 417,
                                 columnNumber: 9
                             }, this)
                         ]
@@ -6166,7 +6164,8 @@ function Page() {
     _s();
     const [showLoggedMsg, setShowLoggedMsg] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [messageType, setMessageType] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('logged');
-    const [dailyInteractions, setDailyInteractions] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
+    // Remove localStorage-based daily interactions - will use Supabase habit_cycles instead
+    // const [dailyInteractions, setDailyInteractions] = useState<{[habitId: string]: number}>({});
     const [habits, setHabits] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     const [currentHabitIndex, setCurrentHabitIndex] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
     const [isLoaded, setIsLoaded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
@@ -6194,6 +6193,332 @@ function Page() {
             }
         } catch (err) {
             console.error('Network error updating last_seen_at:', err);
+        }
+    };
+    // Function to process missed days at midnight (automatic background processing)
+    const processMidnightMissedDays = async (userEmail)=>{
+        try {
+            if (!("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co").includes('placeholder')) {
+                console.log('⚠️ Supabase not configured, skipping midnight processing');
+                return;
+            }
+            console.log('🌙 Processing missed days for midnight...');
+            // Get user ID
+            const { data: userData, error: userError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('users').select('id').eq('email', userEmail).single();
+            if (userError || !userData) {
+                console.warn('User not found for midnight processing:', userError);
+                return;
+            }
+            // Get all active habit cycles for this user
+            const { data: habitCycles, error: cyclesError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').select(`
+          id, 
+          habit_id, 
+          start_date, 
+          end_date, 
+          completed, 
+          missed, 
+          last_completed_date,
+          habits(user_id)
+        `).gte('end_date', new Date().toISOString().split('T')[0]) // Active cycles only
+            .eq('habits.user_id', userData.id);
+            if (cyclesError || !habitCycles) {
+                console.warn('Error fetching habit cycles for midnight processing:', cyclesError);
+                return;
+            }
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayDateString = yesterday.toDateString();
+            let processedCount = 0;
+            // Check each habit cycle
+            for (const cycle of habitCycles){
+                const lastCompletedDate = cycle.last_completed_date ? new Date(cycle.last_completed_date).toDateString() : null;
+                // If habit wasn't completed yesterday, mark as missed
+                if (lastCompletedDate !== yesterdayDateString) {
+                    const newMissed = cycle.missed + 1;
+                    const totalAttempts = cycle.completed + newMissed;
+                    const newConsistency = Math.round(cycle.completed / totalAttempts * 100) || 0;
+                    // Update habit cycle with missed day
+                    const { error: updateError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').update({
+                        missed: newMissed,
+                        consistency: newConsistency
+                    }).eq('id', cycle.id);
+                    if (updateError) {
+                        console.error('Error updating missed day at midnight:', updateError);
+                    } else {
+                        processedCount++;
+                        console.log(`✅ Marked habit ${cycle.habit_id} as missed for yesterday`);
+                    }
+                }
+            }
+            console.log(`🌙 Midnight processing complete: ${processedCount} habits marked as missed`);
+        } catch (error) {
+            console.error('Error in midnight processing:', error);
+        }
+    };
+    // Function to check if we need to run midnight processing
+    const checkAndRunMidnightProcessing = async (userEmail)=>{
+        try {
+            const today = new Date().toDateString();
+            const lastProcessedKey = `lastMidnightProcessing_${userEmail}`;
+            const lastProcessed = localStorage.getItem(lastProcessedKey);
+            // If we haven't processed today yet, run midnight processing
+            if (lastProcessed !== today) {
+                await processMidnightMissedDays(userEmail);
+                localStorage.setItem(lastProcessedKey, today);
+                console.log('🌙 Midnight processing completed for today');
+            }
+        } catch (error) {
+            console.warn('Error checking midnight processing:', error);
+        }
+    };
+    // Function to check if habit was already completed today
+    const checkHabitCompletedToday = async (habitId)=>{
+        try {
+            if (!("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co").includes('placeholder')) {
+                return false; // Allow if Supabase not configured
+            }
+            const today = new Date().toDateString();
+            // First, let's see what columns actually exist in habit_cycles table
+            const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').select('*') // Select all columns to see what's available
+            .eq('habit_id', habitId).limit(1);
+            console.log('🔍 habit_cycles table data:', data);
+            console.log('🔍 habit_cycles table error:', error);
+            if (error) {
+                console.warn('Error checking habit completion:', error);
+                return false; // Allow if error
+            }
+            if (!data || data.length === 0) {
+                console.log('No habit cycle found, allowing completion');
+                return false; // Allow if no cycle found
+            }
+            // Check if we have last_completed_date field and if it matches today
+            const cycle = data[0];
+            console.log('🔍 Cycle structure:', Object.keys(cycle));
+            if (cycle.last_completed_date) {
+                const lastCompletedDate = new Date(cycle.last_completed_date).toDateString();
+                return lastCompletedDate === today;
+            }
+            return false; // Allow if no last_completed_date
+        } catch (error) {
+            console.warn('Error checking habit completion:', error);
+            return false; // Allow if error
+        }
+    };
+    // Function to calculate and update missed days
+    const updateMissedDays = async (habitId)=>{
+        try {
+            if (!("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co").includes('placeholder')) {
+                return;
+            }
+            const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').select('start_date, last_completed_date, completed, missed').eq('habit_id', habitId).single();
+            if (error || !data) {
+                console.warn('No habit cycle found for missed day calculation');
+                return;
+            }
+            const today = new Date();
+            const startDate = new Date(data.start_date);
+            const lastCompletedDate = data.last_completed_date ? new Date(data.last_completed_date) : startDate;
+            // Calculate total days since start
+            const totalDaysSinceStart = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+            // Calculate days since last completion
+            const daysSinceLastCompleted = Math.floor((today.getTime() - lastCompletedDate.getTime()) / (1000 * 60 * 60 * 24));
+            // If more than 1 day since last completion, count missed days
+            if (daysSinceLastCompleted > 1) {
+                const newMissedDays = daysSinceLastCompleted - 1; // Don't count today as missed yet
+                const totalMissed = data.missed + newMissedDays;
+                // Update missed count in Supabase
+                const { error: updateError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').update({
+                    missed: totalMissed,
+                    consistency: Math.round(data.completed / (data.completed + totalMissed) * 100) || 0
+                }).eq('habit_id', habitId);
+                if (updateError) {
+                    console.error('Error updating missed days:', updateError);
+                } else {
+                    console.log(`✅ Updated ${newMissedDays} missed days for habit`);
+                }
+            }
+        } catch (error) {
+            console.warn('Error calculating missed days:', error);
+        }
+    };
+    // Function to complete a habit (increment completed count)
+    const completeHabit = async (habitId)=>{
+        try {
+            if (!("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co").includes('placeholder')) {
+                return {
+                    success: true,
+                    message: 'Habit completed locally'
+                };
+            }
+            // Check if already completed today
+            const completedToday = await checkHabitCompletedToday(habitId);
+            if (completedToday) {
+                return {
+                    success: false,
+                    message: 'Habit already completed for today!'
+                };
+            }
+            // Get ALL current cycle data to see what fields exist
+            const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').select('*') // Get all columns
+            .eq('habit_id', habitId).limit(1);
+            console.log('🔍 Complete habit - cycle data:', data);
+            console.log('🔍 Complete habit - error:', error);
+            if (error) {
+                console.error('Error fetching habit cycle:', error);
+                return {
+                    success: false,
+                    message: 'Error updating habit: ' + error.message
+                };
+            }
+            if (!data || data.length === 0) {
+                // No cycle exists, create a completion record with proper initial values
+                console.log('🔍 No existing cycle, creating new record...');
+                const { error: insertError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').insert({
+                    habit_id: habitId,
+                    last_completed_date: new Date().toISOString(),
+                    start_date: new Date().toISOString().split('T')[0],
+                    end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    // 30 days from now
+                    completed_days: 1,
+                    // This is the first completion
+                    missed_days: 0,
+                    consistency: 1 / 30 * 100 // 3.33% for first day
+                });
+                if (insertError) {
+                    console.error('Error creating habit cycle:', insertError);
+                    return {
+                        success: false,
+                        message: 'Error creating habit cycle: ' + insertError.message
+                    };
+                }
+                console.log('✅ Created new cycle with first completion');
+                // Force reload habits to reflect the new cycle data
+                if (user) {
+                    console.log('🔄 Force reloading habits after first completion...');
+                    await loadUserHabitsFromSupabase(user.email);
+                }
+                return {
+                    success: true,
+                    message: 'Habit completed successfully!'
+                };
+            }
+            const cycle = data[0];
+            console.log('🔍 Existing cycle structure:', Object.keys(cycle));
+            // Update with available fields
+            const updateData = {
+                last_completed_date: new Date().toISOString()
+            };
+            // Only add fields that exist in the table
+            if ('completed_days' in cycle) {
+                const newCompletedDays = (cycle.completed_days || 0) + 1;
+                updateData.completed_days = newCompletedDays;
+                // Also update consistency
+                if ('consistency' in cycle) {
+                    updateData.consistency = newCompletedDays / 30 * 100;
+                }
+                console.log(`📊 Updating completion: ${cycle.completed_days || 0} → ${newCompletedDays}`);
+            }
+            const { error: updateError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').update(updateData).eq('habit_id', habitId);
+            if (updateError) {
+                console.error('Error updating habit completion:', updateError);
+                return {
+                    success: false,
+                    message: 'Error updating habit: ' + updateError.message
+                };
+            }
+            console.log('✅ Database updated successfully');
+            // CRITICAL: Force reload habits to reflect the updated progress immediately
+            console.log('🔄 Force reloading habits to update UI...');
+            if (user) {
+                await loadUserHabitsFromSupabase(user.email);
+                console.log('🔄 Habit reload completed');
+            }
+            return {
+                success: true,
+                message: 'Habit completed successfully!'
+            };
+        } catch (error) {
+            console.error('Error completing habit:', error);
+            return {
+                success: false,
+                message: 'Error completing habit: ' + error.message
+            };
+        }
+    };
+    // Function to manually mark habit as missed for today
+    const markHabitMissed = async (habitId)=>{
+        try {
+            if (!("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co").includes('placeholder')) {
+                return {
+                    success: true,
+                    message: 'Habit marked as missed locally'
+                };
+            }
+            // Check if already interacted today (completed or missed)
+            const completedToday = await checkHabitCompletedToday(habitId);
+            if (completedToday) {
+                return {
+                    success: false,
+                    message: 'Habit already logged for today!'
+                };
+            }
+            // Get current cycle data
+            const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').select('*').eq('habit_id', habitId).limit(1);
+            console.log('🔍 Mark missed - cycle data:', data);
+            if (error) {
+                console.error('Error fetching habit cycle for miss:', error);
+                return {
+                    success: false,
+                    message: 'Error updating habit: ' + error.message
+                };
+            }
+            let updateData = {};
+            if (!data || data.length === 0) {
+                // No cycle exists, create one with missed day
+                const { error: insertError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').insert({
+                    habit_id: habitId,
+                    start_date: new Date().toISOString().split('T')[0],
+                    end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    // 30 days from now
+                    missed_days: 1
+                });
+                if (insertError) {
+                    console.error('Error creating habit cycle with miss:', insertError);
+                    return {
+                        success: false,
+                        message: 'Error creating habit cycle: ' + insertError.message
+                    };
+                }
+                return {
+                    success: true,
+                    message: 'Habit marked as missed'
+                };
+            }
+            const cycle = data[0];
+            // Only increment missed if that field exists
+            if ('missed_days' in cycle) {
+                updateData.missed_days = (cycle.missed_days || 0) + 1;
+            }
+            if (Object.keys(updateData).length > 0) {
+                const { error: updateError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').update(updateData).eq('habit_id', habitId);
+                if (updateError) {
+                    console.error('Error updating habit miss:', updateError);
+                    return {
+                        success: false,
+                        message: 'Error updating habit: ' + updateError.message
+                    };
+                }
+            }
+            return {
+                success: true,
+                message: 'Habit marked as missed'
+            };
+        } catch (error) {
+            console.error('Error marking habit as missed:', error);
+            return {
+                success: false,
+                message: 'Error marking habit as missed: ' + error.message
+            };
         }
     };
     // Helper function to get full habit name from key
@@ -6416,20 +6741,10 @@ function Page() {
                     setUser(userData);
                     // Update last_seen_at when app loads with existing user
                     updateLastSeenAt(userData.email);
-                    // Load habits specific to this user
-                    const userHabitsKey = `habits_${userData.email}`;
-                    const savedUserHabits = localStorage.getItem(userHabitsKey);
-                    if (savedUserHabits) {
-                        try {
-                            const userHabits = JSON.parse(savedUserHabits);
-                            setHabits(userHabits);
-                            if (userHabits.length > 0) {
-                                setHabitSelection("existing");
-                            }
-                        } catch  {
-                            setHabits([]);
-                        }
-                    }
+                    // Load habits from Supabase first (for cross-device sync), then fallback to localStorage
+                    loadUserHabitsFromSupabase(userData.email);
+                    // MIDNIGHT PROCESSING - Check and run automatic missed day calculation
+                    checkAndRunMidnightProcessing(userData.email);
                 } catch  {
                     localStorage.removeItem("currentUser");
                 }
@@ -6437,6 +6752,143 @@ function Page() {
             setIsLoaded(true);
         }
     }["Page.useEffect"], []);
+    // Function to load user habits from Supabase for cross-device sync
+    const loadUserHabitsFromSupabase = async (userEmail)=>{
+        try {
+            // Check if Supabase is configured
+            if (!("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co").includes('placeholder')) {
+                console.warn('⚠️ Supabase not configured, using localStorage only');
+                loadHabitsFromLocalStorage(userEmail);
+                return;
+            }
+            // Get user ID from email
+            const { data: userData, error: userError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('users').select('id').eq('email', userEmail).single();
+            if (userError || !userData) {
+                console.warn('User not found in Supabase, using localStorage:', userError);
+                loadHabitsFromLocalStorage(userEmail);
+                return;
+            }
+            // Get user's habits from Supabase
+            const { data: supabaseHabits, error: habitsError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habits').select('*').eq('user_id', userData.id).order('created_at', {
+                ascending: true
+            });
+            if (habitsError) {
+                console.warn('Error loading habits from Supabase, using localStorage:', habitsError);
+                loadHabitsFromLocalStorage(userEmail);
+                return;
+            }
+            if (supabaseHabits && supabaseHabits.length > 0) {
+                console.log('✅ Loaded', supabaseHabits.length, 'habits from Supabase');
+                // Load habit cycle data for each habit to get progress info
+                const localHabits = await Promise.all(supabaseHabits.map(async (habit)=>{
+                    // Get cycle data for this habit
+                    const { data: cycleData, error: cycleError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').select('*').eq('habit_id', habit.id).limit(1);
+                    console.log(`🔍 Cycle data for habit ${habit.title}:`, cycleData);
+                    let habitWithProgress = {
+                        id: habit.id,
+                        name: habit.title,
+                        person: userEmail,
+                        dayRecords: habit.day_records || [],
+                        createdAt: habit.created_at,
+                        monthYear: new Date(habit.created_at).toISOString().slice(0, 7),
+                        preferredView: habit.preferred_view || 'chart',
+                        companionPattern: habit.companion_pattern || 'drawing1'
+                    };
+                    // If cycle data exists, add progress information
+                    if (cycleData && cycleData.length > 0) {
+                        const cycle = cycleData[0];
+                        console.log(`📊 Adding progress to ${habit.title}:`, {
+                            completed: cycle.completed_days || 0,
+                            missed: cycle.missed_days || 0,
+                            consistency: cycle.consistency || 0
+                        });
+                        // Create dayRecords based on Supabase cycle data to show visual progress
+                        const updatedDayRecords = [
+                            ...habit.day_records || []
+                        ];
+                        // If we have completed days, ensure the visual representation matches
+                        if ((cycle.completed_days || 0) > 0) {
+                            // Update dayRecords to show the completion
+                            // For each completed day, ensure there's a record showing progress
+                            for(let day = 1; day <= (cycle.completed_days || 0); day++){
+                                const existingRecord = updatedDayRecords.find((record)=>record.x === day);
+                                if (existingRecord) {
+                                    // Ensure this day shows as completed (y value increases)
+                                    if (day === 1) {
+                                        existingRecord.y = Math.max(1, existingRecord.y);
+                                    } else {
+                                        const prevRecord = updatedDayRecords.find((r)=>r.x === day - 1);
+                                        if (prevRecord) {
+                                            existingRecord.y = Math.max(prevRecord.y + 1, existingRecord.y);
+                                        }
+                                    }
+                                } else {
+                                    // Create a record for this completed day
+                                    const prevRecord = updatedDayRecords.find((r)=>r.x === day - 1);
+                                    const newY = prevRecord ? prevRecord.y + 1 : 1;
+                                    updatedDayRecords.push({
+                                        x: day,
+                                        y: newY
+                                    });
+                                }
+                            }
+                            // Sort dayRecords by x (day)
+                            updatedDayRecords.sort((a, b)=>a.x - b.x);
+                        }
+                        // Add cycle info to habit object
+                        habitWithProgress = {
+                            ...habitWithProgress,
+                            dayRecords: updatedDayRecords,
+                            // Use updated dayRecords that reflect Supabase data
+                            // Store cycle data for display
+                            cycleData: {
+                                completed: cycle.completed_days || 0,
+                                missed: cycle.missed_days || 0,
+                                consistency: cycle.consistency || 0,
+                                last_completed_date: cycle.last_completed_date,
+                                start_date: cycle.start_date,
+                                end_date: cycle.end_date
+                            }
+                        };
+                    } else {
+                        console.log(`📊 No cycle data found for ${habit.title}`);
+                    }
+                    return habitWithProgress;
+                }));
+                setHabits(localHabits);
+                if (localHabits.length > 0) {
+                    setHabitSelection("existing");
+                }
+                // Update localStorage with synced data
+                const userHabitsKey = `habits_${userEmail}`;
+                localStorage.setItem(userHabitsKey, JSON.stringify(localHabits));
+            } else {
+                console.log('No habits found in Supabase, checking localStorage');
+                loadHabitsFromLocalStorage(userEmail);
+            }
+        } catch (error) {
+            console.warn('Network error loading from Supabase, using localStorage:', error);
+            loadHabitsFromLocalStorage(userEmail);
+        }
+    };
+    // Fallback function to load habits from localStorage
+    const loadHabitsFromLocalStorage = (userEmail)=>{
+        const userHabitsKey = `habits_${userEmail}`;
+        const savedUserHabits = localStorage.getItem(userHabitsKey);
+        if (savedUserHabits) {
+            try {
+                const userHabits = JSON.parse(savedUserHabits);
+                setHabits(userHabits);
+                if (userHabits.length > 0) {
+                    setHabitSelection("existing");
+                }
+            } catch  {
+                setHabits([]);
+            }
+        } else {
+            setHabits([]);
+        }
+    };
     // Handle user login/registration
     const handleUserSubmit = (userData)=>{
         setUser(userData);
@@ -6444,30 +6896,10 @@ function Page() {
         setShowSplashScreen(false); // Ensure splash screen is hidden
         // Update last_seen_at when user logs in/registers
         updateLastSeenAt(userData.email);
-        // Load existing habits for this user
-        const userHabitsKey = `habits_${userData.email}`;
-        const savedUserHabits = localStorage.getItem(userHabitsKey);
-        if (savedUserHabits) {
-            try {
-                const userHabits = JSON.parse(savedUserHabits);
-                setHabits(userHabits);
-                // If user has habits, mark as existing user
-                if (userHabits.length > 0) {
-                    setHabitSelection("existing"); // Mark that user has existing habits
-                } else {
-                    // User has no habits, should show habit selection
-                    setHabitSelection(null);
-                }
-            } catch  {
-                // If there's an error loading habits, start fresh
-                setHabits([]);
-                setHabitSelection(null);
-            }
-        } else {
-            // New user with no saved habits - should show habit selection
-            setHabits([]);
-            setHabitSelection(null);
-        }
+        // Load habits from Supabase for cross-device sync
+        loadUserHabitsFromSupabase(userData.email);
+        // MIDNIGHT PROCESSING - Check and run automatic missed day calculation for new login
+        checkAndRunMidnightProcessing(userData.email);
     };
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "Page.useEffect": ()=>{
@@ -6700,6 +7132,8 @@ function Page() {
                 ...habit,
                 dayRecords
             } : habit));
+        // Sync progress to Supabase for cross-device consistency
+        await syncHabitProgressToSupabase(habitId, dayRecords);
         // Track habit start (first time logging) in Supabase
         if (hadNoRecords && hasRecordsNow && user && habit) {
             try {
@@ -6719,11 +7153,64 @@ function Page() {
             }
         }
     };
-    const updateHabit = (habitId, updatedFields)=>{
+    // Function to sync habit progress to Supabase
+    const syncHabitProgressToSupabase = async (habitId, dayRecords)=>{
+        try {
+            // Check if Supabase is configured
+            if (!("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co").includes('placeholder')) {
+                console.log('⚠️ Supabase not configured, skipping sync');
+                return;
+            }
+            // Skip syncing dayRecords to habits table since day_records column doesn't exist
+            // Instead, we'll rely on habit_cycles table for progress tracking
+            console.log('📊 Skipping dayRecords sync - using habit_cycles table for progress');
+        } catch (error) {
+            console.warn('Network error syncing to Supabase:', error);
+        }
+    };
+    const updateHabit = async (habitId, updatedFields)=>{
         setHabits(habits.map((habit)=>habit.id === habitId ? {
                 ...habit,
                 ...updatedFields
             } : habit));
+        // Sync habit preferences to Supabase for cross-device consistency
+        await syncHabitPreferencesToSupabase(habitId, updatedFields);
+    };
+    // Function to sync habit preferences to Supabase
+    const syncHabitPreferencesToSupabase = async (habitId, updatedFields)=>{
+        try {
+            // Check if Supabase is configured
+            if (!("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co").includes('placeholder')) {
+                return;
+            }
+            // Validate habitId is UUID
+            const isUUID = typeof habitId === 'string' && habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+            if (!isUUID) {
+                return;
+            }
+            // Prepare update object with relevant fields
+            const updateData = {
+                last_updated: new Date().toISOString()
+            };
+            if (updatedFields.preferredView) {
+                updateData.preferred_view = updatedFields.preferredView;
+            }
+            if (updatedFields.companionPattern) {
+                updateData.companion_pattern = updatedFields.companionPattern;
+            }
+            if (updatedFields.dayRecords) {
+                updateData.day_records = updatedFields.dayRecords;
+            }
+            // Update habit preferences in Supabase
+            const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habits').update(updateData).eq('id', habitId);
+            if (error) {
+                console.warn('Failed to sync habit preferences to Supabase:', error);
+            } else {
+                console.log('✅ Habit preferences synced to Supabase');
+            }
+        } catch (error) {
+            console.warn('Network error syncing preferences to Supabase:', error);
+        }
     };
     const deleteHabit = (habitId)=>{
         const newHabits = habits.filter((h)=>h.id !== habitId);
@@ -6758,7 +7245,7 @@ function Page() {
                         className: "animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 565,
+                        lineNumber: 1147,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -6766,18 +7253,18 @@ function Page() {
                         children: "Loading your habits..."
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 566,
+                        lineNumber: 1148,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 564,
+                lineNumber: 1146,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 563,
+            lineNumber: 1145,
             columnNumber: 12
         }, this);
     }
@@ -6789,12 +7276,12 @@ function Page() {
                 onContinue: ()=>setShowSplashScreen(false)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 574,
+                lineNumber: 1156,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 573,
+            lineNumber: 1155,
             columnNumber: 12
         }, this);
     }
@@ -6807,12 +7294,12 @@ function Page() {
                 onBack: ()=>setShowSplashScreen(true)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 581,
+                lineNumber: 1163,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 580,
+            lineNumber: 1162,
             columnNumber: 12
         }, this);
     }
@@ -6872,12 +7359,12 @@ function Page() {
                 }
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 588,
+                lineNumber: 1170,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 587,
+            lineNumber: 1169,
             columnNumber: 12
         }, this);
     }
@@ -6897,17 +7384,17 @@ function Page() {
                     onBack: ()=>setCustomHabitType(null)
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 642,
+                    lineNumber: 1224,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 641,
+                lineNumber: 1223,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 640,
+            lineNumber: 1222,
             columnNumber: 12
         }, this);
     }
@@ -6965,7 +7452,7 @@ function Page() {
                     }
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 652,
+                    lineNumber: 1234,
                     columnNumber: 31
                 }, this) : habits.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$habit$2d$tracker$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
                     habit: null,
@@ -6984,12 +7471,14 @@ function Page() {
                         const nextIndex = currentHabitIndex < habits.length - 1 ? currentHabitIndex + 1 : 0;
                         setCurrentHabitIndex(nextIndex);
                     },
+                    onCompleteHabit: completeHabit,
+                    onMarkMissed: markHabitMissed,
                     dailyInteractions: dailyInteractions,
                     setDailyInteractions: setDailyInteractions,
                     totalHabits: habits.length
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 694,
+                    lineNumber: 1276,
                     columnNumber: 37
                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
                     children: [
@@ -7012,17 +7501,17 @@ function Page() {
                                             d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 705,
+                                            lineNumber: 1287,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 704,
+                                        lineNumber: 1286,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 703,
+                                    lineNumber: 1285,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7036,7 +7525,7 @@ function Page() {
                                             children: getHabitNameFromKey(habits[currentHabitIndex]?.name) || habits[currentHabitIndex]?.name
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 709,
+                                            lineNumber: 1291,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7060,7 +7549,7 @@ function Page() {
                                                                     fill: "white"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/page.tsx",
-                                                                    lineNumber: 718,
+                                                                    lineNumber: 1300,
                                                                     columnNumber: 29
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
@@ -7071,7 +7560,7 @@ function Page() {
                                                                     stroke: messageType === 'logged' ? 'green' : 'currentColor'
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/app/page.tsx",
-                                                                    lineNumber: 719,
+                                                                    lineNumber: 1301,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             ]
@@ -7082,7 +7571,7 @@ function Page() {
                                                             d: "M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/page.tsx",
-                                                            lineNumber: 720,
+                                                            lineNumber: 1302,
                                                             columnNumber: 65
                                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
                                                             strokeLinecap: "round",
@@ -7091,19 +7580,19 @@ function Page() {
                                                             d: "M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/page.tsx",
-                                                            lineNumber: 720,
+                                                            lineNumber: 1302,
                                                             columnNumber: 191
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 716,
+                                                        lineNumber: 1298,
                                                         columnNumber: 23
                                                     }, this),
                                                     messageType === 'logged' ? 'LOGGED FOR TODAY!' : messageType === 'not-started' ? 'HABIT NOT STARTED YET' : '3-HABIT LIMIT REACHED'
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 715,
+                                                lineNumber: 1297,
                                                 columnNumber: 36
                                             }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 className: "h-6 flex items-center",
@@ -7117,18 +7606,18 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 723,
+                                                lineNumber: 1305,
                                                 columnNumber: 31
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 714,
+                                            lineNumber: 1296,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 708,
+                                    lineNumber: 1290,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7150,13 +7639,13 @@ function Page() {
                                     children: "+ Add"
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
-                                    lineNumber: 731,
+                                    lineNumber: 1313,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 702,
+                            lineNumber: 1284,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7172,17 +7661,23 @@ function Page() {
                                                 children: "Successful"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 751,
+                                                lineNumber: 1333,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 className: "text-lg font-bold text-green-600",
                                                 children: (()=>{
-                                                    const records = habits[currentHabitIndex]?.dayRecords || [];
                                                     const habit = habits[currentHabitIndex];
+                                                    if (!habit) return "0/30";
+                                                    // Use loaded cycle data if available (from Supabase)
+                                                    if (habit.cycleData?.completed !== undefined) {
+                                                        const completed = habit.cycleData.completed;
+                                                        return `${completed}/30`;
+                                                    }
+                                                    // Fallback to dayRecords calculation
+                                                    const records = habit.dayRecords || [];
                                                     // Count actual successful days - when Y increased from previous day
                                                     const completed = (()=>{
-                                                        const records = habits[currentHabitIndex]?.dayRecords || [];
                                                         let successfulDays = 0;
                                                         records.forEach((record, index)=>{
                                                             if (index === 0) {
@@ -7210,13 +7705,13 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 752,
+                                                lineNumber: 1334,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 750,
+                                        lineNumber: 1332,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7227,13 +7722,20 @@ function Page() {
                                                 children: "Missed"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 789,
+                                                lineNumber: 1379,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                 className: "text-lg font-bold text-red-500",
                                                 children: (()=>{
-                                                    const records = habits[currentHabitIndex]?.dayRecords || [];
+                                                    const habit = habits[currentHabitIndex];
+                                                    if (!habit) return "0";
+                                                    // Use loaded cycle data if available (from Supabase)
+                                                    if (habit.cycleData?.missed !== undefined) {
+                                                        return habit.cycleData.missed;
+                                                    }
+                                                    // Fallback to dayRecords calculation
+                                                    const records = habit.dayRecords || [];
                                                     let missedCount = 0;
                                                     records.forEach((record, index)=>{
                                                         if (index === 0) {
@@ -7251,13 +7753,13 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 790,
+                                                lineNumber: 1380,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 788,
+                                        lineNumber: 1378,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7268,7 +7770,7 @@ function Page() {
                                                 children: "Consistency"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 812,
+                                                lineNumber: 1411,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -7276,6 +7778,11 @@ function Page() {
                                                 children: (()=>{
                                                     const habit = habits[currentHabitIndex];
                                                     if (!habit) return "0%";
+                                                    // Use loaded cycle data if available (from Supabase)
+                                                    if (habit.cycleData?.consistency !== undefined) {
+                                                        return `${habit.cycleData.consistency.toFixed(2)}%`;
+                                                    }
+                                                    // Fallback to dayRecords calculation
                                                     const records = habit.dayRecords || [];
                                                     if (records.length === 0) return "0%";
                                                     // Count actual successful days - when Y increased from previous day  
@@ -7303,24 +7810,24 @@ function Page() {
                                                 })()
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 813,
+                                                lineNumber: 1412,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 811,
+                                        lineNumber: 1410,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 749,
+                                lineNumber: 1331,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 748,
+                            lineNumber: 1330,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7341,17 +7848,17 @@ function Page() {
                                 onNextHabit: ()=>{
                                     setCurrentHabitIndex((prev)=>(prev + 1) % habits.length);
                                 },
-                                dailyInteractions: dailyInteractions,
-                                setDailyInteractions: setDailyInteractions,
+                                onCompleteHabit: completeHabit,
+                                onMarkMissed: markHabitMissed,
                                 totalHabits: habits.length
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 851,
+                                lineNumber: 1457,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 850,
+                            lineNumber: 1456,
                             columnNumber: 13
                         }, this)
                     ]
@@ -7364,7 +7871,7 @@ function Page() {
                             onClick: ()=>setShowProfileDrawer(false)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 865,
+                            lineNumber: 1471,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7380,7 +7887,7 @@ function Page() {
                                                 children: "Profile"
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 871,
+                                                lineNumber: 1477,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7398,23 +7905,23 @@ function Page() {
                                                         d: "M6 18L18 6M6 6l12 12"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 874,
+                                                        lineNumber: 1480,
                                                         columnNumber: 23
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 873,
+                                                    lineNumber: 1479,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 872,
+                                                lineNumber: 1478,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 870,
+                                        lineNumber: 1476,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7437,17 +7944,17 @@ function Page() {
                                                                 d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 884,
+                                                                lineNumber: 1490,
                                                                 columnNumber: 25
                                                             }, this)
                                                         }, void 0, false, {
                                                             fileName: "[project]/app/page.tsx",
-                                                            lineNumber: 883,
+                                                            lineNumber: 1489,
                                                             columnNumber: 23
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 882,
+                                                        lineNumber: 1488,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7457,7 +7964,7 @@ function Page() {
                                                                 children: user?.username || 'User'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 888,
+                                                                lineNumber: 1494,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7465,19 +7972,19 @@ function Page() {
                                                                 children: user?.email || 'user@example.com'
                                                             }, void 0, false, {
                                                                 fileName: "[project]/app/page.tsx",
-                                                                lineNumber: 891,
+                                                                lineNumber: 1497,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/page.tsx",
-                                                        lineNumber: 887,
+                                                        lineNumber: 1493,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 881,
+                                                lineNumber: 1487,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7488,7 +7995,7 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 897,
+                                                lineNumber: 1503,
                                                 columnNumber: 19
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7499,13 +8006,13 @@ function Page() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/page.tsx",
-                                                lineNumber: 901,
+                                                lineNumber: 1507,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 880,
+                                        lineNumber: 1486,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7519,7 +8026,7 @@ function Page() {
                                                     children: "Log out"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 909,
+                                                    lineNumber: 1515,
                                                     columnNumber: 21
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7527,35 +8034,35 @@ function Page() {
                                                     children: "Sign out of your account"
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/page.tsx",
-                                                    lineNumber: 910,
+                                                    lineNumber: 1516,
                                                     columnNumber: 21
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/app/page.tsx",
-                                            lineNumber: 908,
+                                            lineNumber: 1514,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 907,
+                                        lineNumber: 1513,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 869,
+                                lineNumber: 1475,
                                 columnNumber: 15
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/app/page.tsx",
-                            lineNumber: 868,
+                            lineNumber: 1474,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 863,
+                    lineNumber: 1469,
                     columnNumber: 31
                 }, this),
                 showLogoutConfirmation && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7568,7 +8075,7 @@ function Page() {
                                 children: "Do you want to log out?"
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 920,
+                                lineNumber: 1526,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -7591,7 +8098,7 @@ function Page() {
                                         children: "Yes"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 924,
+                                        lineNumber: 1530,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -7600,39 +8107,39 @@ function Page() {
                                         children: "No"
                                     }, void 0, false, {
                                         fileName: "[project]/app/page.tsx",
-                                        lineNumber: 938,
+                                        lineNumber: 1544,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 923,
+                                lineNumber: 1529,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 919,
+                        lineNumber: 1525,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/app/page.tsx",
-                    lineNumber: 918,
+                    lineNumber: 1524,
                     columnNumber: 36
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/page.tsx",
-            lineNumber: 651,
+            lineNumber: 1233,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/page.tsx",
-        lineNumber: 650,
+        lineNumber: 1232,
         columnNumber: 10
     }, this);
 }
-_s(Page, "jOCBLhS3KN39fxZTDSLfss70b9c=");
+_s(Page, "HSvNrqwimIc/qxN2dYQ1MtSP8lE=");
 _c = Page;
 var _c;
 __turbopack_context__.k.register(_c, "Page");

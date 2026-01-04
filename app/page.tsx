@@ -7,7 +7,7 @@ import FirstUserForm from "@/components/first-user-form"
 import HabitSelection from "@/components/habit-selection"
 import CustomHabitScreen from "@/components/CustomHabitScreen"
 import SplashScreen from "@/components/splash-screen"
-import { supabase } from '@/lib/supabase'
+import { supabase, getEnvironmentInfo, debugSupabaseConnection } from '@/lib/supabase'
 import type { Habit, DayRecord } from "@/lib/types"
 
 
@@ -496,6 +496,24 @@ export default function Page() {
   };
 
   useEffect(() => {
+    // 🔧 PRODUCTION DEBUGGING - Log environment info on app startup
+    console.log('🚀 App Starting - Environment Debug Info:');
+    const envInfo = getEnvironmentInfo();
+    console.table(envInfo);
+    
+    // Test Supabase connection on startup
+    if (envInfo.supabaseConfigured) {
+      debugSupabaseConnection().then(connected => {
+        if (connected) {
+          console.log('✅ Supabase connection verified - registration should work');
+        } else {
+          console.warn('❌ Supabase connection failed - registration will fall back to localStorage');
+        }
+      });
+    } else {
+      console.warn('⚠️ Supabase not configured - registration will use localStorage only');
+    }
+    
     // Load saved user first
     const savedUser = localStorage.getItem("currentUser");
     if (savedUser) {

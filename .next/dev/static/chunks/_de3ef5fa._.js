@@ -9,8 +9,9 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$build$2f$polyfills$2f$process$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = /*#__PURE__*/ __turbopack_context__.i("[project]/node_modules/.pnpm/next@16.0.8_@babel+core@7.2_e6c684eabbe936b8628166c2f117655b/node_modules/next/dist/build/polyfills/process.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$supabase$2b$supabase$2d$js$40$2$2e$89$2e$0$2f$node_modules$2f40$supabase$2f$supabase$2d$js$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/@supabase+supabase-js@2.89.0/node_modules/@supabase/supabase-js/dist/index.mjs [app-client] (ecmascript) <locals>");
 ;
-const supabaseUrl = ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || 'https://placeholder.supabase.co';
-const supabaseAnonKey = ("TURBOPACK compile-time value", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2c2F6cmFhZHZoanBqdGpqd2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5OTI5MjMsImV4cCI6MjA4MjU2ODkyM30.zP6Tu-x6lAni6wRLsYhalBhH7NQPBHXI2tFrA7YBBfU") || 'placeholder-key';
+// Use environment variables if available, otherwise use production credentials
+const supabaseUrl = ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co") || 'https://vvsazraadvhjpjtjjwkd.supabase.co';
+const supabaseAnonKey = ("TURBOPACK compile-time value", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2c2F6cmFhZHZoanBqdGpqd2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5OTI5MjMsImV4cCI6MjA4MjU2ODkyM30.zP6Tu-x6lAni6wRLsYhalBhH7NQPBHXI2tFrA7YBBfU") || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2c2F6cmFhZHZoanBqdGpqd2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5OTI5MjMsImV4cCI6MjA4MjU2ODkyM30.zP6Tu-x6lAni6wRLsYhalBhH7NQPBHXI2tFrA7YBBfU';
 const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f40$supabase$2b$supabase$2d$js$40$2$2e$89$2e$0$2f$node_modules$2f40$supabase$2f$supabase$2d$js$2f$dist$2f$index$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$locals$3e$__["createClient"])(supabaseUrl, supabaseAnonKey);
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
@@ -2594,13 +2595,74 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
     ]);
     const handleLetGo = async ()=>{
         if (!habit) return;
-        // Strict UUID validation - NO fallbacks allowed
+        // Strict UUID validation
         const habitId = habit.id;
         const isUUID = typeof habitId === 'string' && habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
         if (!isUUID) {
-            console.error('❌ Invalid habit UUID received:', habitId, 'TYPE:', typeof habitId);
-            console.error('❌ STOPPING EXECUTION - habit must have valid UUID');
-            // Still create visual feedback but skip all database operations
+            console.error('❌ Invalid habit UUID:', habitId);
+            return;
+        }
+        try {
+            // Step 1: Get or create active cycle
+            const { data: cycles, error: cyclesError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').select('*').eq('habit_id', habitId).gte('end_date', new Date().toISOString().split('T')[0]).order('created_at', {
+                ascending: false
+            }).limit(1);
+            if (cyclesError) {
+                console.error('Error checking cycles:', cyclesError);
+                return;
+            }
+            let cycleId;
+            if (cycles.length === 0) {
+                // Create new cycle
+                const todayDate = new Date().toISOString().split('T')[0];
+                const endDate = new Date();
+                endDate.setDate(endDate.getDate() + 29);
+                const { data: newCycle, error: createError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').insert([
+                    {
+                        habit_id: habitId,
+                        start_date: todayDate,
+                        end_date: endDate.toISOString().split('T')[0],
+                        completed_days: 0,
+                        missed_days: 0,
+                        consistency: 0
+                    }
+                ]).select().single();
+                if (createError || !newCycle) {
+                    console.error('Error creating cycle:', createError);
+                    return;
+                }
+                cycleId = newCycle.id;
+                setCurrentCycle(newCycle);
+                setHabitStarted(true);
+            } else {
+                cycleId = cycles[0].id;
+                setCurrentCycle(cycles[0]);
+                setHabitStarted(true);
+            }
+            // Step 2: Call the daily log API (idempotent - handles duplicates)
+            const response = await fetch('/api/log-daily-habit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    habit_id: habitId,
+                    cycle_id: cycleId,
+                    status: 'completed'
+                })
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                console.error('API error:', result);
+                return;
+            }
+            // Step 3: Handle the result
+            if (result.alreadyLogged) {
+                // Already logged today - show message
+                onShowLoggedMsg?.('logged');
+                return;
+            }
+            // Step 4: Update visual feedback (only if successfully logged)
             setDayRecords((prev)=>{
                 const lastRecord = prev[prev.length - 1];
                 if (!lastRecord) {
@@ -2613,150 +2675,29 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                 }
                 const newX = lastRecord.x + 1;
                 const newY = lastRecord.y + 1;
-                return [
-                    ...prev,
-                    {
-                        x: newX,
-                        y: newY
-                    }
-                ];
+                let maxDots = 30;
+                let maxY = 30;
+                if (newX <= maxDots && newY <= maxY) {
+                    return [
+                        ...prev,
+                        {
+                            x: newX,
+                            y: newY
+                        }
+                    ];
+                }
+                return prev;
             });
-            return;
-        }
-        console.log('🆔 Using valid habit UUID:', habitId);
-        const today = new Date().toDateString();
-        const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
-        // If this is the second or more interaction today, just show message
-        if (todayInteractions >= 1) {
-            onShowLoggedMsg?.('logged');
-            return;
-        }
-        // First interaction - update state and increment counter
-        setDailyInteractions?.({
-            ...dailyInteractions,
-            [`${habitId}-${today}`]: todayInteractions + 1
-        });
-        // ALWAYS create the dot first (visual feedback) - don't let database errors block this
-        setDayRecords((prev)=>{
-            const lastRecord = prev[prev.length - 1];
-            if (!lastRecord) {
-                return [
-                    {
-                        x: 1,
-                        y: 1
-                    }
-                ];
+            // Update cycle state
+            if (result.stats) {
+                setCurrentCycle((prev)=>prev ? {
+                        ...prev,
+                        ...result.stats
+                    } : null);
             }
-            const newX = lastRecord.x + 1;
-            const newY = lastRecord.y + 1;
-            // Set limits based on view type
-            let maxDots, maxY;
-            if (currentView === 'companion') {
-                // Companion view: dynamic limit based on pattern
-                maxDots = 30; // Always use lock pattern (30 dots)
-                maxY = maxDots;
-            } else {
-                // Chart/Calendar view: always 30x30 grid
-                maxDots = 30;
-                maxY = 30;
-            }
-            if (newX <= maxDots && newY <= maxY) {
-                return [
-                    ...prev,
-                    {
-                        x: newX,
-                        y: newY
-                    }
-                ];
-            }
-            return prev;
-        });
-        // Then handle Supabase operations (don't let errors block visual feedback)
-        try {
-            console.log('🔍 Starting Supabase operations for habit:', habitId);
-            console.log('🔍 Habit ID type:', typeof habitId, 'length:', habitId.length, 'contains dash:', habitId.includes('-'));
-            // Check if there's an active cycle for this habit
-            const { data: cycles, error: cyclesError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').select('*').eq('habit_id', habitId) // habitId must be UUID
-            .gte('end_date', new Date().toISOString().split('T')[0]) // only active cycles
-            .order('created_at', {
-                ascending: false
-            }).limit(1);
-            console.log('📊 Query result - cycles:', cycles, 'error:', cyclesError);
-            if (cyclesError) {
-                console.error('❌ Error checking cycles:', cyclesError);
-                // If the error is about table not existing or column issues, log it specifically
-                if (cyclesError.code === '42P01') {
-                    console.error('🚨 Table habit_cycles does not exist!');
-                } else if (cyclesError.code === '42703') {
-                    console.error('🚨 Column habit_id does not exist in habit_cycles table!');
-                }
-                return; // Visual feedback already created above
-            }
-            const todayDate = new Date().toISOString().split('T')[0];
-            console.log('📅 Today date:', todayDate);
-            if (cycles.length === 0) {
-                // No active cycle exists → create a new cycle (this starts the habit)
-                console.log('➕ Creating new habit cycle...');
-                const endDate = new Date();
-                endDate.setDate(endDate.getDate() + 29); // Add 29 days for 30-day cycle including today
-                const newCycleData = {
-                    habit_id: habitId,
-                    start_date: todayDate,
-                    end_date: endDate.toISOString().split('T')[0],
-                    completed_days: 1,
-                    // first day completed
-                    missed_days: 0,
-                    consistency: 1 / 30.0 * 100
-                };
-                console.log('📝 Inserting cycle data:', newCycleData);
-                console.log('📝 Habit ID for insert:', habitId, 'type:', typeof habitId, 'length:', habitId.length);
-                const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').insert([
-                    newCycleData
-                ]).select();
-                console.log('💾 Insert result - data:', data, 'error:', error);
-                if (error) {
-                    console.error('❌ Detailed error creating habit cycle:', {
-                        message: error.message,
-                        code: error.code,
-                        details: error.details,
-                        hint: error.hint
-                    });
-                    // Try a fallback approach - check if habit exists in habits table
-                    console.log('🔄 Checking if habit exists in habits table...');
-                    const { data: habitCheck, error: habitCheckError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habits').select('id, title').eq('id', habitId);
-                    console.log('🔍 Habit check result:', habitCheck, 'error:', habitCheckError);
-                    return; // Visual feedback already created above
-                }
-                console.log('✅ New habit cycle created:', data);
-                setCurrentCycle(data[0]);
-                setHabitStarted(true);
-            } else {
-                // Active cycle exists → update it
-                console.log('🔄 Updating existing habit cycle...');
-                const currentCycleData = cycles[0];
-                const newCompletedDays = currentCycleData.completed_days + 1;
-                const newConsistency = newCompletedDays / 30.0 * 100;
-                console.log('📈 Update data - completed days:', newCompletedDays, 'consistency:', newConsistency);
-                const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').update({
-                    completed_days: newCompletedDays,
-                    consistency: newConsistency
-                }).eq('id', currentCycleData.id);
-                console.log('💾 Update result - error:', error);
-                if (error) {
-                    console.error('❌ Error updating habit cycle:', error);
-                    return; // Visual feedback already created above
-                }
-                console.log('✅ Habit cycle updated - completed day');
-                setCurrentCycle({
-                    ...currentCycleData,
-                    completed_days: newCompletedDays,
-                    consistency: newConsistency
-                });
-                setHabitStarted(true);
-            }
+            console.log('✅ Habit logged successfully:', result);
         } catch (err) {
-            console.error('🚨 Network error during habit cycle management:', err);
-        // Visual feedback already created above, so don't block the UI
+            console.error('Error logging habit:', err);
         }
     };
     const handleStick = ()=>{
@@ -2802,76 +2743,85 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
     };
     const handleHabitMissed = async ()=>{
         if (!habit) return;
-        // Check if habit has started yet (has active cycle)
+        const habitId = habit.id;
+        const isUUID = typeof habitId === 'string' && habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+        if (!isUUID) {
+            console.error('❌ Invalid habit UUID:', habitId);
+            return;
+        }
+        // Check if habit has started yet
         if (!habitStarted && dayRecords.length === 0) {
             onShowLoggedMsg?.('not-started');
             return;
         }
-        const today = new Date().toDateString();
-        const habitId = habit.id;
-        const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
-        // If this is the second or more interaction today, just show message
-        if (todayInteractions >= 1) {
-            onShowLoggedMsg?.('logged');
-            return;
-        }
-        // First interaction - update state and increment counter
-        setDailyInteractions?.({
-            ...dailyInteractions,
-            [`${habitId}-${today}`]: todayInteractions + 1
-        });
         try {
-            // Only update if habit has started (has active cycle)
-            if (habitStarted && currentCycle) {
-                const newMissedDays = currentCycle.missed_days + 1;
-                const { error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').update({
-                    missed_days: newMissedDays
-                }).eq('id', currentCycle.id);
-                if (error) {
-                    console.error('Error updating missed days:', error);
-                    return;
+            // Step 1: Get or create active cycle
+            const { data: cycles, error: cyclesError } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["supabase"].from('habit_cycles').select('*').eq('habit_id', habitId).gte('end_date', new Date().toISOString().split('T')[0]).order('created_at', {
+                ascending: false
+            }).limit(1);
+            if (cyclesError || cycles.length === 0) {
+                console.error('Error checking cycles or no active cycle:', cyclesError);
+                onShowLoggedMsg?.('not-started');
+                return;
+            }
+            const cycleId = cycles[0].id;
+            setCurrentCycle(cycles[0]);
+            // Step 2: Call the daily log API
+            const response = await fetch('/api/log-daily-habit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    habit_id: habitId,
+                    cycle_id: cycleId,
+                    status: 'missed'
+                })
+            });
+            const result = await response.json();
+            if (!response.ok) {
+                console.error('API error:', result);
+                return;
+            }
+            // Step 3: Handle the result
+            if (result.alreadyLogged) {
+                // Already logged today - show message
+                onShowLoggedMsg?.('logged');
+                return;
+            }
+            // Step 4: Update visual feedback (only if successfully logged)
+            setDayRecords((prev)=>{
+                const lastRecord = prev[prev.length - 1];
+                const newX = lastRecord.x + 1;
+                let newY;
+                if (newX === 2 && lastRecord.y > 0) {
+                    newY = 1;
+                } else {
+                    newY = Math.max(0, lastRecord.y - 1);
                 }
-                console.log('Habit cycle updated - missed day');
-                setCurrentCycle({
-                    ...currentCycle,
-                    missed_days: newMissedDays
-                });
+                let maxDots = 30;
+                if (newX <= maxDots) {
+                    return [
+                        ...prev,
+                        {
+                            x: newX,
+                            y: newY
+                        }
+                    ];
+                }
+                return prev;
+            });
+            // Update cycle state
+            if (result.stats) {
+                setCurrentCycle((prev)=>prev ? {
+                        ...prev,
+                        ...result.stats
+                    } : null);
             }
+            console.log('✅ Missed day logged successfully:', result);
         } catch (err) {
-            console.error('Network error during missed day tracking:', err);
+            console.error('Error logging missed day:', err);
         }
-        // Continue with original dot grid logic
-        setDayRecords((prev)=>{
-            const lastRecord = prev[prev.length - 1];
-            // For Day 2 missed: create dot at X=2, Y=1 (next to Day 1 green circle)
-            // For subsequent days: follow previous miss logic
-            const newX = lastRecord.x + 1;
-            let newY;
-            if (newX === 2 && lastRecord.y > 0) {
-                // Day 2 miss: set Y to 1 to appear next to Day 1 green circle
-                newY = 1;
-            } else {
-                // Regular miss logic: decrease Y by 1, minimum 0
-                newY = Math.max(0, lastRecord.y - 1);
-            }
-            // Set limits based on view type
-            let maxDays;
-            if (currentView === 'companion') {
-                maxDays = 30; // Always use lock pattern (30 dots)
-            } else {
-                maxDays = 30; // Chart/Calendar view limit
-            }
-            if (newX <= maxDays) {
-                return [
-                    ...prev,
-                    {
-                        x: newX,
-                        y: newY
-                    }
-                ];
-            }
-            return prev;
-        });
     };
     if (isNewHabitMode) {
         return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$habit$2d$header$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -2883,7 +2833,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
             }
         }, void 0, false, {
             fileName: "[project]/components/habit-tracker.tsx",
-            lineNumber: 446,
+            lineNumber: 390,
             columnNumber: 12
         }, this);
     }
@@ -2899,7 +2849,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "No Habits Yet"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 456,
+                        lineNumber: 400,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2907,7 +2857,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "You haven't created any habits yet. Start your journey by creating your first habit!"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 457,
+                        lineNumber: 401,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2919,18 +2869,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                         children: "Create Your First Habit"
                     }, void 0, false, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 460,
+                        lineNumber: 404,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/components/habit-tracker.tsx",
-                lineNumber: 455,
+                lineNumber: 399,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/habit-tracker.tsx",
-            lineNumber: 454,
+            lineNumber: 398,
             columnNumber: 12
         }, this);
     }
@@ -2958,7 +2908,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 478,
+                                        lineNumber: 422,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -2971,18 +2921,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             clipRule: "evenodd"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 480,
+                                            lineNumber: 424,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 479,
+                                        lineNumber: 423,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 474,
+                                lineNumber: 418,
                                 columnNumber: 15
                             }, this),
                             showViewDropdown && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3002,7 +2952,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Chart View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 486,
+                                            lineNumber: 430,
                                             columnNumber: 49
                                         }, this),
                                         currentView !== 'calendar' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3016,7 +2966,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Calendar View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 493,
+                                            lineNumber: 437,
                                             columnNumber: 52
                                         }, this),
                                         currentView !== 'companion' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3031,29 +2981,29 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Companion View"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 500,
+                                            lineNumber: 444,
                                             columnNumber: 53
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/habit-tracker.tsx",
-                                    lineNumber: 485,
+                                    lineNumber: 429,
                                     columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 484,
+                                lineNumber: 428,
                                 columnNumber: 36
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 473,
+                        lineNumber: 417,
                         columnNumber: 13
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 472,
+                    lineNumber: 416,
                     columnNumber: 11
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3065,12 +3015,12 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 dayRecords: dayRecords
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 516,
+                                lineNumber: 460,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 515,
+                            lineNumber: 459,
                             columnNumber: 41
                         }, this),
                         currentView === 'calendar' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3080,12 +3030,12 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 habitStartDate: habit.createdAt
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 519,
+                                lineNumber: 463,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 518,
+                            lineNumber: 462,
                             columnNumber: 44
                         }, this),
                         currentView === 'companion' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3108,18 +3058,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 totalHabits: totalHabits
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 522,
+                                lineNumber: 466,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/habit-tracker.tsx",
-                            lineNumber: 521,
+                            lineNumber: 465,
                             columnNumber: 45
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 514,
+                    lineNumber: 458,
                     columnNumber: 11
                 }, this),
                 (currentView === 'chart' || currentView === 'calendar' || currentView === 'companion' && isCompanionCanvasShowing) && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3138,12 +3088,12 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Completed Habit!"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 537,
+                                            lineNumber: 481,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 536,
+                                        lineNumber: 480,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3154,18 +3104,18 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                             children: "Missed Today"
                                         }, void 0, false, {
                                             fileName: "[project]/components/habit-tracker.tsx",
-                                            lineNumber: 540,
+                                            lineNumber: 484,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 539,
+                                        lineNumber: 483,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 535,
+                                lineNumber: 479,
                                 columnNumber: 17
                             }, this),
                             habit && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3177,7 +3127,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "Want to give up?"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 546,
+                                        lineNumber: 490,
                                         columnNumber: 21
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3198,35 +3148,35 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                                     d: "M9 5l7 7-7 7"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/habit-tracker.tsx",
-                                                    lineNumber: 552,
+                                                    lineNumber: 496,
                                                     columnNumber: 25
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/habit-tracker.tsx",
-                                                lineNumber: 551,
+                                                lineNumber: 495,
                                                 columnNumber: 23
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 549,
+                                        lineNumber: 493,
                                         columnNumber: 21
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 545,
+                                lineNumber: 489,
                                 columnNumber: 27
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 534,
+                        lineNumber: 478,
                         columnNumber: 15
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 533,
+                    lineNumber: 477,
                     columnNumber: 130
                 }, this),
                 showDeleteConfirmation && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3239,7 +3189,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                 children: "Do you really don't want to continue?"
                             }, void 0, false, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 562,
+                                lineNumber: 506,
                                 columnNumber: 17
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3251,7 +3201,7 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "Yes"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 566,
+                                        lineNumber: 510,
                                         columnNumber: 19
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3260,31 +3210,31 @@ function HabitTracker({ habit, onAddHabit, onUpdateRecords, onDeleteHabit, isNew
                                         children: "No"
                                     }, void 0, false, {
                                         fileName: "[project]/components/habit-tracker.tsx",
-                                        lineNumber: 569,
+                                        lineNumber: 513,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/habit-tracker.tsx",
-                                lineNumber: 565,
+                                lineNumber: 509,
                                 columnNumber: 17
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/components/habit-tracker.tsx",
-                        lineNumber: 561,
+                        lineNumber: 505,
                         columnNumber: 15
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/components/habit-tracker.tsx",
-                    lineNumber: 560,
+                    lineNumber: 504,
                     columnNumber: 38
                 }, this)
             ]
         }, void 0, true)
     }, void 0, false, {
         fileName: "[project]/components/habit-tracker.tsx",
-        lineNumber: 469,
+        lineNumber: 413,
         columnNumber: 10
     }, this);
 }

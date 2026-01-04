@@ -62,6 +62,15 @@ type ApiRouteConfig = {
 
 
 
+// Validate ../../../pages/api/log-daily-habit.ts
+{
+  type __IsExpected<Specific extends ApiRouteConfig> = Specific
+  const handler = {} as typeof import("../../../pages/api/log-daily-habit.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../../pages/api/register-user.ts
 {
   type __IsExpected<Specific extends ApiRouteConfig> = Specific

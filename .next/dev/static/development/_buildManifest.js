@@ -7,6 +7,7 @@ self.__BUILD_MANIFEST = {
   "sortedPages": [
     "/_app",
     "/_error",
+    "/api/log-daily-habit",
     "/api/register-user",
     "/api/request-password-reset",
     "/api/reset-password",

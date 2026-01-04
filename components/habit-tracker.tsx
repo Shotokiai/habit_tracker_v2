@@ -165,181 +165,118 @@ export default function HabitTracker({
   const handleLetGo = async () => {
     if (!habit) return;
     
-    // Strict UUID validation - NO fallbacks allowed
+    // Strict UUID validation
     const habitId = habit.id;
     const isUUID = typeof habitId === 'string' && 
       habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
     
     if (!isUUID) {
-      console.error('❌ Invalid habit UUID received:', habitId, 'TYPE:', typeof habitId);
-      console.error('❌ STOPPING EXECUTION - habit must have valid UUID');
-      // Still create visual feedback but skip all database operations
-      setDayRecords((prev) => {
-        const lastRecord = prev[prev.length - 1]
-        if (!lastRecord) {
-          return [{ x: 1, y: 1 }]
-        }
-        const newX = lastRecord.x + 1
-        const newY = lastRecord.y + 1
-        return [...prev, { x: newX, y: newY }]
-      })
+      console.error('❌ Invalid habit UUID:', habitId);
       return;
     }
-    
-    console.log('🆔 Using valid habit UUID:', habitId);
-    
-    const today = new Date().toDateString();
-    const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
-    
-    // If this is the second or more interaction today, just show message
-    if (todayInteractions >= 1) {
-      onShowLoggedMsg?.('logged');
-      return;
-    }
-    
-    // First interaction - update state and increment counter
-    setDailyInteractions?.({
-      ...dailyInteractions,
-      [`${habitId}-${today}`]: todayInteractions + 1
-    });
 
-    // ALWAYS create the dot first (visual feedback) - don't let database errors block this
-    setDayRecords((prev) => {
-      const lastRecord = prev[prev.length - 1]
-      if (!lastRecord) {
-        return [{ x: 1, y: 1 }]
-      }
-      const newX = lastRecord.x + 1
-      const newY = lastRecord.y + 1
-      // Set limits based on view type
-      let maxDots, maxY
-      if (currentView === 'companion') {
-        // Companion view: dynamic limit based on pattern
-        maxDots = 30  // Always use lock pattern (30 dots)
-        maxY = maxDots
-      } else {
-        // Chart/Calendar view: always 30x30 grid
-        maxDots = 30
-        maxY = 30
-      }
-      if (newX <= maxDots && newY <= maxY) {
-        return [...prev, { x: newX, y: newY }]
-      }
-      return prev
-    })
-
-    // Then handle Supabase operations (don't let errors block visual feedback)
     try {
-      console.log('🔍 Starting Supabase operations for habit:', habitId);
-      console.log('🔍 Habit ID type:', typeof habitId, 'length:', habitId.length, 'contains dash:', habitId.includes('-'));
-      
-      // Check if there's an active cycle for this habit
+      // Step 1: Get or create active cycle
       const { data: cycles, error: cyclesError } = await supabase
         .from('habit_cycles')
         .select('*')
-        .eq('habit_id', habitId) // habitId must be UUID
-        .gte('end_date', new Date().toISOString().split('T')[0]) // only active cycles
+        .eq('habit_id', habitId)
+        .gte('end_date', new Date().toISOString().split('T')[0])
         .order('created_at', { ascending: false })
         .limit(1);
 
-      console.log('📊 Query result - cycles:', cycles, 'error:', cyclesError);
-
       if (cyclesError) {
-        console.error('❌ Error checking cycles:', cyclesError);
-        
-        // If the error is about table not existing or column issues, log it specifically
-        if (cyclesError.code === '42P01') {
-          console.error('🚨 Table habit_cycles does not exist!');
-        } else if (cyclesError.code === '42703') {
-          console.error('🚨 Column habit_id does not exist in habit_cycles table!');
-        }
-        
-        return; // Visual feedback already created above
+        console.error('Error checking cycles:', cyclesError);
+        return;
       }
 
-      const todayDate = new Date().toISOString().split('T')[0];
-      console.log('📅 Today date:', todayDate);
+      let cycleId: string;
 
       if (cycles.length === 0) {
-        // No active cycle exists → create a new cycle (this starts the habit)
-        console.log('➕ Creating new habit cycle...');
+        // Create new cycle
+        const todayDate = new Date().toISOString().split('T')[0];
         const endDate = new Date();
-        endDate.setDate(endDate.getDate() + 29); // Add 29 days for 30-day cycle including today
+        endDate.setDate(endDate.getDate() + 29);
         
-        const newCycleData = {
-          habit_id: habitId,
-          start_date: todayDate,
-          end_date: endDate.toISOString().split('T')[0],
-          completed_days: 1, // first day completed
-          missed_days: 0,
-          consistency: (1 / 30.0) * 100,
-        };
-        
-        console.log('📝 Inserting cycle data:', newCycleData);
-        console.log('📝 Habit ID for insert:', habitId, 'type:', typeof habitId, 'length:', habitId.length);
-        
-        const { data, error } = await supabase
+        const { data: newCycle, error: createError } = await supabase
           .from('habit_cycles')
-          .insert([newCycleData])
-          .select();
+          .insert([{
+            habit_id: habitId,
+            start_date: todayDate,
+            end_date: endDate.toISOString().split('T')[0],
+            completed_days: 0,
+            missed_days: 0,
+            consistency: 0,
+          }])
+          .select()
+          .single();
 
-        console.log('💾 Insert result - data:', data, 'error:', error);
-        
-        if (error) {
-          console.error('❌ Detailed error creating habit cycle:', {
-            message: error.message,
-            code: error.code,
-            details: error.details,
-            hint: error.hint
-          });
-          
-          // Try a fallback approach - check if habit exists in habits table
-          console.log('🔄 Checking if habit exists in habits table...');
-          const { data: habitCheck, error: habitCheckError } = await supabase
-            .from('habits')
-            .select('id, title')
-            .eq('id', habitId);
-          
-          console.log('🔍 Habit check result:', habitCheck, 'error:', habitCheckError);
-          return; // Visual feedback already created above
+        if (createError || !newCycle) {
+          console.error('Error creating cycle:', createError);
+          return;
         }
 
-        console.log('✅ New habit cycle created:', data);
-        setCurrentCycle(data[0]);
+        cycleId = newCycle.id;
+        setCurrentCycle(newCycle);
         setHabitStarted(true);
-        
       } else {
-        // Active cycle exists → update it
-        console.log('🔄 Updating existing habit cycle...');
-        const currentCycleData = cycles[0];
-        const newCompletedDays = currentCycleData.completed_days + 1;
-        const newConsistency = (newCompletedDays / 30.0) * 100;
-
-        console.log('📈 Update data - completed days:', newCompletedDays, 'consistency:', newConsistency);
-
-        const { error } = await supabase
-          .from('habit_cycles')
-          .update({
-            completed_days: newCompletedDays,
-            consistency: newConsistency,
-          })
-          .eq('id', currentCycleData.id);
-
-        console.log('💾 Update result - error:', error);
-
-        if (error) {
-          console.error('❌ Error updating habit cycle:', error);
-          return; // Visual feedback already created above
-        }
-
-        console.log('✅ Habit cycle updated - completed day');
-        setCurrentCycle({...currentCycleData, completed_days: newCompletedDays, consistency: newConsistency});
+        cycleId = cycles[0].id;
+        setCurrentCycle(cycles[0]);
         setHabitStarted(true);
       }
 
+      // Step 2: Call the daily log API (idempotent - handles duplicates)
+      const response = await fetch('/api/log-daily-habit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          habit_id: habitId,
+          cycle_id: cycleId,
+          status: 'completed'
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error('API error:', result);
+        return;
+      }
+
+      // Step 3: Handle the result
+      if (result.alreadyLogged) {
+        // Already logged today - show message
+        onShowLoggedMsg?.('logged');
+        return;
+      }
+
+      // Step 4: Update visual feedback (only if successfully logged)
+      setDayRecords((prev) => {
+        const lastRecord = prev[prev.length - 1];
+        if (!lastRecord) {
+          return [{ x: 1, y: 1 }];
+        }
+        const newX = lastRecord.x + 1;
+        const newY = lastRecord.y + 1;
+        
+        let maxDots = 30;
+        let maxY = 30;
+        
+        if (newX <= maxDots && newY <= maxY) {
+          return [...prev, { x: newX, y: newY }];
+        }
+        return prev;
+      });
+
+      // Update cycle state
+      if (result.stats) {
+        setCurrentCycle((prev: any) => prev ? {...prev, ...result.stats} : null);
+      }
+
+      console.log('✅ Habit logged successfully:', result);
+
     } catch (err) {
-      console.error('🚨 Network error during habit cycle management:', err);
-      // Visual feedback already created above, so don't block the UI
+      console.error('Error logging habit:', err);
     }
   }
 
@@ -382,84 +319,96 @@ export default function HabitTracker({
   const handleHabitMissed = async () => {
     if (!habit) return;
     
-    // Check if habit has started yet (has active cycle)
+    const habitId = habit.id;
+    const isUUID = typeof habitId === 'string' && 
+      habitId.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i);
+    
+    if (!isUUID) {
+      console.error('❌ Invalid habit UUID:', habitId);
+      return;
+    }
+
+    // Check if habit has started yet
     if (!habitStarted && dayRecords.length === 0) {
       onShowLoggedMsg?.('not-started');
       return;
     }
-    
-    const today = new Date().toDateString();
-    const habitId = habit.id;
-    const todayInteractions = dailyInteractions[`${habitId}-${today}`] || 0;
-    
-    // If this is the second or more interaction today, just show message
-    if (todayInteractions >= 1) {
-      onShowLoggedMsg?.('logged');
-      return;
-    }
-    
-    // First interaction - update state and increment counter
-    setDailyInteractions?.({
-      ...dailyInteractions,
-      [`${habitId}-${today}`]: todayInteractions + 1
-    });
 
     try {
-      // Only update if habit has started (has active cycle)
-      if (habitStarted && currentCycle) {
-        const newMissedDays = currentCycle.missed_days + 1;
-        
-        const { error } = await supabase
-          .from('habit_cycles')
-          .update({
-            missed_days: newMissedDays,
-            // consistency stays the same - only increases when completed
-          })
-          .eq('id', currentCycle.id);
+      // Step 1: Get or create active cycle
+      const { data: cycles, error: cyclesError } = await supabase
+        .from('habit_cycles')
+        .select('*')
+        .eq('habit_id', habitId)
+        .gte('end_date', new Date().toISOString().split('T')[0])
+        .order('created_at', { ascending: false })
+        .limit(1);
 
-        if (error) {
-          console.error('Error updating missed days:', error);
-          return;
-        }
-
-        console.log('Habit cycle updated - missed day');
-        setCurrentCycle({...currentCycle, missed_days: newMissedDays});
+      if (cyclesError || cycles.length === 0) {
+        console.error('Error checking cycles or no active cycle:', cyclesError);
+        onShowLoggedMsg?.('not-started');
+        return;
       }
+
+      const cycleId = cycles[0].id;
+      setCurrentCycle(cycles[0]);
+
+      // Step 2: Call the daily log API
+      const response = await fetch('/api/log-daily-habit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          habit_id: habitId,
+          cycle_id: cycleId,
+          status: 'missed'
+        })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error('API error:', result);
+        return;
+      }
+
+      // Step 3: Handle the result
+      if (result.alreadyLogged) {
+        // Already logged today - show message
+        onShowLoggedMsg?.('logged');
+        return;
+      }
+
+      // Step 4: Update visual feedback (only if successfully logged)
+      setDayRecords((prev) => {
+        const lastRecord = prev[prev.length - 1];
+        
+        const newX = lastRecord.x + 1;
+        let newY;
+        
+        if (newX === 2 && lastRecord.y > 0) {
+          newY = 1;
+        } else {
+          newY = Math.max(0, lastRecord.y - 1);
+        }
+        
+        let maxDots = 30;
+        
+        if (newX <= maxDots) {
+          return [...prev, { x: newX, y: newY }];
+        }
+        return prev;
+      });
+
+      // Update cycle state
+      if (result.stats) {
+        setCurrentCycle((prev: any) => prev ? {...prev, ...result.stats} : null);
+      }
+
+      console.log('✅ Missed day logged successfully:', result);
 
     } catch (err) {
-      console.error('Network error during missed day tracking:', err);
+      console.error('Error logging missed day:', err);
     }
-
-    // Continue with original dot grid logic
-    setDayRecords((prev) => {
-      const lastRecord = prev[prev.length - 1]
-      
-      // For Day 2 missed: create dot at X=2, Y=1 (next to Day 1 green circle)
-      // For subsequent days: follow previous miss logic
-      const newX = lastRecord.x + 1
-      let newY;
-      
-      if (newX === 2 && lastRecord.y > 0) {
-        // Day 2 miss: set Y to 1 to appear next to Day 1 green circle
-        newY = 1;
-      } else {
-        // Regular miss logic: decrease Y by 1, minimum 0
-        newY = Math.max(0, lastRecord.y - 1);
-      }
-      
-      // Set limits based on view type
-      let maxDays
-      if (currentView === 'companion') {
-        maxDays = 30  // Always use lock pattern (30 dots)
-      } else {
-        maxDays = 30 // Chart/Calendar view limit
-      }
-      
-      if (newX <= maxDays) {
-        return [...prev, { x: newX, y: newY }]
-      }
-      return prev
-    })
   }
 
   if (isNewHabitMode) {

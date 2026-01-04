@@ -53,38 +53,45 @@ export default function FirstUserForm({ onSubmit, onBack }: FirstUserFormProps) 
     
     const newUser = { username, age, email }
     
-    // Save to Supabase users table
+    // Save user to localStorage for future logins
+    const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
+    localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
+    
+    // Try to save to Supabase, but don't block if it fails
     try {
-      const { data, error } = await supabase
-        .from('users')
-        .insert([
-          {
-            name: username,
-            email: email,
-            age: parseInt(age),
-          }
-        ])
-        .select(); // Add .select() to return the inserted data
+      // Check if Supabase is configured
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      
+      if (supabaseUrl && supabaseKey && 
+          !supabaseUrl.includes('placeholder') && 
+          !supabaseKey.includes('placeholder')) {
+        
+        const { data, error } = await supabase
+          .from('users')
+          .insert([
+            {
+              name: username,
+              email: email,
+              age: parseInt(age),
+            }
+          ])
+          .select()
 
-      if (error) {
-        console.error('Supabase error:', error);
-        setError(error.message);
-        return;
+        if (error) {
+          console.warn('Supabase save failed, continuing with localStorage:', error)
+        } else {
+          console.log('User saved to Supabase:', data)
+        }
+      } else {
+        console.log('Supabase not configured, using localStorage only')
       }
-
-      console.log('User inserted to Supabase:', data);
-      
-      // Save user to localStorage for future logins
-      const updatedUsers = [...savedUsers.filter(u => u.email !== email), newUser]
-      localStorage.setItem('savedUsers', JSON.stringify(updatedUsers))
-      
-      // Continue to next step
-      onSubmit(newUser)
-      
     } catch (err) {
-      console.error('Network error during Supabase registration:', err)
-      setError('Failed to register. Please try again.')
+      console.warn('Network error during Supabase save, continuing with localStorage:', err)
     }
+    
+    // Always continue to next step regardless of Supabase status
+    onSubmit(newUser)
   }
 
   const handleUserLogin = (user: SavedUser) => {

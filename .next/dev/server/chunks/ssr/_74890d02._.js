@@ -3246,33 +3246,38 @@ function FirstUserForm({ onSubmit, onBack }) {
             age,
             email
         };
-        // Save to Supabase users table
+        // Save user to localStorage for future logins
+        const updatedUsers = [
+            ...savedUsers.filter((u)=>u.email !== email),
+            newUser
+        ];
+        localStorage.setItem('savedUsers', JSON.stringify(updatedUsers));
+        // Try to save to Supabase, but don't block if it fails
         try {
-            const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from('users').insert([
-                {
-                    name: username,
-                    email: email,
-                    age: parseInt(age)
+            // Check if Supabase is configured
+            const supabaseUrl = ("TURBOPACK compile-time value", "https://vvsazraadvhjpjtjjwkd.supabase.co");
+            const supabaseKey = ("TURBOPACK compile-time value", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2c2F6cmFhZHZoanBqdGpqd2tkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY5OTI5MjMsImV4cCI6MjA4MjU2ODkyM30.zP6Tu-x6lAni6wRLsYhalBhH7NQPBHXI2tFrA7YBBfU");
+            if (supabaseUrl && supabaseKey && !supabaseUrl.includes('placeholder') && !supabaseKey.includes('placeholder')) {
+                const { data, error } = await __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$supabase$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].from('users').insert([
+                    {
+                        name: username,
+                        email: email,
+                        age: parseInt(age)
+                    }
+                ]).select();
+                if (error) {
+                    console.warn('Supabase save failed, continuing with localStorage:', error);
+                } else {
+                    console.log('User saved to Supabase:', data);
                 }
-            ]).select(); // Add .select() to return the inserted data
-            if (error) {
-                console.error('Supabase error:', error);
-                setError(error.message);
-                return;
+            } else {
+                console.log('Supabase not configured, using localStorage only');
             }
-            console.log('User inserted to Supabase:', data);
-            // Save user to localStorage for future logins
-            const updatedUsers = [
-                ...savedUsers.filter((u)=>u.email !== email),
-                newUser
-            ];
-            localStorage.setItem('savedUsers', JSON.stringify(updatedUsers));
-            // Continue to next step
-            onSubmit(newUser);
         } catch (err) {
-            console.error('Network error during Supabase registration:', err);
-            setError('Failed to register. Please try again.');
+            console.warn('Network error during Supabase save, continuing with localStorage:', err);
         }
+        // Always continue to next step regardless of Supabase status
+        onSubmit(newUser);
     };
     const handleUserLogin = (user)=>{
         onSubmit(user);
@@ -3302,22 +3307,22 @@ function FirstUserForm({ onSubmit, onBack }) {
                                         d: "M15 19l-7-7 7-7"
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 102,
+                                        lineNumber: 106,
                                         columnNumber: 21
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 101,
+                                    lineNumber: 105,
                                     columnNumber: 19
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/first-user-form.tsx",
-                                lineNumber: 100,
+                                lineNumber: 104,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 99,
+                            lineNumber: 103,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3328,7 +3333,7 @@ function FirstUserForm({ onSubmit, onBack }) {
                                     children: "Join Our Community"
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 109,
+                                    lineNumber: 113,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3336,13 +3341,13 @@ function FirstUserForm({ onSubmit, onBack }) {
                                     children: "Become part of something great"
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 112,
+                                    lineNumber: 116,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 108,
+                            lineNumber: 112,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -3360,12 +3365,12 @@ function FirstUserForm({ onSubmit, onBack }) {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 120,
+                                        lineNumber: 124,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 119,
+                                    lineNumber: 123,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3389,7 +3394,7 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                     children: "How old are you?"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/first-user-form.tsx",
-                                                    lineNumber: 127,
+                                                    lineNumber: 131,
                                                     columnNumber: 21
                                                 }, this),
                                                 Array.from({
@@ -3399,13 +3404,13 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                         children: num
                                                     }, num, false, {
                                                         fileName: "[project]/components/first-user-form.tsx",
-                                                        lineNumber: 132,
+                                                        lineNumber: 136,
                                                         columnNumber: 49
                                                     }, this))
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 124,
+                                            lineNumber: 128,
                                             columnNumber: 19
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3418,23 +3423,23 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                     d: "M7 10l5 5 5-5z"
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/first-user-form.tsx",
-                                                    lineNumber: 136,
+                                                    lineNumber: 140,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/components/first-user-form.tsx",
-                                                lineNumber: 135,
+                                                lineNumber: 139,
                                                 columnNumber: 21
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 134,
+                                            lineNumber: 138,
                                             columnNumber: 19
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 123,
+                                    lineNumber: 127,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3448,12 +3453,12 @@ function FirstUserForm({ onSubmit, onBack }) {
                                         required: true
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 142,
+                                        lineNumber: 146,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 141,
+                                    lineNumber: 145,
                                     columnNumber: 17
                                 }, this),
                                 error && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3461,7 +3466,7 @@ function FirstUserForm({ onSubmit, onBack }) {
                                     children: error
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 145,
+                                    lineNumber: 149,
                                     columnNumber: 27
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -3470,13 +3475,13 @@ function FirstUserForm({ onSubmit, onBack }) {
                                     children: "Let's Go!"
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 147,
+                                    lineNumber: 151,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 118,
+                            lineNumber: 122,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3492,18 +3497,18 @@ function FirstUserForm({ onSubmit, onBack }) {
                                         children: "Log In"
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 156,
+                                        lineNumber: 160,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/first-user-form.tsx",
-                                lineNumber: 154,
+                                lineNumber: 158,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 153,
+                            lineNumber: 157,
                             columnNumber: 15
                         }, this)
                     ]
@@ -3527,17 +3532,17 @@ function FirstUserForm({ onSubmit, onBack }) {
                                             d: "M15 19l-7-7 7-7"
                                         }, void 0, false, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 166,
+                                            lineNumber: 170,
                                             columnNumber: 21
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 165,
+                                        lineNumber: 169,
                                         columnNumber: 19
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 164,
+                                    lineNumber: 168,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -3545,20 +3550,20 @@ function FirstUserForm({ onSubmit, onBack }) {
                                     children: "Select your account"
                                 }, void 0, false, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 169,
+                                    lineNumber: 173,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 163,
+                            lineNumber: 167,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             className: "mt-4 mb-4"
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 175,
+                            lineNumber: 179,
                             columnNumber: 15
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3582,7 +3587,7 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                             children: user.username
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/first-user-form.tsx",
-                                                            lineNumber: 185,
+                                                            lineNumber: 189,
                                                             columnNumber: 29
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3590,13 +3595,13 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                             children: user.email
                                                         }, void 0, false, {
                                                             fileName: "[project]/components/first-user-form.tsx",
-                                                            lineNumber: 186,
+                                                            lineNumber: 190,
                                                             columnNumber: 29
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/components/first-user-form.tsx",
-                                                    lineNumber: 184,
+                                                    lineNumber: 188,
                                                     columnNumber: 27
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -3607,23 +3612,23 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                         d: "M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"
                                                     }, void 0, false, {
                                                         fileName: "[project]/components/first-user-form.tsx",
-                                                        lineNumber: 189,
+                                                        lineNumber: 193,
                                                         columnNumber: 29
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/components/first-user-form.tsx",
-                                                    lineNumber: 188,
+                                                    lineNumber: 192,
                                                     columnNumber: 27
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 183,
+                                            lineNumber: 187,
                                             columnNumber: 25
                                         }, this)
                                     }, index, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 182,
+                                        lineNumber: 186,
                                         columnNumber: 116
                                     }, this))
                             }, void 0, false) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -3631,12 +3636,12 @@ function FirstUserForm({ onSubmit, onBack }) {
                                 children: "No saved accounts found"
                             }, void 0, false, {
                                 fileName: "[project]/components/first-user-form.tsx",
-                                lineNumber: 193,
+                                lineNumber: 197,
                                 columnNumber: 25
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 178,
+                            lineNumber: 182,
                             columnNumber: 15
                         }, this),
                         !showAllUsers && savedUsers.length > 5 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3656,7 +3661,7 @@ function FirstUserForm({ onSubmit, onBack }) {
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 200,
+                                            lineNumber: 204,
                                             columnNumber: 23
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
@@ -3671,28 +3676,28 @@ function FirstUserForm({ onSubmit, onBack }) {
                                                 d: "M19 9l-7 7-7-7"
                                             }, void 0, false, {
                                                 fileName: "[project]/components/first-user-form.tsx",
-                                                lineNumber: 204,
+                                                lineNumber: 208,
                                                 columnNumber: 25
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/components/first-user-form.tsx",
-                                            lineNumber: 203,
+                                            lineNumber: 207,
                                             columnNumber: 23
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/components/first-user-form.tsx",
-                                    lineNumber: 199,
+                                    lineNumber: 203,
                                     columnNumber: 21
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/components/first-user-form.tsx",
-                                lineNumber: 198,
+                                lineNumber: 202,
                                 columnNumber: 19
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 197,
+                            lineNumber: 201,
                             columnNumber: 58
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$0$2e$8_$40$babel$2b$core$40$7$2e$2_e6c684eabbe936b8628166c2f117655b$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -3708,35 +3713,35 @@ function FirstUserForm({ onSubmit, onBack }) {
                                         children: "Create Account"
                                     }, void 0, false, {
                                         fileName: "[project]/components/first-user-form.tsx",
-                                        lineNumber: 213,
+                                        lineNumber: 217,
                                         columnNumber: 19
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/components/first-user-form.tsx",
-                                lineNumber: 211,
+                                lineNumber: 215,
                                 columnNumber: 17
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/components/first-user-form.tsx",
-                            lineNumber: 210,
+                            lineNumber: 214,
                             columnNumber: 15
                         }, this)
                     ]
                 }, void 0, true)
             }, void 0, false, {
                 fileName: "[project]/components/first-user-form.tsx",
-                lineNumber: 95,
+                lineNumber: 99,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/components/first-user-form.tsx",
-            lineNumber: 94,
+            lineNumber: 98,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/components/first-user-form.tsx",
-        lineNumber: 93,
+        lineNumber: 97,
         columnNumber: 10
     }, this);
 }

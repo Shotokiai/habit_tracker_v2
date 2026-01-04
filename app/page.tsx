@@ -33,18 +33,29 @@ export default function Page() {
   // Helper function to update user's last_seen_at timestamp
   const updateLastSeenAt = async (userEmail: string) => {
     try {
+      // Check if Supabase is configured
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+      
+      if (!supabaseUrl || !supabaseKey || 
+          supabaseUrl.includes('placeholder') || 
+          supabaseKey.includes('placeholder')) {
+        console.log('Supabase not configured, skipping last_seen_at update');
+        return;
+      }
+      
       const { error } = await supabase
         .from('users')
         .update({ last_seen_at: new Date().toISOString() })
         .eq('email', userEmail);
         
       if (error) {
-        console.error('Error updating last_seen_at:', error);
+        console.warn('Could not update last_seen_at:', error);
       } else {
         console.log('✅ Updated last_seen_at for user:', userEmail);
       }
     } catch (err) {
-      console.error('Network error updating last_seen_at:', err);
+      console.warn('Network error updating last_seen_at, continuing without update:', err);
     }
   };
 
